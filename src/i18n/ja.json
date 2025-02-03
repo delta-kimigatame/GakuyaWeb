@@ -1,1 +1,43 @@
-{}
+{
+    "language": {
+      "ja": "日本語",
+      "en": "英語"
+    },
+    "menu": {
+      "toDarkMode": "ダークモードにする",
+      "toLightMode": "ライトモードにする",
+      "changeLanguage": "言語設定",
+      "showLog": "操作ログ表示",
+      "logAttention": "ログは自動では送信されません。必要に応じて開発者に送付してください。"
+    },
+    "top": {
+      "description": "LABERUはUTAU音源のための原音設定ツールです。",
+      "selectZipButtonText": "利用規約に同意して、UTAU音源のzipファイルを選択",
+      "rule": "利用規約",
+      "ruleDescription": "声の権利者から許諾を得た音源のみご利用できます。",
+      "ruleDescription2": "人力音源はNGです。UTAUのために録音した音源なら利用規約で禁止されていなければOK",
+      "privacy": "プライバシーポリシー",
+      "privacyAnalytics": "当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を使用しています。このGoogleアナリティクスはデータの収集のためにCookieを使用しています。このデータは匿名で収集されており、個人を特定するものではありません。",
+      "privacyCookie": "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
+      "history": "更新履歴",
+      "changelog": [
+        "2025/02/** 初版公開"
+      ]
+    },
+    "footer": {
+      "disclaimer": "UTAUは飴屋／菖蒲氏によって公開されている、Windows向けに作成された歌声合成ソフトウェアです。",
+      "disclaimer2": "本ソフトウェアはUTAU公式とは無関係です。",
+      "developerx": "開発者Xアカウント",
+      "github": "github",
+      "discord": "discord"
+    },
+    "xbutton": {
+      "share": "共有"
+    },
+    "error": {
+      "title": "エラー",
+      "message": "予期せぬエラーが生じました。下記のボタンからlogをダウンロードし、開発者に送付してください。",
+      "download": "ログをダウンロード",
+      "log": "操作ログ"
+    }
+}
