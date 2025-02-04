@@ -89,7 +89,6 @@ export class Frq {
     this.perSamples = dv.getUint16(8, true);
     this.frqAverage = dv.getFloat64(12, true);
     const dataCount = dv.getUint16(36, true);
-    console.log(dataCount)
     for (let i = 0; i < dataCount; i++) {
       this.frq_.push(dv.getFloat64(40 + 16 * i, true));
       this.amp_.push(dv.getFloat64(40 + 8 + 16 * i, true));
