@@ -4,11 +4,11 @@
   "description": "UTAU VoiceBank's packaging tool on browser.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=production",
-    "prepare": "npm run build",
-    "makedoc": "npx typedoc --entryPointStrategy expand ./src --htmlLang jp --cleanOutputDir false",
-    "start": "webpack serve --mode=development",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "makedoc": "npx typedoc --entryPointStrategy expand ./src --htmlLang jp --cleanOutputDir false"
   },
   "keywords": [
     "UTAU",
@@ -45,19 +45,12 @@
     "@babel/preset-react": "^7.24.6",
     "@testing-library/jest-dom": "^6.4.6",
     "@types/jest": "^29.5.12",
-    "babel-loader": "^9.2.1",
-    "copy-webpack-plugin": "^12.0.2",
-    "css-loader": "^7.1.2",
+    "@vitejs/plugin-react": "^4.3.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "sass-loader": "^14.2.1",
-    "style-loader": "^4.0.0",
     "ts-jest": "^29.2.0",
-    "ts-loader": "^9.5.1",
     "typedoc": "^0.25.13",
     "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "vite": "^6.0.11"
   }
 }
