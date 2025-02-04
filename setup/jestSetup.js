@@ -1,7 +1,5 @@
-if (typeof global.TextEncoder === 'undefined') {
-    global.TextEncoder = require('util').TextEncoder
-  }
-  
-  if (typeof global.TextDecoder === 'undefined') {
-    global.TextDecoder = require('util').TextDecoder
-  }
+import { TextDecoder } from 'util';
+import { createRequire } from "module";
+global.TextDecoder = TextDecoder;
+global.createRequire = createRequire
+global.self = globalThis;

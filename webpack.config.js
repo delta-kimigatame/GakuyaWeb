@@ -1,5 +1,6 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require("path");
+import * as path from "path";
+const __dirname = import.meta.dirname;
 module.exports = {
   entry: {
     index: "./src/index.tsx",

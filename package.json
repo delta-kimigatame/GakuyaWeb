@@ -8,12 +8,13 @@
     "prepare": "npm run build",
     "makedoc": "npx typedoc --entryPointStrategy expand ./src --htmlLang jp --cleanOutputDir false",
     "start": "webpack serve --mode=development",
-    "test": "npx jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [
     "UTAU",
     "voicebank"
   ],
+  "type": "module",
   "author": "delta_kimigatame",
   "license": "MIT",
   "dependencies": {
@@ -34,7 +35,7 @@
     "react-error-boundary": "^5.0.0",
     "react-i18next": "^15.4.0",
     "styled-components": "^6.1.14",
-    "tsworld": "^0.0.1",
+    "tsworld": "file:../TSWorld/tsworld-0.0.2.tgz",
     "utauoto": "^0.5.0",
     "utauwav": "^0.5.0"
   },

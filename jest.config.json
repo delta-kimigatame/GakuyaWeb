@@ -1,9 +1,0 @@
-{
-    "globals": {},
-    "moduleNameMapper": {},
-    "moduleDirectories": ["src", "node_modules"],
-    "moduleFileExtensions": ["js", "ts"],
-    "preset": "ts-jest",
-    "setupFiles": ["<rootDir>/setup/jestSetup.js"],
-    "testEnvironment": "jsdom"
-  }
