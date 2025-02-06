@@ -12,7 +12,7 @@ import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
 import { HeaderMenu } from "./HeaderMenu";
 
-import { setting } from "../settings/setting";
+import { setting } from "../../settings/setting";
 /**
  * ヘッダ
  * @param props {@link HeaderProps}

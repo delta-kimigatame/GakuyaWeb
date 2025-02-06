@@ -1,12 +1,12 @@
 import * as React from "react";
-import i18n from "./i18n/configs";
+import i18n from "../i18n/configs";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { PaletteMode } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useCookies } from "react-cookie";
-import { getDesignTokens } from "./settings/theme";
+import { getDesignTokens } from "../settings/theme";
 
 import { Header } from "./Header/Header";
 import { Footer } from "./Fotter";
@@ -14,7 +14,7 @@ import { PrivacyPaper } from "./Top/PrivacyPaper";
 import { RulePaper } from "./Top/RulePaper";
 import { HistoryPaper } from "./Top/HistoryPaper";
 
-import { Log } from "./Lib/Logging";
+import { Log } from "../Lib/Logging";
 
 export const App: React.FC = () => {
   // 端末のダークモード設定取得

@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { PaletteMode } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useCookies } from "react-cookie";
-import { getDesignTokens } from "./settings/theme";
+import { getDesignTokens } from "../settings/theme";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,7 +16,7 @@ import { Footer } from "./Fotter";
 import { FullWidthButton } from "./Common/FullWidthButton";
 import { LogPaper } from "./Top/LogPaper";
 
-import { Log } from "./Lib/Logging";
+import { Log } from "../Lib/Logging";
 
 export const ErrorPaper: React.FC<FallbackProps> = ({
   error,

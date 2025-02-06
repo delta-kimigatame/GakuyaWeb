@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import XIcon from "@mui/icons-material/X";
 
-import { XButton } from "./XButton";
-import { setting } from "./settings/setting";
+import { XButton } from "./Common/XButton";
+import { setting } from "../settings/setting";
 
 /**
  * フッタ
