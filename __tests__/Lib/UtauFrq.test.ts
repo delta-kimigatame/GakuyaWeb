@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { Frq } from "../../src/Lib/UtauFrq";
 
 describe("エラーが帰る", () => {
