@@ -1,4 +1,5 @@
 import * as React from "react";
+import JSZip from "jszip";
 import i18n from "../i18n/configs";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -13,8 +14,10 @@ import { Footer } from "./Fotter";
 import { PrivacyPaper } from "./Top/PrivacyPaper";
 import { RulePaper } from "./Top/RulePaper";
 import { HistoryPaper } from "./Top/HistoryPaper";
+import { TopPaper } from "./Top/TopPaper";
 
 import { Log } from "../Lib/Logging";
+import { TopView } from "./Top/TopView";
 
 export const App: React.FC = () => {
   // 端末のダークモード設定取得
@@ -33,6 +36,10 @@ export const App: React.FC = () => {
     cookies.language !== undefined ? cookies.language : "ja";
   const [mode, setMode] = React.useState<PaletteMode>(mode_);
   const [language, setLanguage] = React.useState<string>(language_);
+  const [zipFileName, setZipFileName] = React.useState<string>("");
+  const [readZip, setReadZip] = React.useState<{
+    [key: string]: JSZip.JSZipObject;
+  } | null>(null);
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
   /**
    * ダークモード設定が切り替わった際、クッキーに保存する。
@@ -71,9 +78,18 @@ export const App: React.FC = () => {
         setLanguage={setLanguage}
         windowSize={windowSize}
       />
-      <RulePaper />
-      <PrivacyPaper />
-      <HistoryPaper />
+      {readZip === null ? (
+        <>
+          <TopView
+            readZip={readZip}
+            setReadZip={setReadZip}
+            zipFileName={zipFileName}
+            setZipFileName={setZipFileName}
+          />
+        </>
+      ) : (
+        <></>
+      )}
       <Footer theme={theme} />
     </ThemeProvider>
   );
