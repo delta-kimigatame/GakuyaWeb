@@ -11,7 +11,7 @@
     "logAttention": "Logs are not sent automatically, so please send them to the developer if necessary."
   },
   "top": {
-    "description": "Laberu is otoing tool for UTAU VoiceBanks",
+    "description": "Gakuya is packaging tool for UTAU VoiceBanks",
     "selectZipButtonText": "Agree to the terms of use and Select the UTAU VoiceBanks zip file",
     "rule": "Terms of service",
     "ruleDescription": "Only voice sources with permission from the voice rights holder may be used.",
@@ -30,6 +30,14 @@
     "developerx": "Developer X account",
     "github": "github",
     "discord": "discord"
+  },
+  "loadZipDialog": {
+    "title": "Read Zip",
+    "encodeCheck": "Check the encoding",
+    "encoding": "character code",
+    "reload": "Reload with the specified character code",
+    "submit": "OK",
+    "error": "ERROR"
   },
   "xbutton": {
     "share": "share"
