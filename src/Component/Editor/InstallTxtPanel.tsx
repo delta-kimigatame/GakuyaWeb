@@ -4,13 +4,12 @@ import { useTranslation } from "react-i18next";
 import { InstallTxt } from "../../Lib/InstallTxt";
 
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
 
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 import { FullWidthTextField } from "../Common/FullWidthTextField";
-import { FullWidthSelect } from "../Common/FullWidthSelect";
+
+import { Log } from "../../Lib/Logging";
 
 /**
  * install.txtを編集する画面
@@ -24,6 +23,7 @@ export const InstallTextPanel: React.FC<ReadMePanelProps> = (props) => {
    */
   React.useEffect(() => {
     if (props.update) {
+      Log.log(`rootDirの変更に伴うinstall.txtの変更。`, "InstallTextPanel");
       const install = new InstallTxt({
         folder: props.rootDir,
         contentsDir: props.rootDir,
@@ -43,6 +43,7 @@ export const InstallTextPanel: React.FC<ReadMePanelProps> = (props) => {
       contentsDir: props.install.contentsDir,
       description: props.install.description,
     });
+    Log.log(`Install.folderの変更。${e.target.value}`, "InstallTextPanel");
     props.setInstall(install);
   };
   /**
@@ -55,17 +56,20 @@ export const InstallTextPanel: React.FC<ReadMePanelProps> = (props) => {
       contentsDir: props.install.contentsDir,
       description: e.target.value,
     });
+    Log.log(`Install.descriptionの変更。${e.target.value}`, "InstallTextPanel");
     props.setInstall(install);
   };
 
   const OnChangeUpdate = ()=>{
     const newValue = !props.update
+    Log.log(`Install.txt出力設定の変更。${newValue}`, "InstallTextPanel");
     props.setUpdate(newValue)
-    if(newValue){
+    if(newValue && props.install===null){
+      Log.log(`Install.txtが存在しないため生成しました。`, "InstallTextPanel");
       const install = new InstallTxt({
         folder: props.rootDir,
         contentsDir: props.rootDir,
-        description: props.install.description,
+        description: "",
       });
       props.setInstall(install);
     }
