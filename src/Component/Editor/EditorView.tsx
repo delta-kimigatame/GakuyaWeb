@@ -16,6 +16,7 @@ import { CharacterTxt } from "../../Lib/CharacterTxt";
 import { PrefixMap } from "../../Lib/PrefixMap";
 import { Log } from "../../Lib/Logging";
 import { FileReadAsync } from "../../Lib/FileReadAsync";
+import { ReadMePanel } from "./ReadMePanel";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [characterYaml, setCharacterYaml] = React.useState<{} | null>(null);
   /** readme.txt */
   const [readme, setReadme] = React.useState<string>("");
+  const [readmeUpdate, setReadmeUpdate] = React.useState<boolean>(false);
   /** prefix.map */
   const [prefixMaps, setPrefixMaps] = React.useState<{ string?: PrefixMap }>(
     {}
@@ -246,7 +248,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             </Tabs>
             <TabPanel value={0}>0</TabPanel>
             <TabPanel value={1}>1</TabPanel>
-            <TabPanel value={2}>2</TabPanel>
+            <TabPanel value={2}>
+              <ReadMePanel readme={readme} setReadme={setReadme} update={readmeUpdate} setUpdate={setReadmeUpdate}/>
+            </TabPanel>
             <TabPanel value={3}>3</TabPanel>
             <TabPanel value={4}>4</TabPanel>
           </TabContext>
