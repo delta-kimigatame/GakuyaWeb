@@ -7,6 +7,7 @@ export const FullWidthTextField: React.FC<{
   value;
   label;
   type: React.HTMLInputTypeAttribute;
+  disabled?:boolean
 }> = (props) => {
   return (
     <TextField
@@ -19,6 +20,7 @@ export const FullWidthTextField: React.FC<{
       label={props.label}
       value={props.value}
       onChange={props.onChange}
+      disabled={props.disabled}
     />
   );
 };
