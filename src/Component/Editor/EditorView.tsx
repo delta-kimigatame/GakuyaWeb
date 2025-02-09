@@ -17,6 +17,7 @@ import { PrefixMap } from "../../Lib/PrefixMap";
 import { Log } from "../../Lib/Logging";
 import { FileReadAsync } from "../../Lib/FileReadAsync";
 import { ReadMePanel } from "./ReadMePanel";
+import { InstallTextPanel } from "./InstallTxtPanel";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [selectTab, setSelectTab] = React.useState(0);
   /** install.txt */
   const [install, setInstall] = React.useState<InstallTxt | null>(null);
+  const [installUpdate, setInstallUpdate] = React.useState<boolean>(false);
   /** character.txt */
   const [character, setCharacter] = React.useState<CharacterTxt | null>(null);
   /** character.yaml */
@@ -249,9 +251,22 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             <TabPanel value={0}>0</TabPanel>
             <TabPanel value={1}>1</TabPanel>
             <TabPanel value={2}>
-              <ReadMePanel readme={readme} setReadme={setReadme} update={readmeUpdate} setUpdate={setReadmeUpdate}/>
+              <ReadMePanel
+                readme={readme}
+                setReadme={setReadme}
+                update={readmeUpdate}
+                setUpdate={setReadmeUpdate}
+              />
             </TabPanel>
-            <TabPanel value={3}>3</TabPanel>
+            <TabPanel value={3}>
+              <InstallTextPanel
+                rootDir={rootDir}
+                install={install}
+                setInstall={setInstall}
+                update={installUpdate}
+                setUpdate={setInstallUpdate}
+              />
+            </TabPanel>
             <TabPanel value={4}>4</TabPanel>
           </TabContext>
         </>
