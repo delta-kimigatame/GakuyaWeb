@@ -13,10 +13,10 @@ import { Log } from "../../Lib/Logging";
 
 /**
  * install.txtを編集する画面
- * @param props {@link ReadMePanelProps}
+ * @param props {@link InstallTxtPanelProps}
  * @returns install.txtを編集する画面
  */
-export const InstallTextPanel: React.FC<ReadMePanelProps> = (props) => {
+export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
   const { t } = useTranslation();
   /**
    * rootDir変更時の処理
@@ -108,11 +108,11 @@ export const InstallTextPanel: React.FC<ReadMePanelProps> = (props) => {
   );
 };
 
-export interface ReadMePanelProps {
+export interface InstallTxtPanelProps {
   rootDir: string;
-  /** readmeファイルの中身 */
+  /** install.txtファイルの中身 */
   install: InstallTxt | null;
-  /** readmeファイルの変更処理 */
+  /** install.txtファイルの変更処理 */
   setInstall: React.Dispatch<React.SetStateAction<InstallTxt | null>>;
   /** ファイル更新の要否 */
   update: boolean;
