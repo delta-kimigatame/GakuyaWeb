@@ -146,6 +146,18 @@ describe("prefix.map", () => {
       }
     }
   });
+  it("output_setRangeSingle", () => {
+    const map = new PrefixMap();
+    map.SetRangeValues("B7", "pre", "");
+    const output = map.OutputMap();
+    for (let i = ToneToNoteNum("C1"); i <= ToneToNoteNum("B7"); i++) {
+      if (i >= ToneToNoteNum("B7")) {
+        expect(output).toContain(NoteNumToTone(i) + "\tpre\t");
+      } else {
+        expect(output).toContain(NoteNumToTone(i) + "\t\t");
+      }
+    }
+  });
   it("load_empty_file", () => {
     const map = new PrefixMap();
     const output = map.OutputMap();
@@ -188,68 +200,68 @@ describe("prefix.map", () => {
   });
   it("output_empty_for_OU", () => {
     const map = new PrefixMap();
-    map.voiceColor="test"
+    map.voiceColor = "test";
     const output = map.OutputSubbanks();
-    expect(output[0].color).toBe("test")
-    expect(output[0].prefix).toBe("")
-    expect(output[0].suffix).toBe("")
-    expect(output[0].tone_ranges[0]).toBe("C1-B7")
+    expect(output[0].color).toBe("test");
+    expect(output[0].prefix).toBe("");
+    expect(output[0].suffix).toBe("");
+    expect(output[0].tone_ranges[0]).toBe("C1-B7");
   });
   it("output_range_for_OU", () => {
     const map = new PrefixMap();
-    map.voiceColor="test"
+    map.voiceColor = "test";
     map.SetRangeValues("C7-B7", "pre", "");
     map.SetRangeValues("C6-B6", "", "su");
     map.SetRangeValues("C5-B5", "testp", "tests");
     const output = map.OutputSubbanks();
-    expect(output[0].color).toBe("test")
-    expect(output[0].prefix).toBe("")
-    expect(output[0].suffix).toBe("")
-    expect(output[0].tone_ranges[0]).toBe("C1-B4")
-    expect(output[1].color).toBe("test")
-    expect(output[1].prefix).toBe("testp")
-    expect(output[1].suffix).toBe("tests")
-    expect(output[1].tone_ranges[0]).toBe("C5-B5")
-    expect(output[2].color).toBe("test")
-    expect(output[2].prefix).toBe("")
-    expect(output[2].suffix).toBe("su")
-    expect(output[2].tone_ranges[0]).toBe("C6-B6")
-    expect(output[3].color).toBe("test")
-    expect(output[3].prefix).toBe("pre")
-    expect(output[3].suffix).toBe("")
-    expect(output[3].tone_ranges[0]).toBe("C7-B7")
+    expect(output[0].color).toBe("test");
+    expect(output[0].prefix).toBe("");
+    expect(output[0].suffix).toBe("");
+    expect(output[0].tone_ranges[0]).toBe("C1-B4");
+    expect(output[1].color).toBe("test");
+    expect(output[1].prefix).toBe("testp");
+    expect(output[1].suffix).toBe("tests");
+    expect(output[1].tone_ranges[0]).toBe("C5-B5");
+    expect(output[2].color).toBe("test");
+    expect(output[2].prefix).toBe("");
+    expect(output[2].suffix).toBe("su");
+    expect(output[2].tone_ranges[0]).toBe("C6-B6");
+    expect(output[3].color).toBe("test");
+    expect(output[3].prefix).toBe("pre");
+    expect(output[3].suffix).toBe("");
+    expect(output[3].tone_ranges[0]).toBe("C7-B7");
   });
   it("output_range_for_OU_same_prefix_last", () => {
     const map = new PrefixMap();
-    map.voiceColor="test"
+    map.voiceColor = "test";
     map.SetRangeValues("C6-B6", "", "su");
     const output = map.OutputSubbanks();
-    expect(output[0].color).toBe("test")
-    expect(output[0].prefix).toBe("")
-    expect(output[0].suffix).toBe("")
-    expect(output[0].tone_ranges[0]).toBe("C1-B5")
-    expect(output[0].tone_ranges[1]).toBe("C7-B7")
-    expect(output[1].color).toBe("test")
-    expect(output[1].prefix).toBe("")
-    expect(output[1].suffix).toBe("su")
-    expect(output[1].tone_ranges[0]).toBe("C6-B6")
-  })
+    expect(output[0].color).toBe("test");
+    expect(output[0].prefix).toBe("");
+    expect(output[0].suffix).toBe("");
+    expect(output[0].tone_ranges[0]).toBe("C1-B5");
+    expect(output[0].tone_ranges[1]).toBe("C7-B7");
+    expect(output[1].color).toBe("test");
+    expect(output[1].prefix).toBe("");
+    expect(output[1].suffix).toBe("su");
+    expect(output[1].tone_ranges[0]).toBe("C6-B6");
+  });
   it("output_range_for_OU_same_prefix_last", () => {
     const map = new PrefixMap();
-    map.voiceColor="test"
+    map.voiceColor = "test";
     map.SetRangeValues("C4-B4", "", "su");
     map.SetRangeValues("C6-B6", "", "su");
     const output = map.OutputSubbanks();
-    expect(output[0].color).toBe("test")
-    expect(output[0].prefix).toBe("")
-    expect(output[0].suffix).toBe("")
-    expect(output[0].tone_ranges[0]).toBe("C1-B3")
-    expect(output[0].tone_ranges[1]).toBe("C5-B5")
-    expect(output[0].tone_ranges[2]).toBe("C7-B7")
-    expect(output[1].color).toBe("test")
-    expect(output[1].prefix).toBe("")
-    expect(output[1].suffix).toBe("su")
-    expect(output[1].tone_ranges[0]).toBe("C4-B4")
-    expect(output[1].tone_ranges[1]).toBe("C6-B6")
-  })
+    expect(output[0].color).toBe("test");
+    expect(output[0].prefix).toBe("");
+    expect(output[0].suffix).toBe("");
+    expect(output[0].tone_ranges[0]).toBe("C1-B3");
+    expect(output[0].tone_ranges[1]).toBe("C5-B5");
+    expect(output[0].tone_ranges[2]).toBe("C7-B7");
+    expect(output[1].color).toBe("test");
+    expect(output[1].prefix).toBe("");
+    expect(output[1].suffix).toBe("su");
+    expect(output[1].tone_ranges[0]).toBe("C4-B4");
+    expect(output[1].tone_ranges[1]).toBe("C6-B6");
+  });
 });

@@ -80,10 +80,18 @@ export class PrefixMap {
    * @param newSuffix 新しいsuffix
    */
   SetRangeValues(range: string, newPrefix: string, newSuffix) {
-    const [minTone, maxTone] = range.split("-");
-    for (let i = ToneToNoteNum(minTone); i <= ToneToNoteNum(maxTone); i++) {
+    if(range.includes("-")){
+      const [minTone, maxTone] = range.split("-");
+      for (let i = ToneToNoteNum(minTone); i <= ToneToNoteNum(maxTone); i++) {
+        this.SetValue({
+          tone: NoteNumToTone(i),
+          prefix: newPrefix,
+          suffix: newSuffix,
+        });
+      }
+    }else{
       this.SetValue({
-        tone: NoteNumToTone(i),
+        tone: range,
         prefix: newPrefix,
         suffix: newSuffix,
       });
