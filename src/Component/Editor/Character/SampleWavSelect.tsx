@@ -33,7 +33,7 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
     if (props.files.length === 0) {
       return;
     }
-    if (!props.hasCharacterTxt) {
+    if (props.hasCharacterTxt) {
       if (props.characterTxt.sample) {
         loadWav(props.characterTxt.sample);
       } else {
