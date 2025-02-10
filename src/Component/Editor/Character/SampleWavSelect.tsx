@@ -73,7 +73,7 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
         onChange={OnChangeSample}
         disabled={!props.characterTxtUpdate}
       >
-        {props.characterTxt.image !== "upload" && (
+        {props.characterTxt.sample !== "upload" && (
           <MenuItem value={props.characterTxt.sample}>
             {props.characterTxt.sample}
           </MenuItem>
