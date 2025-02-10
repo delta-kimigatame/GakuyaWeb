@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-import { FullWidthButton } from "../Common/FullWidthButton";
+import { FullWidthButton } from "../../Common/FullWidthButton";
 
-import { OutputBitmap } from "../../Lib/UtauBitmap";
-import { utauIcon } from "../../settings/setting";
-import { Log } from "../../Lib/Logging";
+import { OutputBitmap } from "../../../Lib/UtauBitmap";
+import { utauIcon } from "../../../settings/setting";
+import { Log } from "../../../Lib/Logging";
 
 export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
   const { t } = useTranslation();
