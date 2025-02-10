@@ -15,7 +15,7 @@ import { FullWidthTextField } from "../Common/FullWidthTextField";
 import { Log } from "../../Lib/Logging";
 import { FullWidthSelect } from "../Common/FullWidthSelect";
 import { Png2BmpCanvas } from "./Character/Png2BmpCanvas";
-import { SampleWavUploadButton } from "./Character/SampleWavUploadButton";
+import { SampleWavSelect } from "./Character/SampleWavSelect";
 
 export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const { t } = useTranslation();
@@ -25,8 +25,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const [hasCharacterTxt, setHasCharacterTxt] = React.useState<boolean>(true);
   /** zip内のアイコン画像をdataurlに変換したもの */
   const [iconUrl, setIconUrl] = React.useState<string>("");
-  /** zip内のサンプル音声をdataurlに変換したもの */
-  const [sampleUrl, setSampleUrl] = React.useState<string>("");
   /**
    * rootDir変更時の処理
    */
@@ -61,7 +59,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
         })
       );
       setIconUrl("");
-      setSampleUrl("");
     } else {
       if (props.characterTxt.image) {
         const imagePath =
@@ -77,21 +74,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
         });
       } else {
         setIconUrl("");
-      }
-      if (props.characterTxt.sample) {
-        const samplePath =
-          props.rootDir +
-          (props.rootDir !== "" ? "/" : "") +
-          props.characterTxt.sample;
-        Log.log(
-          `character.txtに基づきサンプル音声load ${samplePath}`,
-          "CharacterPanel"
-        );
-        props.zipFiles[samplePath].async("arraybuffer").then((result) => {
-          setSampleUrl(URL.createObjectURL(new File([result], samplePath)));
-        });
-      } else {
-        setSampleUrl("");
       }
     }
   }, [props.rootDir, files]);
@@ -160,37 +142,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
       );
       props.zipFiles[imagePath].async("arraybuffer").then((result) => {
         setIconUrl(URL.createObjectURL(new File([result], imagePath)));
-      });
-    }
-  };
-
-  /** サンプル音声が変更された際の処理 */
-  const OnChangeSample = (e: SelectChangeEvent) => {
-    Log.log(
-      `character.txtの変更。key=sample,value=${e.target.value}`,
-      "CharacterPanel"
-    );
-    props.setCharacterTxt(
-      new CharacterTxt({
-        name: props.characterTxt.name,
-        image: props.characterTxt.image,
-        sample: e.target.value,
-        author: props.characterTxt.author,
-        web: props.characterTxt.web,
-        version: props.characterTxt.version,
-      })
-    );
-    if (e.target.value === "upload") {
-      setSampleUrl("");
-    } else {
-      const samplePath =
-        props.rootDir + (props.rootDir !== "" ? "/" : "") + e.target.value;
-      Log.log(
-        `character.txtに基づきサンプル音声load ${samplePath}`,
-        "CharacterPanel"
-      );
-      props.zipFiles[samplePath].async("arraybuffer").then((result) => {
-        setSampleUrl(URL.createObjectURL(new File([result], samplePath)));
       });
     }
   };
@@ -273,49 +224,16 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
               <Png2BmpCanvas setImgBuf={props.setIconBuf} />
             </>
           )}
-          <FullWidthSelect
-            label={t("editor.character.field.sample")}
-            value={props.characterTxt.sample}
-            onChange={OnChangeSample}
-            disabled={!props.characterTxtUpdate}
-          >
-            {props.characterTxt.image !== "upload" && (
-              <MenuItem value={props.characterTxt.sample}>
-                {props.characterTxt.sample}
-              </MenuItem>
-            )}
-            <MenuItem value={"upload"}>
-              {t("editor.character.field.uploadSample")}
-            </MenuItem>
-            {files
-              .filter((f) => f.startsWith(props.rootDir) && f.endsWith(".wav"))
-              .map((f) => (
-                <MenuItem
-                  value={
-                    props.rootDir === ""
-                      ? f
-                      : f.replace(props.rootDir + "/", "")
-                  }
-                >
-                  {props.rootDir === ""
-                    ? f
-                    : f.replace(props.rootDir + "/", "")}
-                </MenuItem>
-              ))}
-          </FullWidthSelect>
-          {props.characterTxt.sample !== "upload" &&
-            props.characterTxt.sample !== "" &&
-            sampleUrl !== "" && (
-              <>
-                <audio src={sampleUrl} controls style={{ margin: 8 }}></audio>
-                <br />
-              </>
-            )}
-          {props.characterTxt.sample === "upload" && (
-            <>
-              <SampleWavUploadButton setSampleBuf={props.setSampleBuf}/>
-            </>
-          )}
+          <SampleWavSelect 
+            rootDir={props.rootDir}
+            zipFiles={props.zipFiles}
+            files={files}
+            hasCharacterTxt={hasCharacterTxt}
+            characterTxt={props.characterTxt}
+            setCharacterTxt={props.setCharacterTxt}
+            characterTxtUpdate={props.characterTxtUpdate}
+            setSampleBuf={props.setSampleBuf}
+          />
           <FullWidthTextField
             type="text"
             label={t("editor.character.field.author")}
