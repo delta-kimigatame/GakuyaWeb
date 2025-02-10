@@ -10,14 +10,17 @@ import TabPanel from "@mui/lab/TabPanel";
 
 import { BasePaper } from "../Common/BasePaper";
 import { setting } from "../../settings/setting";
+import { ReadMePanel } from "./ReadMePanel";
+import { InstallTextPanel } from "./InstallTxtPanel";
 
 import { InstallTxt } from "../../Lib/InstallTxt";
 import { CharacterTxt } from "../../Lib/CharacterTxt";
 import { PrefixMap } from "../../Lib/PrefixMap";
 import { Log } from "../../Lib/Logging";
 import { FileReadAsync } from "../../Lib/FileReadAsync";
-import { ReadMePanel } from "./ReadMePanel";
-import { InstallTextPanel } from "./InstallTxtPanel";
+import { CharacterTxtPanel } from "./CharacterTxtPanel";
+import { Divider } from "@mui/material";
+import { CharacterYamlPanel } from "./CharacterYamlPanel";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -28,8 +31,17 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [installUpdate, setInstallUpdate] = React.useState<boolean>(false);
   /** character.txt */
   const [character, setCharacter] = React.useState<CharacterTxt | null>(null);
+  const [characterUpdate, setCharacterUpdate] = React.useState<boolean>(false);
+  /** icon画像 */
+  const [iconBuf, setIconBuf] = React.useState<ArrayBuffer>();
+  /** sample音声 */
+  const [sampleBuf, setSampleBuf] = React.useState<ArrayBuffer>();
   /** character.yaml */
   const [characterYaml, setCharacterYaml] = React.useState<{} | null>(null);
+  const [characterYamlUpdate, setCharacterYamlUpdate] =
+    React.useState<boolean>(false);
+  /** portrait */
+  const [portraitBuf, setPortraitBuf] = React.useState<ArrayBuffer>();
   /** readme.txt */
   const [readme, setReadme] = React.useState<string>("");
   const [readmeUpdate, setReadmeUpdate] = React.useState<boolean>(false);
@@ -249,7 +261,29 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               />
             </Tabs>
             <TabPanel value={0}>0</TabPanel>
-            <TabPanel value={1}>1</TabPanel>
+            <TabPanel value={1}>
+              <CharacterTxtPanel
+                rootDir={rootDir}
+                zipFileName={props.zipFileName}
+                zipFiles={props.zipFiles}
+                characterTxt={character}
+                setCharacterTxt={setCharacter}
+                characterTxtUpdate={characterUpdate}
+                setCharacterTxtUpdate={setCharacterUpdate}
+                setIconBuf={setIconBuf}
+                setSampleBuf={setSampleBuf}
+              />
+              <Divider />
+              <CharacterYamlPanel
+                rootDir={rootDir}
+                zipFiles={props.zipFiles}
+                characterYaml={characterYaml}
+                setCharacterYaml={setCharacterYaml}
+                update={characterYamlUpdate}
+                setUpdate={setCharacterYamlUpdate}
+                setPortraitBuf={setPortraitBuf}
+              />
+            </TabPanel>
             <TabPanel value={2}>
               <ReadMePanel
                 readme={readme}
@@ -280,4 +314,6 @@ export interface EditorViewProps {
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
   } | null;
+  /**zipファイル名 */
+  zipFileName: string;
 }
