@@ -31,7 +31,7 @@ export const SampleWavUploadButton: React.FC<SampleWavUploadButtonProps> = (
     setReadFile(e.target.files[0]);
     Log.log(
       `音声ファイル読み込み。${e.target.files[0].name}`,
-      "CharacterPanel"
+      "SampleWavUploadButton"
     );
   };
   /**
