@@ -3,6 +3,8 @@ import JSZip from "jszip";
 import yaml from "js-yaml";
 import { useTranslation } from "react-i18next";
 
+import { PaletteMode } from "@mui/material";
+
 import TabContext from "@mui/lab/TabContext";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -21,6 +23,7 @@ import { FileReadAsync } from "../../Lib/FileReadAsync";
 import { CharacterTxtPanel } from "./CharacterTxtPanel";
 import { Divider } from "@mui/material";
 import { CharacterYamlPanel } from "./CharacterYamlPanel";
+import { PrefixMapPanel } from "./PrefixMapPanel";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -49,6 +52,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [prefixMaps, setPrefixMaps] = React.useState<{ string?: PrefixMap }>(
     {}
   );
+  const [prefixMapsUpdate,setPrefixMapsUpdate] = React.useState<boolean>(false);
   /** 音源ルート */
   const [rootDir, setRootDir] = React.useState<string | null>(null);
   /** フォルダ名一覧 */
@@ -301,7 +305,15 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setInstallUpdate}
               />
             </TabPanel>
-            <TabPanel value={4}>4</TabPanel>
+            <TabPanel value={4}>
+              <PrefixMapPanel 
+                prefixMaps={prefixMaps}
+                setPrefixMaps={setPrefixMaps}
+                update={prefixMapsUpdate}
+                setUpdate={setPrefixMapsUpdate}
+                mode={props.mode}
+              />
+            </TabPanel>
           </TabContext>
         </>
       }
@@ -316,4 +328,6 @@ export interface EditorViewProps {
   } | null;
   /**zipファイル名 */
   zipFileName: string;
+  /**ダークモードかライトモードか */
+  mode: PaletteMode;
 }
