@@ -264,8 +264,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 value={4}
               />
             </Tabs>
-            <TabPanel value={0}>0</TabPanel>
-            <TabPanel value={1}>
+            <TabPanel value={0} sx={{p:1}}>0</TabPanel>
+            <TabPanel value={1} sx={{p:1}}>
               <CharacterTxtPanel
                 rootDir={rootDir}
                 zipFileName={props.zipFileName}
@@ -288,7 +288,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setPortraitBuf={setPortraitBuf}
               />
             </TabPanel>
-            <TabPanel value={2}>
+            <TabPanel value={2} sx={{p:1}}>
               <ReadMePanel
                 readme={readme}
                 setReadme={setReadme}
@@ -296,7 +296,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setReadmeUpdate}
               />
             </TabPanel>
-            <TabPanel value={3}>
+            <TabPanel value={3} sx={{p:1}}>
               <InstallTextPanel
                 rootDir={rootDir}
                 install={install}
@@ -305,7 +305,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setInstallUpdate}
               />
             </TabPanel>
-            <TabPanel value={4}>
+            <TabPanel value={4} sx={{p:1}}>
               <PrefixMapPanel 
                 prefixMaps={prefixMaps}
                 setPrefixMaps={setPrefixMaps}
