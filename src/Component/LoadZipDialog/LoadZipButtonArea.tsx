@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
 import { SelectChangeEvent } from "@mui/material/Select";
 
 import { NormalizeJP } from "../../Lib/FilenameNormalize";
@@ -19,6 +20,8 @@ import { Log } from "../../Lib/Logging";
  */
 export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
   const { t } = useTranslation();
+  /** 処理中判定 */
+  const [processing, setProcessing] = React.useState<boolean>(false);
 
   /**
    * ボタンを押した際の処理 \
@@ -28,6 +31,7 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
     if (props.zipFiles === null) return;
     const newZip = new JSZip();
     Log.log(`zipファイル名正規化開始`, "LoadZipButtonArea");
+    setProcessing(true)
     ZipExtract(props.zipFiles, 0, newZip);
   };
 
@@ -63,6 +67,7 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
       } else {
         Log.log(`zipファイル名正規化終了`, "LoadZipButtonArea");
         props.setZipFiles(newZip.files);
+        setProcessing(false)
         props.setDialogOpen(false);
       }
     });
@@ -70,14 +75,15 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
 
   return (
     <>
-      <FullWidthButton onClick={OnSubmitClick}>
-        {t("loadZipDialog.submit")}
+      <FullWidthButton onClick={OnSubmitClick} disabled={processing}>
+        {processing?<CircularProgress color="inherit" size={20} />:t("loadZipDialog.submit")}
       </FullWidthButton>
       <br />
       <FullWidthSelect
         label={t("loadZipDialog.encoding")}
         value={props.encoding}
         onChange={OnSelectChange}
+        disabled={processing}
       >
         <MenuItem value={"utf-8"}>UTF-8</MenuItem>
         <MenuItem value={"Shift-Jis"}>Shift-JIS</MenuItem>
