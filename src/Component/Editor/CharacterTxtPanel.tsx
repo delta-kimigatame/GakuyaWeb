@@ -6,16 +6,13 @@ import { CharacterTxt } from "../../Lib/CharacterTxt";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
-import { SelectChangeEvent } from "@mui/material/Select";
 
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 import { FullWidthTextField } from "../Common/FullWidthTextField";
+import { SampleWavSelect } from "./Character/SampleWavSelect";
+import { IconSelect } from "./Character/IconSelect";
 
 import { Log } from "../../Lib/Logging";
-import { FullWidthSelect } from "../Common/FullWidthSelect";
-import { Png2BmpCanvas } from "./Character/Png2BmpCanvas";
-import { SampleWavSelect } from "./Character/SampleWavSelect";
 
 export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const { t } = useTranslation();
@@ -23,8 +20,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const [files, setFiles] = React.useState<string[]>([]);
   /** rootフォルダにおけるcharacter.txtの有無 */
   const [hasCharacterTxt, setHasCharacterTxt] = React.useState<boolean>(true);
-  /** zip内のアイコン画像をdataurlに変換したもの */
-  const [iconUrl, setIconUrl] = React.useState<string>("");
   /**
    * rootDir変更時の処理
    */
@@ -58,24 +53,7 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
           version: "",
         })
       );
-      setIconUrl("");
-    } else {
-      if (props.characterTxt.image) {
-        const imagePath =
-          props.rootDir +
-          (props.rootDir !== "" ? "/" : "") +
-          props.characterTxt.image;
-        Log.log(
-          `character.txtに基づきアイコン画像load ${imagePath}`,
-          "CharacterPanel"
-        );
-        props.zipFiles[imagePath].async("arraybuffer").then((result) => {
-          setIconUrl(URL.createObjectURL(new File([result], imagePath)));
-        });
-      } else {
-        setIconUrl("");
-      }
-    }
+    } 
   }, [props.rootDir, files]);
 
   React.useEffect(() => {
@@ -115,37 +93,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
     );
   };
 
-  /** アイコン画像が変更された際の処理 */
-  const OnChangeImage = (e: SelectChangeEvent) => {
-    Log.log(
-      `character.txtの変更。key=image,value=${e.target.value}`,
-      "CharacterPanel"
-    );
-    props.setCharacterTxt(
-      new CharacterTxt({
-        name: props.characterTxt.name,
-        image: e.target.value,
-        sample: props.characterTxt.sample,
-        author: props.characterTxt.author,
-        web: props.characterTxt.web,
-        version: props.characterTxt.version,
-      })
-    );
-    if (e.target.value === "upload") {
-      setIconUrl("");
-    } else {
-      const imagePath =
-        props.rootDir + (props.rootDir !== "" ? "/" : "") + e.target.value;
-      Log.log(
-        `character.txtに基づきアイコン画像load ${imagePath}`,
-        "CharacterPanel"
-      );
-      props.zipFiles[imagePath].async("arraybuffer").then((result) => {
-        setIconUrl(URL.createObjectURL(new File([result], imagePath)));
-      });
-    }
-  };
-
   return (
     <Box>
       <Typography variant="caption">
@@ -169,61 +116,16 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
             }}
             disabled={!props.characterTxtUpdate}
           />
-          <FullWidthSelect
-            label={t("editor.character.field.image")}
-            value={props.characterTxt.image}
-            onChange={OnChangeImage}
-            disabled={!props.characterTxtUpdate}
-          >
-            {props.characterTxt.image !== "upload" && (
-              <MenuItem value={props.characterTxt.image}>
-                {props.characterTxt.image}
-              </MenuItem>
-            )}
-            <MenuItem value={"upload"}>
-              {t("editor.character.field.convertBmp")}
-            </MenuItem>
-            {files
-              .filter(
-                (f) =>
-                  f.startsWith(props.rootDir) &&
-                  (f.endsWith(".bmp") ||
-                    f.endsWith(".gif") ||
-                    f.endsWith(".jpg") ||
-                    f.endsWith(".jpeg"))
-              )
-              .map((f) => (
-                <MenuItem
-                  value={
-                    props.rootDir === ""
-                      ? f
-                      : f.replace(props.rootDir + "/", "")
-                  }
-                >
-                  {props.rootDir === ""
-                    ? f
-                    : f.replace(props.rootDir + "/", "")}
-                </MenuItem>
-              ))}
-          </FullWidthSelect>
-          {props.characterTxt.image !== "upload" &&
-            props.characterTxt.image !== "" &&
-            iconUrl !== "" && (
-              <>
-                <img
-                  src={iconUrl}
-                  width={100}
-                  height={100}
-                  style={{ margin: 8 }}
-                />
-                <br />
-              </>
-            )}
-          {props.characterTxt.image === "upload" && (
-            <>
-              <Png2BmpCanvas setImgBuf={props.setIconBuf} />
-            </>
-          )}
+          <IconSelect
+            rootDir={props.rootDir}
+            zipFiles={props.zipFiles}
+            files={files}
+            hasCharacterTxt={hasCharacterTxt}
+            characterTxt={props.characterTxt}
+            setCharacterTxt={props.setCharacterTxt}
+            characterTxtUpdate={props.characterTxtUpdate}
+            setIconBuf={props.setIconBuf}
+          />
           <SampleWavSelect 
             rootDir={props.rootDir}
             zipFiles={props.zipFiles}
