@@ -95,16 +95,17 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
 
   return (
     <Box>
-      <Typography variant="caption">
-        {t("editor.character.description")}
-      </Typography>
-      <br />
       <CommonCheckBox
         checked={props.characterTxtUpdate}
         setChecked={OnChangeCharacterTxtUpdate}
         label={t("editor.character.check")}
         disabled={!hasCharacterTxt}
       />
+      <br />
+      <Typography variant="caption">
+        {t("editor.character.description")}
+      </Typography>
+      <br />
       {props.characterTxt !== null && (
         <>
           <FullWidthTextField

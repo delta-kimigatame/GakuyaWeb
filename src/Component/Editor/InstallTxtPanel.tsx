@@ -77,15 +77,16 @@ export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
 
   return (
     <Box>
-      <Typography variant="caption">
-        {t("editor.install.description")}
-      </Typography>
-      <br />
       <CommonCheckBox
         checked={props.update}
         setChecked={OnChangeUpdate}
         label={t("editor.install.check")}
       />
+      <br />
+      <Typography variant="caption">
+        {t("editor.install.description")}
+      </Typography>
+      <br />
       {props.install !== null && (
         <>
           <FullWidthTextField

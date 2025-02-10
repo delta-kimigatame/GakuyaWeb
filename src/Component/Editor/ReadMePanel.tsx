@@ -16,15 +16,15 @@ export const ReadMePanel: React.FC<ReadMePanelProps> = (props) => {
   const { t } = useTranslation();
   return (
     <Box>
-      <Typography variant="caption">
-        {t("editor.readme.description")}
-      </Typography>
-      <br />
       <CommonCheckBox
         checked={props.update}
         setChecked={props.setUpdate}
         label={t("editor.readme.check")}
-      />
+      /><br />
+      <Typography variant="caption">
+        {t("editor.readme.description")}
+      </Typography>
+      <br />
       <TextField
         fullWidth
         multiline
