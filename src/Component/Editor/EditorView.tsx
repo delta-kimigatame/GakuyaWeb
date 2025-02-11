@@ -1,6 +1,7 @@
 import * as React from "react";
 import JSZip from "jszip";
 import yaml from "js-yaml";
+import * as iconv from "iconv-lite";
 import { useTranslation } from "react-i18next";
 
 import { PaletteMode } from "@mui/material";
@@ -9,6 +10,8 @@ import TabContext from "@mui/lab/TabContext";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
+import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 
 import { BasePaper } from "../Common/BasePaper";
 import { setting } from "../../settings/setting";
@@ -25,6 +28,10 @@ import { Divider } from "@mui/material";
 import { CharacterYamlPanel } from "./CharacterYamlPanel";
 import { PrefixMapPanel } from "./PrefixMapPanel";
 import { FileCheckPanel } from "./FileCheckPanel";
+import { FullWidthButton } from "../Common/FullWidthButton";
+import { Wave } from "utauwav";
+import { GenerateFrq } from "../../Lib/GenerateFrq";
+import { World } from "tsworld";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -69,6 +76,10 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   /** フォルダ名一覧 */
   const [directories, setDirectories] = React.useState<Array<string>>([]);
 
+  /** zipの書き出し中 */
+  const [progress, setProgress] = React.useState<boolean>(false);
+  /** download zip */
+  const [zipUrl, setZipUrl] = React.useState<string>("");
   /**
    * zipが読み込まれた際の処理
    */
@@ -166,7 +177,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       } else {
         setReadme("");
       }
-      let maps={}
+      let maps = {};
       if (Object.keys(props.zipFiles).includes(rootDir + "/prefix.map")) {
         Log.log(
           `prefix.mapがみつかりました。${rootDir + "/prefix.map"}`,
@@ -251,11 +262,265 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     }
   }, [rootDir]);
 
+  const ZipExtractBase = (
+    newRootDir: string,
+    filelist: string[],
+    index: number,
+    newZip: JSZip,
+    world: World
+  ) => {
+    const f = filelist[index];
+    const reg = new RegExp("^" + rootDir);
+    if (index >= filelist.length ) {
+      ZipExtractMake(newRootDir, newZip);
+    } else if (IsDelete(f, flags)) {
+      Log.log(`${f}は設定に従い削除されました。`, "EditorView");
+      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+    } else if (f.endsWith("character.txt") && characterUpdate) {
+      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+    } else if (
+      (f.endsWith("character.yaml") && characterYamlUpdate) ||
+      (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
+    ) {
+      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+    } else if (f.endsWith("readme.txt") && readmeUpdate) {
+      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+    } else if (f.endsWith("prefix.map") && prefixMapsUpdate) {
+      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+    } else {
+      const newFileName = f.replace(
+        reg,
+        newRootDir + rootDir === "" ? "/" : ""
+      );
+      props.zipFiles[f].async("arraybuffer").then((buf) => {
+        if (f.endsWith(".wav")) {
+          const wav = new Wave(buf);
+          Log.log(`${f}をwavとして読み込みました。`, "EditorView");
+          if (flags.wav.stereo) {
+            wav.channels = 1;
+            Log.log(`${f}をモノラルに変換しました。`, "EditorView");
+          }
+          if (flags.wav.sampleRate) {
+            wav.sampleRate = 44100;
+            Log.log(`${f}を44,100Hzに変換しました`, "EditorView");
+          }
+          if (flags.wav.depth) {
+            wav.bitDepth = 16;
+            Log.log(`${f}のbit深度を16bitに設定しました`, "EditorView");
+          }
+          if (flags.wav.dcoffset) {
+            wav.RemoveDCOffset();
+            Log.log(`${f}のDCoffsetを除去しました`, "EditorView");
+          }
+          newZip.file(newFileName, wav.Output());
+          Log.log(
+            `${f}を${newFileName}としてzipに格納しました。`,
+            "EditorView"
+          );
+          const frqPath = f.replace(".wav", "_wav.frq");
+          if (flags.frq.frq && !(frqPath in props.zipFiles)) {
+            Log.log(`${frqPath}が存在しないため生成します。`, "EditorView");
+            const ndata = Float64Array.from(wav.LogicalNormalize(1));
+            const frq = GenerateFrq(world, ndata, 44100, 256);
+            newZip.file(frqPath, frq.Output());
+            Log.log(`${frqPath}をzipに格納しました。`, "EditorView");
+          }
+        } else {
+          newZip.file(newFileName, buf);
+          Log.log(
+            `${f}を${newFileName}としてzipに格納しました。`,
+            "EditorView"
+          );
+        }
+        ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      });
+    }
+  };
+  const ZipExtractMake = (newRootDir: string, newZip: JSZip) => {
+    if (flags.oto.root && newRootDir + "/oto.ini" in newZip.files) {
+      const o_output = new File([""], "character.txt", {
+        type: "text/plane;charset=shift-jis",
+      });
+      newZip.file(newRootDir + "//oto.ini", o_output);
+      Log.log(
+        `空のoto.iniを作成し、${newRootDir + "/oto.ini"}に格納しました。`,
+        "EditorView"
+      );
+    }
+    if (characterUpdate) {
+      const c = {
+        name: character.name,
+        image: character.image,
+        sample: character.sample,
+        author: character.author,
+        web: character.web,
+        version: character.web,
+      };
+      if (character.image === "upload") {
+        let i = 0;
+        while (
+          newRootDir + "/icon" + (i === 0 ? "" : i.toString()) + ".bmp" in
+          newZip.files
+        ) {
+          i++;
+        }
+        const iconPath = "icon" + (i === 0 ? "" : i.toString()) + ".bmp";
+        c.image = iconPath;
+        newZip.file(iconPath, iconBuf);
+        Log.log(
+          `${newRootDir + "/" + iconPath}をzipに格納しました。`,
+          "EditorView"
+        );
+      }
+      if (character.sample === "upload") {
+        let i = 0;
+        while (
+          newRootDir + "/sample" + (i === 0 ? "" : i.toString()) + ".wav" in
+          newZip.files
+        ) {
+          i++;
+        }
+        const samplePath = "sample" + (i === 0 ? "" : i.toString()) + ".wav";
+        c.sample = samplePath;
+        newZip.file(samplePath, sampleBuf);
+        Log.log(
+          `${newRootDir + "/" + samplePath}をzipに格納しました。`,
+          "EditorView"
+        );
+      }
+      const c_output = new File(
+        [iconv.encode(new CharacterTxt(c).OutputTxt(), "Windows-31j")],
+        "character.txt",
+        { type: "text/plane;charset=shift-jis" }
+      );
+      newZip.file(newRootDir + "/character.txt", c_output);
+      Log.log(
+        `${newRootDir + "/character.txt"}をzipに格納しました。`,
+        "EditorView"
+      );
+    }
+    if (
+      characterYamlUpdate ||
+      (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
+    ) {
+      const subbanks = [];
+      Object.keys(prefixMaps).forEach((color) => {
+        const temp_subbanks = prefixMaps[color].OutputSubbanks();
+        temp_subbanks.forEach((t) => {
+          t.color = color;
+          subbanks.push(t);
+        });
+      });
+      if (subbanks.length !== 0) {
+        characterYaml["subbanks"] = subbanks;
+      }
+      const c = yaml.dump(characterYaml);
+      const c_output = new File([iconv.encode(c, "utf-8")], "character.yaml", {
+        type: "text/plane;charset=utf-8",
+      });
+      newZip.file(newRootDir + "/character.yaml", c_output);
+      Log.log(
+        `${newRootDir + "/character.yaml"}をzipに格納しました。`,
+        "EditorView"
+      );
+    }
+    if (readmeUpdate) {
+      const r_output = new File(
+        [iconv.encode(readme, "Windows-31j")],
+        "readme.txt",
+        { type: "text/plane;charset=shift-jis" }
+      );
+      newZip.file(newRootDir + "/readme.txt", r_output);
+      Log.log(
+        `${newRootDir + "/readme.txt"}をzipに格納しました。`,
+        "EditorView"
+      );
+    }
+    if (prefixMapsUpdate) {
+      const p_output = new File(
+        [iconv.encode(prefixMaps[""].OutputMap(), "Windows-31j")],
+        "prefix.map",
+        { type: "text/plane;charset=shift-jis" }
+      );
+      newZip.file(newRootDir + "/prefix.map", p_output);
+      Log.log(
+        `${newRootDir + "/prefix.map"}をzipに格納しました。`,
+        "EditorView"
+      );
+    }
+    if (installUpdate) {
+      const i_output = new File(
+        [iconv.encode(install.OutputTxt(), "Windows-31j")],
+        "install.txt",
+        { type: "text/plane;charset=shift-jis" }
+      );
+      newZip.file("install.txt", i_output);
+      Log.log(`${"install.txt"}をzipに格納しました。`, "EditorView");
+    }
+    newZip
+      .generateAsync({
+        type: "uint8array",
+        // @ts-expect-error 型の方がおかしい
+        encodeFileName: (fileName) => iconv.encode(fileName, "CP932"),
+      })
+      .then((result) => {
+        const zipFile = new Blob([result], {
+          type: "application/zip",
+        });
+        setProgress(false);
+        setZipUrl(URL.createObjectURL(zipFile));
+      });
+  };
+
+  const OnOutputClick = async () => {
+    setProgress(true);
+    const newZip = new JSZip();
+    const newRootDir =
+      rootDir === ""
+        ? props.zipFileName.replace(".zip", "")
+        : rootDir.split("/").slice(-1)[0];
+    const world = new World();
+    await world.Initialize();
+    Log.log(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
+    ZipExtractBase(
+      newRootDir,
+      Object.keys(props.zipFiles)
+        .filter((f) => f.startsWith(rootDir))
+        .sort(),
+      0,
+      newZip,
+      world
+    );
+  };
+
   return (
     <BasePaper
       title={setting.productName}
       body={
         <>
+          <FullWidthButton color="primary" onClick={OnOutputClick}>
+            {progress ? <CircularProgress /> : t("editor.output")}
+          </FullWidthButton>
+          {zipUrl !== "" && (
+            <Button
+              fullWidth
+              color="primary"
+              variant="contained"
+              sx={{ textTransform: "none", m: 1 }}
+              href={zipUrl === null ? "" : zipUrl}
+              size="large"
+              download={props.zipFileName.replace(
+                ".zip",
+                new Date().toJSON() + ".zip"
+              )}
+            >
+              {t("editor.download")}
+            </Button>
+          )}
           <TabContext value={selectTab}>
             <Tabs
               value={selectTab}
@@ -338,6 +603,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               <InstallTextPanel
                 rootDir={rootDir}
                 install={install}
+                zipFileName={props.zipFileName}
                 setInstall={setInstall}
                 update={installUpdate}
                 setUpdate={setInstallUpdate}
@@ -404,3 +670,43 @@ export interface FileCheckFlags {
   oto: OtoFlags;
   wav: WavFlags;
 }
+
+export const IsDelete = (f: string, flags: FileCheckFlags): boolean => {
+  if (flags.remove.read && f.endsWith("$read")) {
+    return true;
+  }
+  if (flags.remove.uspec && f.endsWith(".uspec")) {
+    return true;
+  }
+  if (flags.remove.setparam && f.endsWith("oto.setParam-Scache")) {
+    return true;
+  }
+  if (flags.remove.vlabeler && f.includes(".lbp.caches/")) {
+    return true;
+  }
+  if (flags.remove.vlabeler && f.endsWith(".lbp")) {
+    return true;
+  }
+  if (flags.frq.pmk && f.endsWith(".pmk")) {
+    return true;
+  }
+  if (flags.frq.frc && f.endsWith(".frc")) {
+    return true;
+  }
+  if (flags.frq.vs4ufrq && f.endsWith(".vs4ufrq")) {
+    return true;
+  }
+  if (
+    flags.frq.world &&
+    (f.endsWith(".dio") || f.endsWith(".stac") || f.endsWith(".platinum"))
+  ) {
+    return true;
+  }
+  if (flags.frq.llsm && f.endsWith(".llsm")) {
+    return true;
+  }
+  if (flags.frq.mrq && f.endsWith(".mrq")) {
+    return true;
+  }
+  return false;
+};
