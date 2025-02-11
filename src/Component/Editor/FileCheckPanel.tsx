@@ -10,7 +10,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 
 import { Log } from "../../Lib/Logging";
-import { FileCheckFlags } from "./EditorView";
+import { FileCheckFlags,IsDelete } from "./EditorView";
 import { FullWidthButton } from "../Common/FullWidthButton";
 import { FullWidthSelect } from "../Common/FullWidthSelect";
 import { BasePaper } from "../Common/BasePaper";
@@ -59,42 +59,6 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
     );
   };
 
-  const IsDelete = (f: string): boolean => {
-    if (props.flags.remove.read && f.endsWith("$read")) {
-      return true;
-    }
-    if (props.flags.remove.uspec && f.endsWith(".uspec")) {
-      return true;
-    }
-    if (props.flags.remove.setparam && f.endsWith("oto.setParam-Scache")) {
-      return true;
-    }
-    if (props.flags.remove.vlabeler && f.includes(".lbp.caches/")) {
-      return true;
-    }
-    if (props.flags.remove.vlabeler && f.endsWith(".lbp")) {
-      return true;
-    }
-    if (props.flags.frq.pmk && f.endsWith(".pmk")) {
-      return true;
-    }
-    if (props.flags.frq.frc && f.endsWith(".frc")) {
-      return true;
-    }
-    if (props.flags.frq.vs4ufrq && f.endsWith(".vs4ufrq")) {
-      return true;
-    }
-    if (props.flags.frq.world && (f.endsWith(".dio")||f.endsWith(".stac")||f.endsWith(".platinum"))) {
-      return true;
-    }
-    if (props.flags.frq.llsm && f.endsWith(".llsm")) {
-      return true;
-    }
-    if (props.flags.frq.mrq && f.endsWith(".mrq")) {
-      return true;
-    }
-    return false;
-  };
 
   return (
     <>
@@ -357,7 +321,7 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
                 <>
                   <Typography
                     variant="caption"
-                    color={IsDelete(f) ? "error" : "inherit"}
+                    color={IsDelete(f,props.flags) ? "error" : "inherit"}
                   >
                     {f}
                   </Typography>
