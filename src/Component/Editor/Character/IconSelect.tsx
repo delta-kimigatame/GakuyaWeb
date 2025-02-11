@@ -21,9 +21,11 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
       `character.txtに基づきアイコン画像load ${imagePath}`,
       "CharacterPanel"
     );
-    props.zipFiles[imagePath].async("arraybuffer").then((result) => {
-      setIconUrl(URL.createObjectURL(new File([result], imagePath)));
-    });
+    if(imagePath in props.zipFiles){
+      props.zipFiles[imagePath].async("arraybuffer").then((result) => {
+        setIconUrl(URL.createObjectURL(new File([result], imagePath)));
+      });
+    }
   };
   /**
    * ファイル一覧とhasCharacterTxtが更新された際の処理

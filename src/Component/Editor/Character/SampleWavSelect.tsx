@@ -22,9 +22,11 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
       `character.txtに基づきサンプル音声load ${samplePath}`,
       "CharacterPanel"
     );
-    props.zipFiles[samplePath].async("arraybuffer").then((result) => {
-      setSampleUrl(URL.createObjectURL(new File([result], samplePath)));
-    });
+    if (samplePath in props.zipFiles) {
+      props.zipFiles[samplePath].async("arraybuffer").then((result) => {
+        setSampleUrl(URL.createObjectURL(new File([result], samplePath)));
+      });
+    }
   };
   /**
    * ファイル一覧とhasCharacterTxtが更新された際の処理

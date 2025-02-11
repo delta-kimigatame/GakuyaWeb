@@ -21,9 +21,11 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
       `character.yamlに基づき立ち絵load ${samplePath}`,
       "CharacterYamlPanel"
     );
-    props.zipFiles[samplePath].async("arraybuffer").then((result) => {
-      setPortaitUrl(URL.createObjectURL(new File([result], samplePath)));
-    });
+    if (samplePath in props.zipFiles) {
+      props.zipFiles[samplePath].async("arraybuffer").then((result) => {
+        setPortaitUrl(URL.createObjectURL(new File([result], samplePath)));
+      });
+    }
   };
   /**
    * ファイル一覧とhasCharacterYamlが更新された際の処理
