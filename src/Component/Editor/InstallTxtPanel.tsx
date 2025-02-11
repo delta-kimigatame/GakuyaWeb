@@ -18,20 +18,6 @@ import { Log } from "../../Lib/Logging";
  */
 export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
   const { t } = useTranslation();
-  /**
-   * rootDir変更時の処理
-   */
-  React.useEffect(() => {
-    if (props.update) {
-      Log.log(`rootDirの変更に伴うinstall.txtの変更。`, "InstallTextPanel");
-      const install = new InstallTxt({
-        folder: props.rootDir,
-        contentsDir: props.rootDir,
-        description: props.install ? props.install.description : "",
-      });
-      props.setInstall(install);
-    }
-  }, [props.rootDir]);
 
   /**
    * folder変更時の処理

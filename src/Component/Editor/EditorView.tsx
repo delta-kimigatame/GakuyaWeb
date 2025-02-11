@@ -32,7 +32,15 @@ import { FullWidthButton } from "../Common/FullWidthButton";
 import { Wave } from "utauwav";
 import { GenerateFrq } from "../../Lib/GenerateFrq";
 import { World } from "tsworld";
-import { ExtractCharacterTxt, ExtractCharacterYaml, ExtractInstallTxt, ExtractPrefixMap, ExtractReadme, ExtractRootOto, GetSubbanks } from "../../Lib/OutputZip";
+import {
+  ExtractCharacterTxt,
+  ExtractCharacterYaml,
+  ExtractInstallTxt,
+  ExtractPrefixMap,
+  ExtractReadme,
+  ExtractRootOto,
+  GetSubbanks,
+} from "../../Lib/OutputZip";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -145,7 +153,15 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             setInstall(value);
           });
       } else {
-        setInstall(null);
+        Log.log(`rootDirの変更に伴うinstall.txtの変更。`, "EditorView");
+        const install = new InstallTxt({
+          folder:
+            rootDir === "" ? props.zipFileName.replace(".zip", "") : rootDir,
+          contentsDir:
+            rootDir === "" ? props.zipFileName.replace(".zip", "") : rootDir,
+          description: "",
+        });
+        setInstall(install);
       }
       if (Object.keys(props.zipFiles).includes(rootDir + "/character.txt")) {
         Log.log(
@@ -161,7 +177,23 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             setCharacter(value);
           });
       } else {
-        setCharacter(null);
+        Log.log(
+          `character.txtが存在しないため自動生成。name=${
+            rootDir ? rootDir : props.zipFileName.slice(0, -4)
+          }`,
+          "EditorView"
+        );
+        setCharacterUpdate(true);
+        setCharacter(
+          new CharacterTxt({
+            name: rootDir ? rootDir : props.zipFileName.slice(0, -4),
+            image: "",
+            sample: "",
+            author: "",
+            web: "",
+            version: "",
+          })
+        );
       }
       if (Object.keys(props.zipFiles).includes(rootDir + "/readme.txt")) {
         Log.log(
@@ -272,7 +304,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   ) => {
     const f = filelist[index];
     const reg = new RegExp("^" + rootDir);
-    if (index >= filelist.length ) {
+    if (index >= filelist.length) {
       ZipExtractMake(newRootDir, newZip);
     } else if (IsDelete(f, flags)) {
       Log.log(`${f}は設定に従い削除されました。`, "EditorView");
@@ -342,12 +374,32 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     }
   };
   const ZipExtractMake = (newRootDir: string, newZip: JSZip) => {
-    const newZip7=ExtractRootOto(newRootDir,newZip,flags.oto.root)
-    const newZip6=ExtractCharacterTxt(newRootDir,characterUpdate,character,newZip7,iconBuf,sampleBuf)
-    const newZip5=ExtractCharacterYaml(newRootDir,characterYamlUpdate,characterYaml,prefixMapsUpdate,prefixMaps,newZip6,portraitBuf)
-    const newZip4=ExtractReadme(newRootDir,readmeUpdate,readme,newZip5)
-    const newZip3=ExtractPrefixMap(newRootDir,prefixMapsUpdate,prefixMaps,newZip4)
-    const newZip2=ExtractInstallTxt(installUpdate,install,newZip3)
+    const newZip7 = ExtractRootOto(newRootDir, newZip, flags.oto.root);
+    const newZip6 = ExtractCharacterTxt(
+      newRootDir,
+      characterUpdate,
+      character,
+      newZip7,
+      iconBuf,
+      sampleBuf
+    );
+    const newZip5 = ExtractCharacterYaml(
+      newRootDir,
+      characterYamlUpdate,
+      characterYaml,
+      prefixMapsUpdate,
+      prefixMaps,
+      newZip6,
+      portraitBuf
+    );
+    const newZip4 = ExtractReadme(newRootDir, readmeUpdate, readme, newZip5);
+    const newZip3 = ExtractPrefixMap(
+      newRootDir,
+      prefixMapsUpdate,
+      prefixMaps,
+      newZip4
+    );
+    const newZip2 = ExtractInstallTxt(installUpdate, install, newZip3);
     newZip2
       .generateAsync({
         type: "uint8array",

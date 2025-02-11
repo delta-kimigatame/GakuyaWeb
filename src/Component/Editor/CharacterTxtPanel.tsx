@@ -33,25 +33,6 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
       "CharacterPanel"
     );
     setHasCharacterTxt(hasCharacterTxt_);
-    if (!hasCharacterTxt_) {
-      Log.log(
-        `character.txtが存在しないため自動生成。name=${
-          props.rootDir ? props.rootDir : props.zipFileName.slice(0, -4)
-        }`,
-        "CharacterPanel"
-      );
-      props.setCharacterTxtUpdate(true);
-      props.setCharacterTxt(
-        new CharacterTxt({
-          name: props.rootDir ? props.rootDir : props.zipFileName.slice(0, -4),
-          image: "",
-          sample: "",
-          author: "",
-          web: "",
-          version: "",
-        })
-      );
-    }
   }, [props.rootDir, props.files]);
 
   /** character.txtの更新要否の変更 */
