@@ -21,19 +21,19 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
    * rootDir変更時の処理
    */
   React.useEffect(() => {
-    const characterTxtPath =
+    const characterYamlPath =
       props.rootDir === ""
         ? "character.yaml"
         : props.rootDir + "/character.yaml";
     if (props.files.length === 0) {
       return;
     }
-    const hasCharacterTxt_ = props.files.includes(characterTxtPath);
+    const hasCharacterYaml_ = props.files.includes(characterYamlPath);
     Log.log(
-      `rootDirの変更に伴うcharacter.yaml有無の確認。${hasCharacterTxt_}`,
+      `rootDirの変更に伴うcharacter.yaml有無の確認。${hasCharacterYaml_}`,
       "CharacterYamlPanel"
     );
-    setHasCharacterYaml(hasCharacterTxt_);
+    setHasCharacterYaml(hasCharacterYaml_);
   }, [props.rootDir, props.files]);
 
   /** character.yamlの更新要否の変更 */
