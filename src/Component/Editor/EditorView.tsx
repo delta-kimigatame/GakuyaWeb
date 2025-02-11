@@ -32,6 +32,7 @@ import { FullWidthButton } from "../Common/FullWidthButton";
 import { Wave } from "utauwav";
 import { GenerateFrq } from "../../Lib/GenerateFrq";
 import { World } from "tsworld";
+import { ExtractCharacterTxt, ExtractCharacterYaml, ExtractInstallTxt, ExtractPrefixMap, ExtractReadme, ExtractRootOto, GetSubbanks } from "../../Lib/OutputZip";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -341,127 +342,13 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     }
   };
   const ZipExtractMake = (newRootDir: string, newZip: JSZip) => {
-    if (flags.oto.root && newRootDir + "/oto.ini" in newZip.files) {
-      const o_output = new File([""], "character.txt", {
-        type: "text/plane;charset=shift-jis",
-      });
-      newZip.file(newRootDir + "//oto.ini", o_output);
-      Log.log(
-        `空のoto.iniを作成し、${newRootDir + "/oto.ini"}に格納しました。`,
-        "EditorView"
-      );
-    }
-    if (characterUpdate) {
-      const c = {
-        name: character.name,
-        image: character.image,
-        sample: character.sample,
-        author: character.author,
-        web: character.web,
-        version: character.web,
-      };
-      if (character.image === "upload") {
-        let i = 0;
-        while (
-          newRootDir + "/icon" + (i === 0 ? "" : i.toString()) + ".bmp" in
-          newZip.files
-        ) {
-          i++;
-        }
-        const iconPath = "icon" + (i === 0 ? "" : i.toString()) + ".bmp";
-        c.image = iconPath;
-        newZip.file(iconPath, iconBuf);
-        Log.log(
-          `${newRootDir + "/" + iconPath}をzipに格納しました。`,
-          "EditorView"
-        );
-      }
-      if (character.sample === "upload") {
-        let i = 0;
-        while (
-          newRootDir + "/sample" + (i === 0 ? "" : i.toString()) + ".wav" in
-          newZip.files
-        ) {
-          i++;
-        }
-        const samplePath = "sample" + (i === 0 ? "" : i.toString()) + ".wav";
-        c.sample = samplePath;
-        newZip.file(samplePath, sampleBuf);
-        Log.log(
-          `${newRootDir + "/" + samplePath}をzipに格納しました。`,
-          "EditorView"
-        );
-      }
-      const c_output = new File(
-        [iconv.encode(new CharacterTxt(c).OutputTxt(), "Windows-31j")],
-        "character.txt",
-        { type: "text/plane;charset=shift-jis" }
-      );
-      newZip.file(newRootDir + "/character.txt", c_output);
-      Log.log(
-        `${newRootDir + "/character.txt"}をzipに格納しました。`,
-        "EditorView"
-      );
-    }
-    if (
-      characterYamlUpdate ||
-      (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
-    ) {
-      const subbanks = [];
-      Object.keys(prefixMaps).forEach((color) => {
-        const temp_subbanks = prefixMaps[color].OutputSubbanks();
-        temp_subbanks.forEach((t) => {
-          t.color = color;
-          subbanks.push(t);
-        });
-      });
-      if (subbanks.length !== 0) {
-        characterYaml["subbanks"] = subbanks;
-      }
-      const c = yaml.dump(characterYaml);
-      const c_output = new File([iconv.encode(c, "utf-8")], "character.yaml", {
-        type: "text/plane;charset=utf-8",
-      });
-      newZip.file(newRootDir + "/character.yaml", c_output);
-      Log.log(
-        `${newRootDir + "/character.yaml"}をzipに格納しました。`,
-        "EditorView"
-      );
-    }
-    if (readmeUpdate) {
-      const r_output = new File(
-        [iconv.encode(readme, "Windows-31j")],
-        "readme.txt",
-        { type: "text/plane;charset=shift-jis" }
-      );
-      newZip.file(newRootDir + "/readme.txt", r_output);
-      Log.log(
-        `${newRootDir + "/readme.txt"}をzipに格納しました。`,
-        "EditorView"
-      );
-    }
-    if (prefixMapsUpdate) {
-      const p_output = new File(
-        [iconv.encode(prefixMaps[""].OutputMap(), "Windows-31j")],
-        "prefix.map",
-        { type: "text/plane;charset=shift-jis" }
-      );
-      newZip.file(newRootDir + "/prefix.map", p_output);
-      Log.log(
-        `${newRootDir + "/prefix.map"}をzipに格納しました。`,
-        "EditorView"
-      );
-    }
-    if (installUpdate) {
-      const i_output = new File(
-        [iconv.encode(install.OutputTxt(), "Windows-31j")],
-        "install.txt",
-        { type: "text/plane;charset=shift-jis" }
-      );
-      newZip.file("install.txt", i_output);
-      Log.log(`${"install.txt"}をzipに格納しました。`, "EditorView");
-    }
-    newZip
+    const newZip7=ExtractRootOto(newRootDir,newZip,flags.oto.root)
+    const newZip6=ExtractCharacterTxt(newRootDir,characterUpdate,character,newZip7,iconBuf,sampleBuf)
+    const newZip5=ExtractCharacterYaml(newRootDir,characterYamlUpdate,characterYaml,prefixMapsUpdate,prefixMaps,newZip6,portraitBuf)
+    const newZip4=ExtractReadme(newRootDir,readmeUpdate,readme,newZip5)
+    const newZip3=ExtractPrefixMap(newRootDir,prefixMapsUpdate,prefixMaps,newZip4)
+    const newZip2=ExtractInstallTxt(installUpdate,install,newZip3)
+    newZip2
       .generateAsync({
         type: "uint8array",
         // @ts-expect-error 型の方がおかしい
