@@ -16,8 +16,6 @@ import { Log } from "../../Lib/Logging";
 
 export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const { t } = useTranslation();
-  /** zip内のファイル一覧 */
-  const [files, setFiles] = React.useState<string[]>([]);
   /** rootフォルダにおけるcharacter.txtの有無 */
   const [hasCharacterTxt, setHasCharacterTxt] = React.useState<boolean>(true);
   /**
@@ -26,10 +24,10 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   React.useEffect(() => {
     const characterTxtPath =
       props.rootDir === "" ? "character.txt" : props.rootDir + "/character.txt";
-    if (files.length === 0) {
+    if (props.files.length === 0) {
       return;
     }
-    const hasCharacterTxt_ = files.includes(characterTxtPath);
+    const hasCharacterTxt_ = props.files.includes(characterTxtPath);
     Log.log(
       `rootDirの変更に伴うcharacter.txt有無の確認。${hasCharacterTxt_}`,
       "CharacterPanel"
@@ -53,17 +51,8 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
           version: "",
         })
       );
-    } 
-  }, [props.rootDir, files]);
-
-  React.useEffect(() => {
-    Log.log(`zipFilesからファイル一覧の取得`, "CharacterPanel");
-    const files_ =
-      props.zipFiles !== null
-        ? Object.keys(props.zipFiles)
-        : new Array<string>();
-    setFiles(files_);
-  }, [props.zipFiles]);
+    }
+  }, [props.rootDir, props.files]);
 
   /** character.txtの更新要否の変更 */
   const OnChangeCharacterTxtUpdate = () => {
@@ -120,17 +109,17 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
           <IconSelect
             rootDir={props.rootDir}
             zipFiles={props.zipFiles}
-            files={files}
+            files={props.files}
             hasCharacterTxt={hasCharacterTxt}
             characterTxt={props.characterTxt}
             setCharacterTxt={props.setCharacterTxt}
             characterTxtUpdate={props.characterTxtUpdate}
             setIconBuf={props.setIconBuf}
           />
-          <SampleWavSelect 
+          <SampleWavSelect
             rootDir={props.rootDir}
             zipFiles={props.zipFiles}
-            files={files}
+            files={props.files}
             hasCharacterTxt={hasCharacterTxt}
             characterTxt={props.characterTxt}
             setCharacterTxt={props.setCharacterTxt}
@@ -177,6 +166,8 @@ export interface CharacterTxtPanelProps {
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
   } | null;
+  /** ファイル一覧 */
+  files: string[];
   /**zipファイル名 */
   zipFileName: string;
   /** character.txtファイルの中身 */

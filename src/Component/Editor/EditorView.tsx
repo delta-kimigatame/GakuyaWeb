@@ -29,6 +29,13 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
   /** tabの選択状態 */
   const [selectTab, setSelectTab] = React.useState(0);
+  /** 実行設定 */
+  const [flags, setFlags] = React.useState<FileCheckFlags>({
+    remove: {},
+    frq: {},
+    oto: {},
+    wav: {},
+  });
   /** install.txt */
   const [install, setInstall] = React.useState<InstallTxt | null>(null);
   const [installUpdate, setInstallUpdate] = React.useState<boolean>(false);
@@ -52,9 +59,12 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [prefixMaps, setPrefixMaps] = React.useState<{ string?: PrefixMap }>(
     {}
   );
-  const [prefixMapsUpdate,setPrefixMapsUpdate] = React.useState<boolean>(false);
+  const [prefixMapsUpdate, setPrefixMapsUpdate] =
+    React.useState<boolean>(false);
   /** 音源ルート */
   const [rootDir, setRootDir] = React.useState<string | null>(null);
+  /** ファイル一覧 */
+  const [files,setFiles] = React.useState<string[]>([]);
   /** フォルダ名一覧 */
   const [directories, setDirectories] = React.useState<Array<string>>([]);
 
@@ -80,6 +90,12 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       });
       Log.log(`フォルダ読込完了。[${dirs}]`, "EditorView");
       Log.log(`音源ルート。${rootDir_}`, "EditorView");
+      Log.log(`zipFilesからファイル一覧の取得`, "EditorView");
+      const files_ =
+        props.zipFiles !== null
+          ? Object.keys(props.zipFiles)
+          : new Array<string>();
+      setFiles(files_);
       setDirectories(dirs);
       setRootDir(rootDir_);
     }
@@ -264,10 +280,13 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 value={4}
               />
             </Tabs>
-            <TabPanel value={0} sx={{p:1}}>0</TabPanel>
-            <TabPanel value={1} sx={{p:1}}>
+            <TabPanel value={0} sx={{ p: 1 }}>
+              0
+            </TabPanel>
+            <TabPanel value={1} sx={{ p: 1 }}>
               <CharacterTxtPanel
                 rootDir={rootDir}
+                files={files}
                 zipFileName={props.zipFileName}
                 zipFiles={props.zipFiles}
                 characterTxt={character}
@@ -280,6 +299,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               <Divider />
               <CharacterYamlPanel
                 rootDir={rootDir}
+                files={files}
                 zipFiles={props.zipFiles}
                 characterYaml={characterYaml}
                 setCharacterYaml={setCharacterYaml}
@@ -288,7 +308,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setPortraitBuf={setPortraitBuf}
               />
             </TabPanel>
-            <TabPanel value={2} sx={{p:1}}>
+            <TabPanel value={2} sx={{ p: 1 }}>
               <ReadMePanel
                 readme={readme}
                 setReadme={setReadme}
@@ -296,7 +316,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setReadmeUpdate}
               />
             </TabPanel>
-            <TabPanel value={3} sx={{p:1}}>
+            <TabPanel value={3} sx={{ p: 1 }}>
               <InstallTextPanel
                 rootDir={rootDir}
                 install={install}
@@ -305,8 +325,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setInstallUpdate}
               />
             </TabPanel>
-            <TabPanel value={4} sx={{p:1}}>
-              <PrefixMapPanel 
+            <TabPanel value={4} sx={{ p: 1 }}>
+              <PrefixMapPanel
                 prefixMaps={prefixMaps}
                 setPrefixMaps={setPrefixMaps}
                 update={prefixMapsUpdate}
@@ -330,4 +350,39 @@ export interface EditorViewProps {
   zipFileName: string;
   /**ダークモードかライトモードか */
   mode: PaletteMode;
+}
+
+interface RemoveFlags {
+  read?: boolean;
+  uspec?: boolean;
+  setparam?: boolean;
+  vlabeler?: boolean;
+}
+
+interface FrqFlags {
+  frq?: boolean;
+  pmk?: boolean;
+  frc?: boolean;
+  vs4ufrq?: boolean;
+  world?: boolean;
+  llsm?: boolean;
+  mrq?: boolean;
+}
+
+interface OtoFlags {
+  root?: boolean;
+}
+
+interface WavFlags {
+  stereo?: boolean;
+  sampleRate?: boolean;
+  depth?: boolean;
+  dcoffset?: boolean;
+}
+
+export interface FileCheckFlags {
+  remove: RemoveFlags;
+  frq: FrqFlags;
+  oto: OtoFlags;
+  wav: WavFlags;
 }

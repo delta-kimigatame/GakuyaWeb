@@ -15,8 +15,6 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
   props
 ) => {
   const { t } = useTranslation();
-  /** zip内のファイル一覧 */
-  const [files, setFiles] = React.useState<string[]>([]);
   /** rootフォルダにおけるcharacter.txtの有無 */
   const [hasCharacterYaml, setHasCharacterYaml] = React.useState<boolean>(true);
   /**
@@ -27,25 +25,16 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       props.rootDir === ""
         ? "character.yaml"
         : props.rootDir + "/character.yaml";
-    if (files.length === 0) {
+    if (props.files.length === 0) {
       return;
     }
-    const hasCharacterTxt_ = files.includes(characterTxtPath);
+    const hasCharacterTxt_ = props.files.includes(characterTxtPath);
     Log.log(
       `rootDirの変更に伴うcharacter.yaml有無の確認。${hasCharacterTxt_}`,
       "CharacterYamlPanel"
     );
     setHasCharacterYaml(hasCharacterTxt_);
-  }, [props.rootDir, files]);
-
-  React.useEffect(() => {
-    Log.log(`zipFilesからファイル一覧の取得`, "CharacterYamlPanel");
-    const files_ =
-      props.zipFiles !== null
-        ? Object.keys(props.zipFiles)
-        : new Array<string>();
-    setFiles(files_);
-  }, [props.zipFiles]);
+  }, [props.rootDir, props.files]);
 
   /** character.yamlの更新要否の変更 */
   const OnChangeUpdate = () => {
@@ -139,7 +128,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
           <PortraitSelect
             rootDir={props.rootDir}
             zipFiles={props.zipFiles}
-            files={files}
+            files={props.files}
             hasCharacterYaml={hasCharacterYaml}
             characterYaml={props.characterYaml}
             setCharacterYaml={props.setCharacterYaml}
@@ -190,6 +179,8 @@ export interface CharacterYamlPanelProps {
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
   } | null;
+  /** ファイル一覧 */
+  files: string[];
   /** character.yamlファイルの中身 */
   characterYaml: CharacterYaml | null;
   /** character.yamlファイルの変更処理 */
