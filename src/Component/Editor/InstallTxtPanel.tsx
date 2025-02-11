@@ -27,7 +27,7 @@ export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
       const install = new InstallTxt({
         folder: props.rootDir,
         contentsDir: props.rootDir,
-        description: props.install.description,
+        description: props.install ? props.install.description : "",
       });
       props.setInstall(install);
     }
@@ -60,20 +60,20 @@ export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
     props.setInstall(install);
   };
 
-  const OnChangeUpdate = ()=>{
-    const newValue = !props.update
+  const OnChangeUpdate = () => {
+    const newValue = !props.update;
     Log.log(`Install.txt出力設定の変更。${newValue}`, "InstallTextPanel");
-    props.setUpdate(newValue)
-    if(newValue && props.install===null){
+    props.setUpdate(newValue);
+    if (newValue && props.install === null) {
       Log.log(`Install.txtが存在しないため生成しました。`, "InstallTextPanel");
       const install = new InstallTxt({
-        folder: props.rootDir,
-        contentsDir: props.rootDir,
+        folder: props.rootDir === "" ? props.zipFileName.replace(".zip","") : props.rootDir,
+        contentsDir: props.rootDir === "" ? props.zipFileName.replace(".zip","") : props.rootDir,
         description: "",
       });
       props.setInstall(install);
     }
-  }
+  };
 
   return (
     <Box>
@@ -115,6 +115,8 @@ export interface InstallTxtPanelProps {
   install: InstallTxt | null;
   /** install.txtファイルの変更処理 */
   setInstall: React.Dispatch<React.SetStateAction<InstallTxt | null>>;
+  /**zipファイル名 */
+  zipFileName: string;
   /** ファイル更新の要否 */
   update: boolean;
   /** ファイル更新要否の変更処理 */
