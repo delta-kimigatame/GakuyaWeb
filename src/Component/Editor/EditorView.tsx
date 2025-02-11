@@ -24,6 +24,7 @@ import { CharacterTxtPanel } from "./CharacterTxtPanel";
 import { Divider } from "@mui/material";
 import { CharacterYamlPanel } from "./CharacterYamlPanel";
 import { PrefixMapPanel } from "./PrefixMapPanel";
+import { FileCheckPanel } from "./FileCheckPanel";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -64,7 +65,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   /** 音源ルート */
   const [rootDir, setRootDir] = React.useState<string | null>(null);
   /** ファイル一覧 */
-  const [files,setFiles] = React.useState<string[]>([]);
+  const [files, setFiles] = React.useState<string[]>([]);
   /** フォルダ名一覧 */
   const [directories, setDirectories] = React.useState<Array<string>>([]);
 
@@ -131,6 +132,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             );
             setInstall(value);
           });
+      } else {
+        setInstall(null);
       }
       if (Object.keys(props.zipFiles).includes(rootDir + "/character.txt")) {
         Log.log(
@@ -145,6 +148,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             Log.log(`character.txtの読込完了 name=${value.name}`, "EditorView");
             setCharacter(value);
           });
+      } else {
+        setCharacter(null);
       }
       if (Object.keys(props.zipFiles).includes(rootDir + "/readme.txt")) {
         Log.log(
@@ -158,7 +163,10 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             Log.log(`readme.txtの読込完了 ${txt}`, "EditorView");
             setReadme(txt);
           });
+      } else {
+        setReadme("");
       }
+      let maps={}
       if (Object.keys(props.zipFiles).includes(rootDir + "/prefix.map")) {
         Log.log(
           `prefix.mapがみつかりました。${rootDir + "/prefix.map"}`,
@@ -170,10 +178,11 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             const txt = await FileReadAsync(buf);
             const value = new PrefixMap(txt);
             Log.log(`prefix.mapの読込完了 ${txt}`, "EditorView");
-            const prefixMaps_ = { ...prefixMaps };
-            prefixMaps_[""] = value;
-            setPrefixMaps(prefixMaps_);
+            maps[""] = value;
+            setPrefixMaps(maps);
           });
+      } else {
+        setPrefixMaps({});
       }
       if (Object.keys(props.zipFiles).includes(rootDir + "/character.yaml")) {
         Log.log(
@@ -189,7 +198,6 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             setCharacterYaml(value);
             if (value.subbanks) {
               Log.log(`character.yamlにsubbanksが見つかりました`, "EditorView");
-              const maps = { ...prefixMaps };
               for (let i = 0; i < value.subbanks.length; i++) {
                 if (
                   value.subbanks[i].color === "" &&
@@ -234,8 +242,11 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                   }
                 }
               }
+              setPrefixMaps(maps);
             }
           });
+      } else {
+        setCharacterYaml(null);
       }
     }
   }, [rootDir]);
@@ -281,7 +292,14 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               />
             </Tabs>
             <TabPanel value={0} sx={{ p: 1 }}>
-              0
+              <FileCheckPanel
+                rootDir={rootDir}
+                setRootDir={setRootDir}
+                files={files}
+                directories={directories}
+                flags={flags}
+                setFlags={setFlags}
+              />
             </TabPanel>
             <TabPanel value={1} sx={{ p: 1 }}>
               <CharacterTxtPanel
