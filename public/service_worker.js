@@ -1,10 +1,12 @@
-const cacheName = "GAKUYA_20250208";
+const cacheName = "GAKUYA_20250213";
 const urlsToCache = [
   "./",
   "./index.html",
-  "./assets/index-D9vcrQQM.js",
+  "./assets/index.js",
+  "./assets/browser.js",
   "./static/logo192.png",
   "./static/logo512.png",
+  "./static/favicon.ico",
 ];
 self.addEventListener("install", (e) => {
   e.waitUntil(
