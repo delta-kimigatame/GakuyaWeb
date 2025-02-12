@@ -11,13 +11,10 @@ import { getDesignTokens } from "../settings/theme";
 
 import { Header } from "./Header/Header";
 import { Footer } from "./Fotter";
-import { PrivacyPaper } from "./Top/PrivacyPaper";
-import { RulePaper } from "./Top/RulePaper";
-import { HistoryPaper } from "./Top/HistoryPaper";
-import { TopPaper } from "./Top/TopPaper";
+import { TopView } from "./Top/TopView";
+import { EditorView } from "./Editor/EditorView";
 
 import { Log } from "../Lib/Logging";
-import { TopView } from "./Top/TopView";
 
 export const App: React.FC = () => {
   // 端末のダークモード設定取得
@@ -68,6 +65,7 @@ export const App: React.FC = () => {
 
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -88,7 +86,9 @@ export const App: React.FC = () => {
           />
         </>
       ) : (
-        <></>
+        <>
+          <EditorView zipFiles={readZip} zipFileName={zipFileName} mode={mode}/>
+        </>
       )}
       <Footer theme={theme} />
     </ThemeProvider>
