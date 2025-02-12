@@ -39,8 +39,15 @@ import {
   ExtractPrefixMap,
   ExtractReadme,
   ExtractRootOto,
-  GetSubbanks,
+  GetNewFileName,
 } from "../../Lib/OutputZip";
+import {
+  GetCharacterTxt,
+  GetCharacterYaml,
+  GetInstallTxt,
+  GetPrefixMap,
+  GetReadme,
+} from "../../Lib/InputZip";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -89,6 +96,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [progress, setProgress] = React.useState<boolean>(false);
   /** download zip */
   const [zipUrl, setZipUrl] = React.useState<string>("");
+  /** 現在処理中のファイル */
+  const [outputIndex, setOutputIndex] = React.useState<number>(0);
   /**
    * zipが読み込まれた際の処理
    */
@@ -131,167 +140,19 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setReadme("");
       setPrefixMaps({});
     } else {
-      let installTextTemp =
-        rootDir.split("/").slice(0, -1).join("/") + "/install.txt";
-      if (installTextTemp === "/install.txt") {
-        installTextTemp = "install.txt";
-      }
-      if (Object.keys(props.zipFiles).includes(installTextTemp)) {
-        Log.log(
-          `install.txtが見つかりました。${installTextTemp}`,
-          "EditorView"
-        );
-        props.zipFiles[installTextTemp]
-          .async("arraybuffer")
-          .then(async (buf) => {
-            const txt = await FileReadAsync(buf);
-            const value = new InstallTxt({ txt: txt });
-            Log.log(
-              `install.txtの読込完了 folder=${value.folder}`,
-              "EditorView"
-            );
-            setInstall(value);
-          });
-      } else {
-        Log.log(`rootDirの変更に伴うinstall.txtの変更。`, "EditorView");
-        const install = new InstallTxt({
-          folder:
-            rootDir === "" ? props.zipFileName.replace(".zip", "") : rootDir,
-          contentsDir:
-            rootDir === "" ? props.zipFileName.replace(".zip", "") : rootDir,
-          description: "",
-        });
-        setInstall(install);
-      }
-      if (Object.keys(props.zipFiles).includes(rootDir + "/character.txt")) {
-        Log.log(
-          `character.txtがみつかりました。${rootDir + "/character.txt"}`,
-          "EditorView"
-        );
-        props.zipFiles[rootDir + "/character.txt"]
-          .async("arraybuffer")
-          .then(async (buf) => {
-            const txt = await FileReadAsync(buf);
-            const value = new CharacterTxt({ txt: txt });
-            Log.log(`character.txtの読込完了 name=${value.name}`, "EditorView");
-            setCharacter(value);
-          });
-      } else {
-        Log.log(
-          `character.txtが存在しないため自動生成。name=${
-            rootDir ? rootDir : props.zipFileName.slice(0, -4)
-          }`,
-          "EditorView"
-        );
-        setCharacterUpdate(true);
-        setCharacter(
-          new CharacterTxt({
-            name: rootDir ? rootDir : props.zipFileName.slice(0, -4),
-            image: "",
-            sample: "",
-            author: "",
-            web: "",
-            version: "",
-          })
-        );
-      }
-      if (Object.keys(props.zipFiles).includes(rootDir + "/readme.txt")) {
-        Log.log(
-          `readme.txtがみつかりました。${rootDir + "/readme.txt"}`,
-          "EditorView"
-        );
-        props.zipFiles[rootDir + "/readme.txt"]
-          .async("arraybuffer")
-          .then(async (buf) => {
-            const txt = await FileReadAsync(buf);
-            Log.log(`readme.txtの読込完了 ${txt}`, "EditorView");
-            setReadme(txt);
-          });
-      } else {
-        setReadme("");
-      }
-      let maps = {};
-      if (Object.keys(props.zipFiles).includes(rootDir + "/prefix.map")) {
-        Log.log(
-          `prefix.mapがみつかりました。${rootDir + "/prefix.map"}`,
-          "EditorView"
-        );
-        props.zipFiles[rootDir + "/prefix.map"]
-          .async("arraybuffer")
-          .then(async (buf) => {
-            const txt = await FileReadAsync(buf);
-            const value = new PrefixMap(txt);
-            Log.log(`prefix.mapの読込完了 ${txt}`, "EditorView");
-            maps[""] = value;
-            setPrefixMaps(maps);
-          });
-      } else {
-        setPrefixMaps({});
-      }
-      if (Object.keys(props.zipFiles).includes(rootDir + "/character.yaml")) {
-        Log.log(
-          `character.yamlがみつかりました。${rootDir + "/character.yaml"}`,
-          "EditorView"
-        );
-        props.zipFiles[rootDir + "/character.yaml"]
-          .async("arraybuffer")
-          .then(async (buf) => {
-            const txt = await FileReadAsync(buf, "UTF8");
-            const value = yaml.load(txt);
-            Log.log(`character.yamlの読込完了 name=${txt}`, "EditorView");
-            setCharacterYaml(value);
-            if (value.subbanks) {
-              Log.log(`character.yamlにsubbanksが見つかりました`, "EditorView");
-              for (let i = 0; i < value.subbanks.length; i++) {
-                if (
-                  value.subbanks[i].color === "" &&
-                  Object.keys(props.zipFiles).includes(rootDir + "/prefix.map")
-                ) {
-                  Log.log(
-                    `subbanks.color=""はprefix.mapと競合するため無視されました`,
-                    "EditorView"
-                  );
-                } else {
-                  for (
-                    let j = 0;
-                    j < value.subbanks[i].tone_ranges.length;
-                    j++
-                  ) {
-                    if (Object.keys(maps).includes(value.subbanks[i].color)) {
-                      maps[value.subbanks[i].color].SetRangeValues(
-                        value.subbanks[i].tone_ranges[j],
-                        value.subbanks[i].prefix,
-                        value.subbanks[i].suffix
-                      );
-                      Log.log(
-                        `subbanks.color=${value.subbanks[i].color}にprefix=${value.subbanks[i].prefix}、suffix=${value.subbanks[i].suffix}、range=${value.subbanks[i].tone_ranges[j]}を設定しました`,
-                        "EditorView"
-                      );
-                    } else {
-                      maps[value.subbanks[i].color] = new PrefixMap();
-                      Log.log(
-                        `subbanks.color=${value.subbanks[i].color}を追加しました`,
-                        "EditorView"
-                      );
-                      maps[value.subbanks[i].color].SetRangeValues(
-                        value.subbanks[i].tone_ranges[j],
-                        value.subbanks[i].prefix,
-                        value.subbanks[i].suffix
-                      );
-                      Log.log(
-                        `subbanks.color=${value.subbanks[i].color}にprefix=${value.subbanks[i].prefix}、suffix=${value.subbanks[i].suffix}、range=${value.subbanks[i].tone_ranges[j]}を設定しました`,
-                        "EditorView"
-                      );
-                    }
-                  }
-                }
-              }
-              setPrefixMaps(maps);
-            }
-          });
-      } else {
-        setCharacterYaml(null);
-      }
+      setInstall(GetInstallTxt(rootDir, props.zipFileName, props.zipFiles));
+      const [c, u] = GetCharacterTxt(
+        rootDir,
+        props.zipFileName,
+        props.zipFiles
+      );
+      setCharacter(c);
+      setCharacterUpdate(u);
+      setReadme(GetReadme(rootDir, props.zipFiles));
+      const maps = GetPrefixMap(rootDir, props.zipFiles);
+      const [y, m] = GetCharacterYaml(rootDir, props.zipFiles, maps);
+      setPrefixMaps(m);
+      setCharacterYaml(y);
     }
   }, [rootDir]);
 
@@ -303,7 +164,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     world: World
   ) => {
     const f = filelist[index];
-    const reg = new RegExp("^" + rootDir);
+    setOutputIndex(index);
     if (index >= filelist.length) {
       ZipExtractMake(newRootDir, newZip);
     } else if (IsDelete(f, flags)) {
@@ -325,10 +186,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else {
-      const newFileName = f.replace(
-        reg,
-        newRootDir + rootDir === "" ? "/" : ""
-      );
+      const newFileName = GetNewFileName(rootDir, newRootDir, f);
       props.zipFiles[f].async("arraybuffer").then((buf) => {
         if (f.endsWith(".wav")) {
           const wav = new Wave(buf);
@@ -441,8 +299,24 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       title={setting.productName}
       body={
         <>
-          <FullWidthButton color="primary" onClick={OnOutputClick}>
-            {progress ? <CircularProgress /> : t("editor.output")}
+          <FullWidthButton
+            color="primary"
+            onClick={OnOutputClick}
+            disabled={progress}
+          >
+            {progress ? (
+              <>
+                <CircularProgress />({outputIndex}/
+                {
+                  Object.keys(props.zipFiles).filter((f) =>
+                    f.startsWith(rootDir)
+                  ).length
+                }
+                )
+              </>
+            ) : (
+              t("editor.output")
+            )}
           </FullWidthButton>
           {zipUrl !== "" && (
             <Button
