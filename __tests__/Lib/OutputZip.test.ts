@@ -11,6 +11,7 @@ import {
   GetAddFilePath,
   ExtractCharacterTxt,
   ExtractRootOto,
+  GetNewFileName
 } from "../../src/Lib/OutputZip";
 import { InstallTxt, InstallTxtValue } from "../../src/Lib/InstallTxt";
 import { PrefixMap } from "../../src/Lib/PrefixMap";
@@ -31,7 +32,7 @@ describe("OutputZip", () => {
     expect("install.txt" in newZip.files).toBeTruthy();
     newZip.files["install.txt"].async("arraybuffer").then(async (buf) => {
       const txt = await FileReadAsync(buf);
-      expect(txt).toBe("type=voiceset\nfolder=hoge\n");
+      expect(txt).toBe("type=voiceset\r\nfolder=hoge\r\n");
     });
   });
   it("ExtractPrefixMap_false", () => {
@@ -438,7 +439,7 @@ describe("OutputZip", () => {
       .async("arraybuffer")
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
-        expect(txt).toBe("name=test\n");
+        expect(txt).toBe("name=test\r\n");
       });
   });
   it("ExtractCharacterTxt_no_txt", () => {
@@ -456,7 +457,7 @@ describe("OutputZip", () => {
       .async("arraybuffer")
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
-        expect(txt).toBe("name=test\n");
+        expect(txt).toBe("name=test\r\n");
       });
   });
   it("ExtractCharacterTxt_all", () => {
@@ -482,7 +483,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\nimage=a.bmp\nsample=b.wav\nauthor=c,version=e\n"
+          "name=test\r\nimage=a.bmp\r\nsample=b.wav\r\nauthor=c,version=e\r\n"
         );
       });
   });
@@ -510,7 +511,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\nimage=icon.bmp\nsample=b.wav\nauthor=c,version=e\n"
+          "name=test\r\nimage=icon.bmp\r\nsample=b.wav\r\nauthor=c\r\nversion=e\r\n"
         );
       });
   });
@@ -538,7 +539,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\nimage=a.bmp\nsample=sample.wav\nauthor=c,version=e\n"
+          "name=test\r\nimage=a.bmp\r\nsample=sample.wav\r\nauthor=c\r\nversion=e\r\n"
         );
       });
   });
@@ -567,7 +568,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\nimage=icon.bmp\nsample=sample.wav\nauthor=c,version=e\n"
+          "name=test\r\nimage=icon.bmp\r\nsample=sample.wav\r\nauthor=c\r\nversion=e\r\n"
         );
       });
   });
@@ -600,4 +601,10 @@ describe("OutputZip", () => {
       expect(txt).toBe("aaa");
     });
   });
+  it("GetNewFileName",()=>{
+    expect(GetNewFileName("root","test","root/a.wav")).toBe("test/a.wav")
+    expect(GetNewFileName("root","test","root/root/a.wav")).toBe("test/root/a.wav")
+    expect(GetNewFileName("","test","root/a.wav")).toBe("test/root/a.wav")
+    expect(GetNewFileName("","test","a.wav")).toBe("test/a.wav")
+  })
 });

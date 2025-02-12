@@ -72,7 +72,7 @@ export const ExtractReadme = (
 ): JSZip => {
   if (readmeUpdate) {
     const r_output = new File(
-      [iconv.encode(readme, "Windows-31j")],
+      [iconv.encode(readme.replace(/\n/g,"\r\n"), "Windows-31j")],
       "readme.txt",
       { type: "text/plane;charset=shift-jis" }
     );
@@ -268,4 +268,13 @@ export const GetAddFilePath = (
     i++;
   }
   return filename + (i === 0 ? "" : i.toString()) + "." + extension;
+};
+
+export const GetNewFileName = (
+  rootDir: string,
+  newRootDir: string,
+  f
+): string => {
+  const reg = new RegExp("^" + rootDir);
+  return f.replace(reg, newRootDir + (rootDir === "" ? "/" : ""));
 };
