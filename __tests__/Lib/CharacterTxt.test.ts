@@ -56,7 +56,7 @@ describe("CharacterTxt", () => {
   });
   it("output_minimum", () => {
     const character = new CharacterTxt({ txt: "name:a" });
-    expect(character.OutputTxt()).toBe("name=a\n");
+    expect(character.OutputTxt()).toBe("name=a\r\n");
   });
   it("output_all", () => {
     const character = new CharacterTxt({
@@ -67,6 +67,6 @@ describe("CharacterTxt", () => {
       web: "https://e.jp/",
       version: "f",
     });
-    expect(character.OutputTxt()).toBe("name=a\nimage=b.bmp\nsample=c.wav\nauthor=d\nweb=https://e.jp/\nversion=f\n");
+    expect(character.OutputTxt()).toBe("name=a\r\nimage=b.bmp\r\nsample=c.wav\r\nauthor=d\r\nweb=https://e.jp/\r\nversion=f\r\n");
   });
 });

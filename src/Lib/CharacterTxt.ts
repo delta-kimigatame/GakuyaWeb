@@ -118,12 +118,12 @@ export class CharacterTxt {
     const txt =
       "name=" +
       this.name_ +
-      "\n" +
-      (this.image_ ? "image=" + this.image_ + "\n" : "") +
-      (this.sample_ ? "sample=" + this.sample_ + "\n" : "") +
-      (this.author_ ? "author=" + this.author_ + "\n" : "") +
-      (this.web_ ? "web=" + this.web_ + "\n" : "") +
-      (this.version_ ? "version=" + this.version_ + "\n" : "");
+      "\r\n" +
+      (this.image_ ? "image=" + this.image_ + "\r\n" : "") +
+      (this.sample_ ? "sample=" + this.sample_ + "\r\n" : "") +
+      (this.author_ ? "author=" + this.author_ + "\r\n" : "") +
+      (this.web_ ? "web=" + this.web_ + "\r\n" : "") +
+      (this.version_ ? "version=" + this.version_ + "\r\n" : "");
     return txt;
   }
 }
