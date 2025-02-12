@@ -58,7 +58,7 @@ export const GetCharacterTxt = (
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
   }
-): [CharacterTxt, boolean] => {
+): {value:CharacterTxt, update:boolean} => {
   if (Object.keys(zipFiles).includes(rootDir + "/character.txt")) {
     Log.log(
       `character.txtがみつかりました。${rootDir + "/character.txt"}`,
@@ -70,7 +70,7 @@ export const GetCharacterTxt = (
         const txt = await FileReadAsync(buf);
         const value = new CharacterTxt({ txt: txt });
         Log.log(`character.txtの読込完了 name=${value.name}`, "EditorView");
-        return [value, false];
+        return {value:value, update:false};
       });
   } else {
     Log.log(
@@ -79,7 +79,7 @@ export const GetCharacterTxt = (
       }`,
       "EditorView"
     );
-    return [
+    return {value:
       new CharacterTxt({
         name: rootDir ? rootDir : zipFileName.slice(0, -4),
         image: "",
@@ -88,8 +88,8 @@ export const GetCharacterTxt = (
         web: "",
         version: "",
       }),
-      true,
-    ];
+      update:true,
+    };
   }
 };
 
@@ -164,7 +164,7 @@ export const GetCharacterYaml = (
     [key: string]: JSZip.JSZipObject;
   },
   maps: { string?: PrefixMap }
-): [{} | null, { string?: PrefixMap }] => {
+): {yaml:{} | null, maps:{ string?: PrefixMap }} => {
   if (Object.keys(zipFiles).includes(rootDir + "/character.yaml")) {
     Log.log(
       `character.yamlがみつかりました。${rootDir + "/character.yaml"}`,
@@ -219,9 +219,9 @@ export const GetCharacterYaml = (
             }
           }
         }
-        return [value, maps];
+        return {yaml:value, maps:maps};
       });
   } else {
-    return [null, maps];
+    return {yaml:null, maps:maps};
   }
 };
