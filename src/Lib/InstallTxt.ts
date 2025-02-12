@@ -71,12 +71,12 @@ export class InstallTxt {
 
   OutputTxt(): string {
     const txt =
-      "type=voiceset\n" +
+      "type=voiceset\r\n" +
       "folder=" +
       this.folder_ +
-      "\n" +
-      (this.contentsDir_ ? "contentsdir=" + this.contentsDir_ + "\n" : "") +
-      (this.description_ ? "description=" + this.description_ + "\n" : "");
+      "\r\n" +
+      (this.contentsDir_ ? "contentsdir=" + this.contentsDir_ + "\r\n" : "") +
+      (this.description_ ? "description=" + this.description_ + "\r\n" : "");
     return txt;
   }
 }

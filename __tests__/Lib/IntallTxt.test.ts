@@ -28,21 +28,21 @@ describe("InstallTxt", () => {
     it("output_minimum",()=>{
         const install = new InstallTxt({folder:"foo"})
         const output = install.OutputTxt()
-        expect(output).toBe("type=voiceset\nfolder=foo\n")
+        expect(output).toBe("type=voiceset\r\nfolder=foo\r\n")
     })
     it("output_with_contentdir",()=>{
         const install = new InstallTxt({folder:"foo",contentsDir:"bar"})
         const output = install.OutputTxt()
-        expect(output).toBe("type=voiceset\nfolder=foo\ncontentsdir=bar\n")
+        expect(output).toBe("type=voiceset\r\nfolder=foo\r\ncontentsdir=bar\r\n")
     })
     it("output_with_description",()=>{
         const install = new InstallTxt({folder:"foo",description:"test"})
         const output = install.OutputTxt()
-        expect(output).toBe("type=voiceset\nfolder=foo\ndescription=test\n")
+        expect(output).toBe("type=voiceset\r\nfolder=foo\r\ndescription=test\r\n")
     })
     it("output_all",()=>{
         const install = new InstallTxt({folder:"foo",contentsDir:"bar",description:"test"})
         const output = install.OutputTxt()
-        expect(output).toBe("type=voiceset\nfolder=foo\ncontentsdir=bar\ndescription=test\n")
+        expect(output).toBe("type=voiceset\r\nfolder=foo\r\ncontentsdir=bar\r\ndescription=test\r\n")
     })
 })
