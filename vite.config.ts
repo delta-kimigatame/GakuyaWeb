@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
+  base: "./",
   plugins: [react()],
   test: {
     globals: true, // Jestの `global` な関数 (`describe`, `test` など) を有効にする
@@ -18,5 +19,14 @@ export default defineConfig({
   server: {
     host: true,
     port: 8080,
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+      },
+    },
   },
 });
