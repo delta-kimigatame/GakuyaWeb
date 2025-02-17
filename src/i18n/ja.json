@@ -20,46 +20,46 @@
     "privacyAnalytics": "当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を使用しています。このGoogleアナリティクスはデータの収集のためにCookieを使用しています。このデータは匿名で収集されており、個人を特定するものではありません。",
     "privacyCookie": "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     "history": "更新履歴",
-    "changelog": ["2025/02/13 初版公開"]
+    "changelog": ["2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"]
   },
   "editor": {
     "file_check": {
       "title": "ファイルの確認",
-      "all":"全て選択",
-      "file_list":"ファイル一覧",
-      "contentsdir":{
-        "title":"音源ルート(インストールしたいファイルが入っているフォルダ)",
-        "description":"この設定を変更すると、character.txt,character.yaml,readme.txt,install.txt,prefix.mapの編集内容が破棄されます。"
+      "all": "全て選択",
+      "file_list": "ファイル一覧",
+      "contentsdir": {
+        "title": "音源ルート(インストールしたいファイルが入っているフォルダ)",
+        "description": "この設定を変更すると、character.txt,character.yaml,readme.txt,install.txt,prefix.mapの編集内容が破棄されます。"
       },
-      "remove":{
-        "title":"不要ファイルの削除",
-        "read":"$readの削除",
-        "uspec":"UTAU 原音設定キャッシュファイル(*.uspec)の削除",
-        "setparam":"setParamキャッシュファイル(oto.setParam-Scache)の削除",
-        "vlabeler":"vLabelerキャッシュフォルダ(*.lbp.caches/)の削除"
+      "remove": {
+        "title": "不要ファイルの削除",
+        "read": "$readの削除",
+        "uspec": "UTAU 原音設定キャッシュファイル(*.uspec)の削除",
+        "setparam": "setParamキャッシュファイル(oto.setParam-Scache)の削除",
+        "vlabeler": "vLabelerキャッシュフォルダ(*.lbp.caches/)の削除"
       },
-      "frq":{
-        "title":"周波数表ファイル",
-        "description":"基本的にはfrq以外削除します。周波数表の手動修正をしている場合残してください。",
-        "frq":"UTAU標準周波数表 *.frqが存在しない場合生成",
-        "pmk":"tipsエンジン周波数表 *.pmkを削除",
-        "frc":"model4エンジン周波数表 *.frcを削除(利用規約で配布禁止)",
-        "vs4ufrq":"VS4Uエンジン周波数表 *.vs4ufrqを削除",
-        "world":"w4uエンジン周波数表 *.dio,*.stac,*.platinumを削除",
-        "llsm":"moresampler解析ファイル *.llsmを削除",
-        "mrq":"moresampler解析ファイル *.mrqを削除"
+      "frq": {
+        "title": "周波数表ファイル",
+        "description": "基本的にはfrq以外削除します。周波数表の手動修正をしている場合残してください。",
+        "frq": "UTAU標準周波数表 *.frqが存在しない場合生成",
+        "pmk": "tipsエンジン周波数表 *.pmkを削除",
+        "frc": "model4エンジン周波数表 *.frcを削除(利用規約で配布禁止)",
+        "vs4ufrq": "VS4Uエンジン周波数表 *.vs4ufrqを削除",
+        "world": "w4uエンジン周波数表 *.dio,*.stac,*.platinumを削除",
+        "llsm": "moresampler解析ファイル *.llsmを削除",
+        "mrq": "moresampler解析ファイル *.mrqを削除"
       },
-      "oto":{
-        "title":"oto.ini",
-        "root":"音源ルートにoto.iniが存在しない場合、空のファイルを生成"
+      "oto": {
+        "title": "oto.ini",
+        "root": "音源ルートにoto.iniが存在しない場合、空のファイルを生成"
       },
-      "wav":{
-        "title":"音声データ",
-        "description":"基本的には全てチェックする",
-        "stereo":"ステレオ音源をモノラルに変換する",
-        "sampleRate":"サンプリング周波数を44,100にする",
-        "depth":"bit深度を16bitにする",
-        "dcoffset":"DCオフセットを除去する。"
+      "wav": {
+        "title": "音声データ",
+        "description": "基本的には全てチェックする",
+        "stereo": "ステレオ音源をモノラルに変換する",
+        "sampleRate": "サンプリング周波数を44,100にする",
+        "depth": "bit深度を16bitにする",
+        "dcoffset": "DCオフセットを除去する。"
       }
     },
     "character": {
@@ -71,22 +71,22 @@
         "name": "音源名",
         "image": "アイコン画像(bmp/jpg/gif)",
         "sample": "サンプル音声",
-        "author":"管理者",
-        "web":"webサイト",
-        "version":"バージョン情報",
+        "author": "管理者",
+        "web": "webサイト",
+        "version": "バージョン情報",
         "convertBmp": "zip外の画像を選択(bmp/jpg/gif/png)",
-        "uploadSample":"zip外の音声を選択(wav)"
+        "uploadSample": "zip外の音声を選択(wav)"
       }
     },
-    "characterYaml":{
-      "description":"OpenUtau向けの追加設定です。",
-      "check":"character.yamlを作成・更新する",
-      "TextFileEncoding":"文字コードを表示する(shift-jis)",
-      "Portrait":"立ち絵イラスト",
-      "PortraitUpload":"zip外の画像を選択(png)",
-      "PortraitOpacity":"立ち絵の透明度",
-      "PortraitHeight":"立ち絵の高さ",
-      "Voice":"音声提供者"
+    "characterYaml": {
+      "description": "OpenUtau向けの追加設定です。",
+      "check": "character.yamlを作成・更新する",
+      "TextFileEncoding": "文字コードを表示する(shift-jis)",
+      "Portrait": "立ち絵イラスト",
+      "PortraitUpload": "zip外の画像を選択(png)",
+      "PortraitOpacity": "立ち絵の透明度",
+      "PortraitHeight": "立ち絵の高さ",
+      "Voice": "音声提供者"
     },
     "readme": {
       "title": "説明書・利用規約",
@@ -105,25 +105,25 @@
     },
     "prefixmap": {
       "title": "prefix.map",
-      "description":"音高毎に自動で音源を切り替えるための設定です。",
-      "description2":"Voice Colorは本家UTAUでは使えません。",
-      "check":"prefix.mapを作成・更新する",
-      "header":{
-        "tone":"音階",
-        "prefix":"prefix",
-        "suffix":"suffix"
+      "description": "音高毎に自動で音源を切り替えるための設定です。",
+      "description2": "Voice Colorは本家UTAUでは使えません。",
+      "check": "prefix.mapを作成・更新する",
+      "header": {
+        "tone": "音階",
+        "prefix": "prefix",
+        "suffix": "suffix"
       },
-      "voiceColor":"Voice Color",
-      "add":"追加",
-      "change":"変更",
-      "delete":"削除",
-      "all":"全て選択",
-      "cancel":"選択解除",
-      "set":"セット",
-      "clear":"クリア"
+      "voiceColor": "Voice Color",
+      "add": "追加",
+      "change": "変更",
+      "delete": "削除",
+      "all": "全て選択",
+      "cancel": "選択解除",
+      "set": "セット",
+      "clear": "クリア"
     },
-    "output":"zipファイルを生成する",
-    "download":"ダウンロード"
+    "output": "zipファイルを生成する",
+    "download": "ダウンロード"
   },
   "footer": {
     "disclaimer": "UTAUは飴屋／菖蒲氏によって公開されている、Windows向けに作成された歌声合成ソフトウェアです。",
