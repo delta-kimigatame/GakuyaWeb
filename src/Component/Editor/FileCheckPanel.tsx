@@ -10,7 +10,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 
 import { Log } from "../../Lib/Logging";
-import { FileCheckFlags,IsDelete } from "./EditorView";
+import { FileCheckFlags, IsDelete } from "./EditorView";
 import { FullWidthButton } from "../Common/FullWidthButton";
 import { FullWidthSelect } from "../Common/FullWidthSelect";
 import { BasePaper } from "../Common/BasePaper";
@@ -58,7 +58,9 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
       "FileCheckPanel"
     );
   };
-
+  const sortedFiles = React.useMemo(() => {
+    return props.files.filter((f) => f.startsWith(props.rootDir)).sort();
+  }, [props.files]);
 
   return (
     <>
@@ -314,20 +316,17 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
         title={t("editor.file_check.file_list")}
         body={
           <Box sx={{ maxHeight: 300, overflowY: "scroll" }}>
-            {props.files
-              .filter((f) => f.startsWith(props.rootDir))
-              .sort()
-              .map((f) => (
-                <>
-                  <Typography
-                    variant="caption"
-                    color={IsDelete(f,props.flags) ? "error" : "inherit"}
-                  >
-                    {f}
-                  </Typography>
-                  <Divider />
-                </>
-              ))}
+            {sortedFiles.map((f) => (
+              <>
+                <Typography
+                  variant="caption"
+                  color={IsDelete(f, props.flags) ? "error" : "inherit"}
+                >
+                  {f}
+                </Typography>
+                <Divider />
+              </>
+            ))}
           </Box>
         }
       />
