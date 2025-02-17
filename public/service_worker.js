@@ -1,4 +1,4 @@
-const cacheName = "GAKUYA_20250213";
+const cacheName = "GAKUYA_20250217";
 const urlsToCache = [
   "./",
   "./index.html",
