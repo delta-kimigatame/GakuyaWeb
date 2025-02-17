@@ -1,23 +1,16 @@
 import * as React from "react";
-import { useTranslation } from "react-i18next";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MenuItem from "@mui/material/MenuItem";
-import { SelectChangeEvent } from "@mui/material/Select";
-
-import { CommonCheckBox } from "../Common/CommonCheckBox";
 
 import { Log } from "../../Lib/Logging";
-import { FileCheckFlags, IsDelete } from "./EditorView";
-import { FullWidthButton } from "../Common/FullWidthButton";
-import { FullWidthSelect } from "../Common/FullWidthSelect";
-import { BasePaper } from "../Common/BasePaper";
+import { FileCheckFlags } from "./EditorView";
+import { WavArea } from "./FileCheck/WavArea";
+import { OtoArea } from "./FileCheck/OtoArea";
+import { FrqArea } from "./FileCheck/FrqArea";
+import { RemoveFileArea } from "./FileCheck/RemoveFileArea";
+import { SelectRootDir } from "./FileCheck/SelectRootDir";
 
 export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
-  const { t } = useTranslation();
-
   const OnCheckBoxChange = (key1: string, key2: string) => {
     const f: FileCheckFlags = { ...props.flags };
     const newValue = key2 in f[key1] ? !f[key1][key2] : true;
@@ -51,284 +44,36 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
     props.setFlags(f);
   };
 
-  const OnChangeRootDir = (e: SelectChangeEvent) => {
-    props.setRootDir(e.target.value);
-    Log.log(
-      `rootDirの変更。${props.rootDir}->${e.target.value}`,
-      "FileCheckPanel"
-    );
-  };
-  const sortedFiles = React.useMemo(() => {
-    return props.files.filter((f) => f.startsWith(props.rootDir)).sort();
-  }, [props.files]);
-
   return (
     <>
-      <FullWidthSelect
-        label={t("editor.file_check.contentsdir.title")}
-        value={props.rootDir}
-        onChange={OnChangeRootDir}
-      >
-        {props.directories.map((d) => (
-          <MenuItem value={d}>{d}</MenuItem>
-        ))}
-      </FullWidthSelect>
-      <Typography variant="caption">
-        {t("editor.file_check.contentsdir.description")}
-      </Typography>
-      <br />
-      <br />
+      <SelectRootDir
+        rootDir={props.rootDir}
+        setRootDir={props.setRootDir}
+        directories={props.directories}
+      />
       <Divider />
       <br />
-      <Typography variant="h6">
-        {t("editor.file_check.remove.title")}
-      </Typography>
-      <FullWidthButton
-        color="inherit"
-        onClick={() => {
-          OnAllClick("remove");
-        }}
-      >
-        <Typography variant="caption">{t("editor.file_check.all")}</Typography>
-      </FullWidthButton>
-      <CommonCheckBox
-        checked={
-          props.flags.remove.read === undefined
-            ? false
-            : props.flags.remove.read
-        }
-        setChecked={() => {
-          OnCheckBoxChange("remove", "read");
-        }}
-        label={t("editor.file_check.remove.read")}
+      <RemoveFileArea
+        flags={props.flags}
+        OnCheckBoxChange={OnCheckBoxChange}
+        OnAllClick={OnAllClick}
       />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.remove.uspec === undefined
-            ? false
-            : props.flags.remove.uspec
-        }
-        setChecked={() => {
-          OnCheckBoxChange("remove", "uspec");
-        }}
-        label={t("editor.file_check.remove.uspec")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.remove.setparam === undefined
-            ? false
-            : props.flags.remove.setparam
-        }
-        setChecked={() => {
-          OnCheckBoxChange("remove", "setparam");
-        }}
-        label={t("editor.file_check.remove.setparam")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.remove.vlabeler === undefined
-            ? false
-            : props.flags.remove.vlabeler
-        }
-        setChecked={() => {
-          OnCheckBoxChange("remove", "vlabeler");
-        }}
-        label={t("editor.file_check.remove.vlabeler")}
-      />
-      <br />
-      <br />
       <Divider />
       <br />
-      <Typography variant="h6">{t("editor.file_check.frq.title")}</Typography>
-      <Typography variant="caption">
-        {t("editor.file_check.frq.description")}
-      </Typography>
-      <FullWidthButton
-        color="inherit"
-        onClick={() => {
-          OnAllClick("frq");
-        }}
-      >
-        <Typography variant="caption">{t("editor.file_check.all")}</Typography>
-      </FullWidthButton>
-      <CommonCheckBox
-        checked={
-          props.flags.frq.frq === undefined ? false : props.flags.frq.frq
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "frq");
-        }}
-        label={t("editor.file_check.frq.frq")}
+      <FrqArea
+        flags={props.flags}
+        OnCheckBoxChange={OnCheckBoxChange}
+        OnAllClick={OnAllClick}
       />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.pmk === undefined ? false : props.flags.frq.pmk
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "pmk");
-        }}
-        label={t("editor.file_check.frq.pmk")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.frc === undefined ? false : props.flags.frq.frc
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "frc");
-        }}
-        label={t("editor.file_check.frq.frc")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.vs4ufrq === undefined
-            ? false
-            : props.flags.frq.vs4ufrq
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "vs4ufrq");
-        }}
-        label={t("editor.file_check.frq.vs4ufrq")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.world === undefined ? false : props.flags.frq.world
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "world");
-        }}
-        label={t("editor.file_check.frq.world")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.llsm === undefined ? false : props.flags.frq.llsm
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "llsm");
-        }}
-        label={t("editor.file_check.frq.llsm")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.frq.mrq === undefined ? false : props.flags.frq.mrq
-        }
-        setChecked={() => {
-          OnCheckBoxChange("frq", "mrq");
-        }}
-        label={t("editor.file_check.frq.mrq")}
-      />
-      <br />
-      <br />
       <Divider />
       <br />
-      <Typography variant="h6">{t("editor.file_check.oto.title")}</Typography>
-      <CommonCheckBox
-        checked={props.flags.oto.root}
-        setChecked={() => {
-          OnCheckBoxChange("oto", "root");
-        }}
-        label={t("editor.file_check.oto.root")}
-      />
-      <br />
-      <br />
+      <OtoArea flags={props.flags} OnCheckBoxChange={OnCheckBoxChange} />
       <Divider />
       <br />
-      <Typography variant="h6">{t("editor.file_check.wav.title")}</Typography>
-      <Typography variant="caption">
-        {t("editor.file_check.wav.description")}
-      </Typography>
-      <FullWidthButton
-        color="inherit"
-        onClick={() => {
-          OnAllClick("wav");
-        }}
-      >
-        <Typography variant="caption">{t("editor.file_check.all")}</Typography>
-      </FullWidthButton>
-      <CommonCheckBox
-        checked={
-          props.flags.wav.stereo === undefined ? false : props.flags.wav.stereo
-        }
-        setChecked={() => {
-          OnCheckBoxChange("wav", "stereo");
-        }}
-        label={t("editor.file_check.wav.stereo")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.wav.sampleRate === undefined
-            ? false
-            : props.flags.wav.sampleRate
-        }
-        setChecked={() => {
-          OnCheckBoxChange("wav", "sampleRate");
-        }}
-        label={t("editor.file_check.wav.sampleRate")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.wav.depth === undefined ? false : props.flags.wav.depth
-        }
-        setChecked={() => {
-          OnCheckBoxChange("wav", "depth");
-        }}
-        label={t("editor.file_check.wav.depth")}
-      />
-      <br />
-      <br />
-      <CommonCheckBox
-        checked={
-          props.flags.wav.dcoffset === undefined
-            ? false
-            : props.flags.wav.dcoffset
-        }
-        setChecked={() => {
-          OnCheckBoxChange("wav", "dcoffset");
-        }}
-        label={t("editor.file_check.wav.dcoffset")}
-      />
-      <br />
-      <br />
-      <Divider />
-      <br />
-      <BasePaper
-        title={t("editor.file_check.file_list")}
-        body={
-          <Box sx={{ maxHeight: 300, overflowY: "scroll" }}>
-            {sortedFiles.map((f) => (
-              <>
-                <Typography
-                  variant="caption"
-                  color={IsDelete(f, props.flags) ? "error" : "inherit"}
-                >
-                  {f}
-                </Typography>
-                <Divider />
-              </>
-            ))}
-          </Box>
-        }
+      <WavArea
+        flags={props.flags}
+        OnCheckBoxChange={OnCheckBoxChange}
+        OnAllClick={OnAllClick}
       />
     </>
   );

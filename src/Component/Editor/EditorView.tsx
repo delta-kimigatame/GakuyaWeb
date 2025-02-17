@@ -48,6 +48,7 @@ import {
   GetPrefixMap,
   GetReadme,
 } from "../../Lib/InputZip";
+import { FileList } from "./FileCheck/FileList";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {
   const { t } = useTranslation();
@@ -152,7 +153,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     setCharacterYaml(gcyr.yaml);
     setPrefixMaps(gcyr.maps);
   };
-  
+
   React.useEffect(() => {
     if (rootDir === null) {
       Log.log(`rootDir初期化`, "EditorView");
@@ -359,24 +360,29 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 value={0}
               />
               <Tab
-                label={t("editor.character.title")}
+                label={t("editor.file_check.file_list")}
                 style={{ textTransform: "none" }}
                 value={1}
               />
               <Tab
-                label={t("editor.readme.title")}
+                label={t("editor.character.title")}
                 style={{ textTransform: "none" }}
                 value={2}
               />
               <Tab
-                label={t("editor.install.title")}
+                label={t("editor.readme.title")}
                 style={{ textTransform: "none" }}
                 value={3}
               />
               <Tab
-                label={t("editor.prefixmap.title")}
+                label={t("editor.install.title")}
                 style={{ textTransform: "none" }}
                 value={4}
+              />
+              <Tab
+                label={t("editor.prefixmap.title")}
+                style={{ textTransform: "none" }}
+                value={5}
               />
             </Tabs>
             <TabPanel value={0} sx={{ p: 1 }}>
@@ -390,6 +396,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               />
             </TabPanel>
             <TabPanel value={1} sx={{ p: 1 }}>
+              <FileList rootDir={rootDir} files={files} flags={flags} />
+            </TabPanel>
+            <TabPanel value={2} sx={{ p: 1 }}>
               <CharacterTxtPanel
                 rootDir={rootDir}
                 files={files}
@@ -414,7 +423,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setPortraitBuf={setPortraitBuf}
               />
             </TabPanel>
-            <TabPanel value={2} sx={{ p: 1 }}>
+            <TabPanel value={3} sx={{ p: 1 }}>
               <ReadMePanel
                 readme={readme}
                 setReadme={setReadme}
@@ -422,7 +431,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setReadmeUpdate}
               />
             </TabPanel>
-            <TabPanel value={3} sx={{ p: 1 }}>
+            <TabPanel value={4} sx={{ p: 1 }}>
               <InstallTextPanel
                 rootDir={rootDir}
                 install={install}
@@ -432,7 +441,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setInstallUpdate}
               />
             </TabPanel>
-            <TabPanel value={4} sx={{ p: 1 }}>
+            <TabPanel value={5} sx={{ p: 1 }}>
               <PrefixMapPanel
                 prefixMaps={prefixMaps}
                 setPrefixMaps={setPrefixMaps}
