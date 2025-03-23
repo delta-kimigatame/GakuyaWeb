@@ -15,7 +15,7 @@ export const GenerateFrq = (
   sample_rate: number = 44100,
   perSamples: number = 256
 ): Frq | null => {
-  const f0 = world.Harvest(data, sample_rate, perSamples / sample_rate);
+  const f0 = world.Harvest(data, sample_rate, perSamples / sample_rate*1000);
   if (f0) {
     const frq = new Frq({ frq: f0.f0, data: data, perSamples: perSamples });
     frq.CalcAverageFrq();

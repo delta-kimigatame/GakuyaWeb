@@ -24,7 +24,7 @@ export const translation_ja = {
     privacyCookie:
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
-    changelog: ["2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"],
+    changelog: ["2025/03/24 frqがやたら巨大なファイルになる不具合の修正","2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"],
   },
   editor: {
     file_check: {

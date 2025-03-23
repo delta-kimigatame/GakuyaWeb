@@ -26,7 +26,7 @@ export const translation_en = {
     privacyCookie:
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
-    changelog: ["2025/02/17 Add File List Tab", "2025/02/13 Release"],
+    changelog: ["2025/03/24 Fixed Make FrqFile","2025/02/17 Add File List Tab", "2025/02/13 Release"],
   },
   editor: {
     file_check: {
