@@ -126,7 +126,7 @@ export const ExtractCharacterYaml = (
     (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
   ) {
     const characterYaml_ = characterYaml === null ? {} : characterYaml;
-    if (characterYaml_["portrait"] === "upload") {
+    if (characterYaml_["portrait"] === "upload" && portraitBuf!==undefined) {
       const portraitPath = GetAddFilePath(
         newRootDir,
         newZip,
@@ -144,6 +144,7 @@ export const ExtractCharacterYaml = (
     if (subbanks.length !== 0) {
       characterYaml_["subbanks"] = subbanks;
     }
+    characterYaml_["singer_type"]="utau"
     const c = yaml.dump(characterYaml_);
     const c_output = new File([iconv.encode(c, "utf-8")], "character.yaml", {
       type: "text/plane;charset=utf-8",

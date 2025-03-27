@@ -85,7 +85,7 @@ export const translation_ja = {
       },
     },
     characterYaml: {
-      description: "OpenUtau向けの追加設定です。",
+      description: "OpenUtau向けの追加設定です。(自動でsinger_type=utauとなります)",
       check: "character.yamlを作成・更新する",
       TextFileEncoding: "文字コードを表示する(shift-jis)",
       Portrait: "立ち絵イラスト",
@@ -93,6 +93,7 @@ export const translation_ja = {
       PortraitOpacity: "立ち絵の透明度",
       PortraitHeight: "立ち絵の高さ",
       Voice: "音声提供者",
+      DefaultPhonemizer:"日本語音源向けPhonemizerを設定する"
     },
     readme: {
       title: "説明書・利用規約",

@@ -88,7 +88,7 @@ export const translation_en = {
       },
     },
     characterYaml: {
-      description: "Additional settings for OpenUtau.",
+      description: "Additional settings for OpenUtau.(auto singer_type=utau)",
       check: "Create or update character.yaml",
       TextFileEncoding: "Specify text file encoding (shift-jis)",
       Portrait: "Standing Illustration",
@@ -96,6 +96,7 @@ export const translation_en = {
       PortraitOpacity: "Standing Illustration Opacity",
       PortraitHeight: "Standing Illustration Height",
       Voice: "Voice Provider",
+      DefaultPhonemizer:"Setting Phonemizer for jp VoiceBanks."
     },
     readme: {
       title: "Readme & Terms of Use",

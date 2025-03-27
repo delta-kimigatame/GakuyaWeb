@@ -66,6 +66,26 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
     }
   };
 
+  const OnChangeDefaultPhonemizer=()=>{
+    if (props.characterYaml.default_phonemizer === "OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer") {
+      const c = { ...props.characterYaml };
+      c.default_phonemizer = "";
+      props.setCharacterYaml(c);
+      Log.log(
+        `character.yamlの変更。key=DefaultPhonemizer,value=""`,
+        "CharacterYamlPanel"
+      );
+    } else {
+      const c = { ...props.characterYaml };
+      c.default_phonemizer = "OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer";
+      props.setCharacterYaml(c);
+      Log.log(
+        `character.yamlの変更。key=DefaultPhonemizer,value="OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer"`,
+        "CharacterYamlPanel"
+      );
+    }
+  }
+
   /** Voiceの変更 */
   const OnVoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const c = { ...props.characterYaml };
@@ -115,6 +135,14 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
               checked={props.characterYaml.text_file_encoding === "shift_jis"}
               setChecked={OnChangeTextFileEncoding}
               label={t("editor.characterYaml.TextFileEncoding")}
+              disabled={!props.update}
+            />
+          </Box>
+          <Box sx={{ m: 1 }}>
+            <CommonCheckBox
+              checked={props.characterYaml.default_phonemizer === "OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer"}
+              setChecked={OnChangeDefaultPhonemizer}
+              label={t("editor.characterYaml.DefaultPhonemizer")}
               disabled={!props.update}
             />
           </Box>
@@ -199,4 +227,5 @@ interface CharacterYaml {
   portrait_height?: number;
   voice?: string;
   text_file_encoding?: string;
+  default_phonemizer?:string;
 }
