@@ -185,8 +185,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (
-      (f.endsWith("character.yaml") && characterYamlUpdate) ||
-      (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
+      f.endsWith("character.yaml") &&
+      (characterYamlUpdate ||
+        (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2))
     ) {
       Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
