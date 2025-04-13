@@ -183,7 +183,7 @@ export const ExtractCharacterTxt = (
       sample: character.sample,
       author: character.author,
       web: character.web,
-      version: character.web,
+      version: character.version,
     };
     if (character.image === "upload") {
       const iconPath = GetAddFilePath(newRootDir, newZip, "icon", "bmp");
