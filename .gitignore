@@ -3,3 +3,6 @@
 /dist
 memo
 /__tests__/test_result
+/hosts
+ansible.cfg
+deploy.yml
