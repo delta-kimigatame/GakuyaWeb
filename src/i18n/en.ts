@@ -26,7 +26,7 @@ export const translation_en = {
     privacyCookie:
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
-    changelog: ["2025/03/27 Update features for character.yaml","2025/03/24 Fixed Make FrqFile","2025/02/17 Add File List Tab", "2025/02/13 Release"],
+    changelog: ["2025/04/13_2 Fixed:output character.txt","2025/04/13 Fixed: when setting voice colors,all wav files deleted.","2025/03/27 Update features for character.yaml","2025/03/24 Fixed Make FrqFile","2025/02/17 Add File List Tab", "2025/02/13 Release"],
   },
   editor: {
     file_check: {
