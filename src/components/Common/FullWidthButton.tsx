@@ -7,6 +7,7 @@ export const FullWidthButton: React.FC<{
   disabled?: boolean;
   children:React.ReactNode;
   color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  testId?:string
 }> = (props) => {
   const onClick = props.onClick ? props.onClick : () => {};
   const color = props.color ? props.color : "inherit";
@@ -19,6 +20,7 @@ export const FullWidthButton: React.FC<{
       size="large"
       color={color}
       disabled={props.disabled}
+      data-testid={props.testId}
     >
       {props.children}
     </Button>

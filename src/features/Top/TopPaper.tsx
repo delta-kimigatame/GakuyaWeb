@@ -71,6 +71,7 @@ export const TopPaper: React.FC<TopPaperProps> = (props) => {
         hidden
         ref={inputRef}
         accept="application/zip"
+        data-testid="hiddenSelectZipInput"
       ></input>
       <BasePaper
         title={setting.productName}
@@ -83,6 +84,7 @@ export const TopPaper: React.FC<TopPaperProps> = (props) => {
               disabled={processing}
               onClick={OnButtonClick}
               color="primary"
+              testId="selectZipButton"
             >
               {!processing ? (
                 <>{t("top.selectZipButtonText")}</>

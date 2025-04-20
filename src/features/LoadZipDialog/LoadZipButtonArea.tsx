@@ -75,7 +75,7 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
 
   return (
     <>
-      <FullWidthButton onClick={OnSubmitClick} disabled={processing}>
+      <FullWidthButton onClick={OnSubmitClick} disabled={processing} testId="loadZipSubbmitButton">
         {processing?<CircularProgress color="inherit" size={20} />:t("loadZipDialog.submit")}
       </FullWidthButton>
       <br />
