@@ -6,7 +6,7 @@ export const setting: { [key: string]: string } = {
   /** アプリの名前 */
   productName: "GAKUYA",
   /** アプリのURL */
-  productUrl: "https://k-uta.jp/galuya/",
+  productUrl: "https://k-uta.jp/gakuya/",
   /** webサイトの名前 */
   siteName: "きみがためtools",
   /** 開発者のXアカウントのURL */
