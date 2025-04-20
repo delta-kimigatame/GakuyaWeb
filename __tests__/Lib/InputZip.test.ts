@@ -2,10 +2,10 @@ import JSZip from "jszip";
 import * as iconv from "iconv-lite";
 import yaml from "js-yaml";
 import { describe, expect, it } from "vitest";
-import { InstallTxt, InstallTxtValue } from "../../src/Lib/InstallTxt";
-import { PrefixMap } from "../../src/Lib/PrefixMap";
-import { FileReadAsync } from "../../src/Lib/FileReadAsync";
-import { CharacterTxt } from "../../src/Lib/CharacterTxt";
+import { InstallTxt, InstallTxtValue } from "../../src/lib/InstallTxt";
+import { PrefixMap } from "../../src/lib/PrefixMap";
+import { FileReadAsync } from "../../src/services/FileReadAsync";
+import { CharacterTxt } from "../../src/lib/CharacterTxt";
 
 import {
   ExtractInstallTxt,
@@ -17,7 +17,7 @@ import {
   ExtractCharacterTxt,
   ExtractRootOto,
   GetNewFileName,
-} from "../../src/Lib/OutputZip";
+} from "../../src/services/OutputZip";
 import {
   GetInstallTxtPath,
   GetInstallTxt,
@@ -25,7 +25,7 @@ import {
   GetReadme,
   GetPrefixMap,
   GetCharacterYaml,
-} from "../../src/Lib/InputZip";
+} from "../../src/services/InputZip";
 
 describe("InputZip", () => {
   it("GetInstallTxtPath", () => {

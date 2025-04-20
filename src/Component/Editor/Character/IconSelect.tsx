@@ -2,12 +2,12 @@ import * as React from "react";
 import JSZip from "jszip";
 import { useTranslation } from "react-i18next";
 
-import { CharacterTxt } from "../../../Lib/CharacterTxt";
+import { CharacterTxt } from "../../../lib/CharacterTxt";
 
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthSelect } from "../../Common/FullWidthSelect";
 import { Png2BmpCanvas } from "./Png2BmpCanvas";
 

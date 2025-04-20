@@ -16,7 +16,7 @@ import { Footer } from "./Fotter";
 import { FullWidthButton } from "./Common/FullWidthButton";
 import { LogPaper } from "./Top/LogPaper";
 
-import { Log } from "../Lib/Logging";
+import { Log } from "../lib/Logging";
 
 export const ErrorPaper: React.FC<FallbackProps> = ({
   error,

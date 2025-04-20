@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import Typography from "@mui/material/Typography";
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthButton } from "../../Common/FullWidthButton";
 
 const mapWriter = new Array<number>();

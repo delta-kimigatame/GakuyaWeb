@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthSelect } from "../../Common/FullWidthSelect";
 import { SampleWavUploadButton } from "./SampleWavUploadButton";
 import { PortraitUploadButton } from "./PortraitUploadButton";

@@ -1,11 +1,11 @@
 import JSZip from "jszip";
 import yaml from "js-yaml";
 import * as iconv from "iconv-lite";
-import { Log } from "./Logging";
-import { InstallTxt } from "./InstallTxt";
+import { Log } from "../lib/Logging";
+import { InstallTxt } from "../lib/InstallTxt";
 import { FileReadAsync } from "./FileReadAsync";
-import { PrefixMap } from "./PrefixMap";
-import { CharacterTxt } from "./CharacterTxt";
+import { PrefixMap } from "../lib/PrefixMap";
+import { CharacterTxt } from "../lib/CharacterTxt";
 
 export const GetInstallTxtPath = (rootDir: string): string => {
   const split_root = rootDir.split("/");

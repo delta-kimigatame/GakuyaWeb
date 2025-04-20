@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-import { InstallTxt } from "../../Lib/InstallTxt";
+import { InstallTxt } from "../../lib/InstallTxt";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 import { FullWidthTextField } from "../Common/FullWidthTextField";
 
-import { Log } from "../../Lib/Logging";
+import { Log } from "../../lib/Logging";
 
 /**
  * install.txtを編集する画面

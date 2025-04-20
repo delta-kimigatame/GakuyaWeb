@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 import { FullWidthTextField } from "../Common/FullWidthTextField";
 
-import { Log } from "../../Lib/Logging";
+import { Log } from "../../lib/Logging";
 import { Slider } from "@mui/material";
 import { PortraitSelect } from "./Character/PortraitSelect";
 export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (

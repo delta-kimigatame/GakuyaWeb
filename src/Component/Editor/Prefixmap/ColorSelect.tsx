@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import { PrefixMap, NoteNumToTone } from "../../../Lib/PrefixMap";
-import { Log } from "../../../Lib/Logging";
+import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
+import { Log } from "../../../lib/Logging";
 import { FullWidthSelect } from "../../Common/FullWidthSelect";
 
 export const ColorSelect: React.FC<ColorSelectProps> = (props) => {

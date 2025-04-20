@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 
-import { PrefixMap, NoteNumToTone } from "../../../Lib/PrefixMap";
+import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
 import { FullWidthTextField } from "../../Common/FullWidthTextField";
 import { DeleteButton } from "./DeleteButton";
 import { ChangeButton } from "./ChangeButton";

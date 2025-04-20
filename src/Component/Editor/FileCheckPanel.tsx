@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Divider from "@mui/material/Divider";
 
-import { Log } from "../../Lib/Logging";
+import { Log } from "../../lib/Logging";
 import { FileCheckFlags } from "./EditorView";
 import { WavArea } from "./FileCheck/WavArea";
 import { OtoArea } from "./FileCheck/OtoArea";

@@ -8,8 +8,8 @@ import { Divider } from "@mui/material";
 
 import { CommonCheckBox } from "../Common/CommonCheckBox";
 
-import { PrefixMap, NoteNumToTone } from "../../Lib/PrefixMap";
-import { Log } from "../../Lib/Logging";
+import { PrefixMap, NoteNumToTone } from "../../lib/PrefixMap";
+import { Log } from "../../lib/Logging";
 import { ValueArea } from "./Prefixmap/ValueArea";
 import { SelectArea } from "./Prefixmap/SelectArea";
 import { ColorArea } from "./Prefixmap/ColorArea";

@@ -1,10 +1,10 @@
 import JSZip from "jszip";
 import yaml from "js-yaml";
 import * as iconv from "iconv-lite";
-import { Log } from "./Logging";
-import { InstallTxt } from "./InstallTxt";
-import { PrefixMap } from "./PrefixMap";
-import { CharacterTxt } from "./CharacterTxt";
+import { Log } from "../lib/Logging";
+import { InstallTxt } from "../lib/InstallTxt";
+import { PrefixMap } from "../lib/PrefixMap";
+import { CharacterTxt } from "../lib/CharacterTxt";
 
 /**
  * Install.txtをzip内に生成する処理

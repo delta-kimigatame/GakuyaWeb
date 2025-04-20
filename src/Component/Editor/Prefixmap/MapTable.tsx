@@ -12,8 +12,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import { PrefixMap, NoteNumToTone } from "../../../Lib/PrefixMap";
-import { Log } from "../../../Lib/Logging";
+import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
+import { Log } from "../../../lib/Logging";
 
 const mapWriter = new Array<number>();
 for (let i = 107; i >= 24; i--) {

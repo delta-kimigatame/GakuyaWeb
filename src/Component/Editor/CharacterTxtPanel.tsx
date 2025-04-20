@@ -2,7 +2,7 @@ import * as React from "react";
 import JSZip from "jszip";
 import { useTranslation } from "react-i18next";
 
-import { CharacterTxt } from "../../Lib/CharacterTxt";
+import { CharacterTxt } from "../../lib/CharacterTxt";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,7 +12,7 @@ import { FullWidthTextField } from "../Common/FullWidthTextField";
 import { SampleWavSelect } from "./Character/SampleWavSelect";
 import { IconSelect } from "./Character/IconSelect";
 
-import { Log } from "../../Lib/Logging";
+import { Log } from "../../lib/Logging";
 
 export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
   const { t } = useTranslation();

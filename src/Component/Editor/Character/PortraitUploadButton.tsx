@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthButton } from "../../Common/FullWidthButton";
 
 export const PortraitUploadButton: React.FC<PortraitUploadButtonProps> = (

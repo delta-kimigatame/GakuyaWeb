@@ -18,11 +18,11 @@ import { setting } from "../../settings/setting";
 import { ReadMePanel } from "./ReadMePanel";
 import { InstallTextPanel } from "./InstallTxtPanel";
 
-import { InstallTxt } from "../../Lib/InstallTxt";
-import { CharacterTxt } from "../../Lib/CharacterTxt";
-import { PrefixMap } from "../../Lib/PrefixMap";
-import { Log } from "../../Lib/Logging";
-import { FileReadAsync } from "../../Lib/FileReadAsync";
+import { InstallTxt } from "../../lib/InstallTxt";
+import { CharacterTxt } from "../../lib/CharacterTxt";
+import { PrefixMap } from "../../lib/PrefixMap";
+import { Log } from "../../lib/Logging";
+import { FileReadAsync } from "../../services/FileReadAsync";
 import { CharacterTxtPanel } from "./CharacterTxtPanel";
 import { Divider } from "@mui/material";
 import { CharacterYamlPanel } from "./CharacterYamlPanel";
@@ -30,7 +30,7 @@ import { PrefixMapPanel } from "./PrefixMapPanel";
 import { FileCheckPanel } from "./FileCheckPanel";
 import { FullWidthButton } from "../Common/FullWidthButton";
 import { Wave } from "utauwav";
-import { GenerateFrq } from "../../Lib/GenerateFrq";
+import { GenerateFrq } from "../../lib/GenerateFrq";
 import { World } from "tsworld";
 import {
   ExtractCharacterTxt,
@@ -40,14 +40,14 @@ import {
   ExtractReadme,
   ExtractRootOto,
   GetNewFileName,
-} from "../../Lib/OutputZip";
+} from "../../services/OutputZip";
 import {
   GetCharacterTxt,
   GetCharacterYaml,
   GetInstallTxt,
   GetPrefixMap,
   GetReadme,
-} from "../../Lib/InputZip";
+} from "../../services/InputZip";
 import { FileList } from "./FileCheck/FileList";
 
 export const EditorView: React.FC<EditorViewProps> = (props) => {

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-import { PrefixMap, NoteNumToTone } from "../../../Lib/PrefixMap";
-import { Log } from "../../../Lib/Logging";
+import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
+import { Log } from "../../../lib/Logging";
 import { FullWidthButton } from "../../Common/FullWidthButton";
 
 export const DeleteButton: React.FC<DeleteButtonProps> = (props) => {

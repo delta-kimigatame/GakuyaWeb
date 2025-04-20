@@ -12,11 +12,11 @@ import {
   ExtractCharacterTxt,
   ExtractRootOto,
   GetNewFileName
-} from "../../src/Lib/OutputZip";
-import { InstallTxt, InstallTxtValue } from "../../src/Lib/InstallTxt";
-import { PrefixMap } from "../../src/Lib/PrefixMap";
-import { FileReadAsync } from "../../src/Lib/FileReadAsync";
-import { CharacterTxt } from "../../src/Lib/CharacterTxt";
+} from "../../src/services/OutputZip";
+import { InstallTxt, InstallTxtValue } from "../../src/lib/InstallTxt";
+import { PrefixMap } from "../../src/lib/PrefixMap";
+import { FileReadAsync } from "../../src/services/FileReadAsync";
+import { CharacterTxt } from "../../src/lib/CharacterTxt";
 
 describe("OutputZip", () => {
   it("ExtractInstallTxt_false", () => {

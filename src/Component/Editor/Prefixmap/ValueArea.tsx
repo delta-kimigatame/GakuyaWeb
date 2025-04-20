@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 
-import { PrefixMap } from "../../../Lib/PrefixMap";
+import { PrefixMap } from "../../../lib/PrefixMap";
 import { FullWidthTextField } from "../../Common/FullWidthTextField";
 import { ClearButton } from "./ClearButton";
 import { SetButton } from "./SetButton";

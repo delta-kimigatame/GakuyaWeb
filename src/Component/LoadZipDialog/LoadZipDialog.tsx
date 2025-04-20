@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import { LoadZipDialogContent } from "./LoadZipDialogContent";
 import { LoadZipDialogTitle } from "./LoadZipDialogTitle";
 
-import { Log } from "../../Lib/Logging";
+import { Log } from "../../lib/Logging";
 
 /**
  * zip読込待ちダイアログ \

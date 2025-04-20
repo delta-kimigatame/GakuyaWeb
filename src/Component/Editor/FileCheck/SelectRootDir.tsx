@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthSelect } from "../../Common/FullWidthSelect";
 
 export const SelectRootDir: React.FC<SelectRootDirProps> = (props) => {

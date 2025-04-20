@@ -14,7 +14,7 @@ import { Footer } from "./Fotter";
 import { TopView } from "./Top/TopView";
 import { EditorView } from "./Editor/EditorView";
 
-import { Log } from "../Lib/Logging";
+import { Log } from "../lib/Logging";
 
 export const App: React.FC = () => {
   // 端末のダークモード設定取得

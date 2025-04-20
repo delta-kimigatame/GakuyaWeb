@@ -2,10 +2,10 @@ import * as React from "react";
 import JSZip from "jszip";
 import { useTranslation } from "react-i18next";
 
-import { CharacterTxt } from "../../../Lib/CharacterTxt";
+import { CharacterTxt } from "../../../lib/CharacterTxt";
 
 
-import { Log } from "../../../Lib/Logging";
+import { Log } from "../../../lib/Logging";
 import { FullWidthButton } from "../../Common/FullWidthButton";
 
 export const SampleWavUploadButton: React.FC<SampleWavUploadButtonProps> = (
