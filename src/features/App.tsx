@@ -9,7 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useCookies } from "react-cookie";
 import { getDesignTokens } from "../settings/theme";
 
-import { Header } from "./Header/Header";
+import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Fotter";
 import { TopView } from "../components/Top/TopView";
 import { EditorView } from "./Editor/EditorView";

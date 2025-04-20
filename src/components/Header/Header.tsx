@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
-import { HeaderMenu } from "../../components/Header/HeaderMenu";
+import { HeaderMenu } from "./HeaderMenu";
 
 import { setting } from "../../settings/setting";
 /**
@@ -20,14 +20,6 @@ import { setting } from "../../settings/setting";
  */
 export const Header: React.FC<HeaderProps> = (props) => {
   const { t } = useTranslation();
-  /** テキスト表示領域 */
-  const [textWidth, setTextWidth] = React.useState<number>(
-    props.windowSize[0] - 40 - 24 - 32
-  );
-  /** 画面サイズが変更されたとき、テキスト表示領域も変更する。 */
-  React.useEffect(() => {
-    setTextWidth(props.windowSize[0] - 40 - 24 - 32);
-  }, [props.windowSize]);
   /** メニューの表示位置。nullの時は非表示 */
   const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null);
   return (
