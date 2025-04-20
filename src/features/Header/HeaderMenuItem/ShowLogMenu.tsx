@@ -14,8 +14,8 @@ import DialogContent from "@mui/material/DialogContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import { FullWidthButton } from "../../Common/FullWidthButton";
-import { LogPaper } from "../../Top/LogPaper";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
+import { LogPaper } from "../../../components/Top/LogPaper";
 
 import { Log } from "../../../lib/Logging";
 
@@ -80,6 +80,7 @@ export const ShowLogMenu: React.FC<ShowLogMenuProps> = (props) => {
         </DialogTitle>
         <IconButton
           onClick={() => {
+            props.setMenuAnchor(null);
             setDialogOpen(false);
           }}
           sx={{
@@ -87,6 +88,7 @@ export const ShowLogMenu: React.FC<ShowLogMenuProps> = (props) => {
             right: 8,
             top: 8,
           }}
+          data-testid="dialogCloseButton"
         >
           <CloseIcon />
         </IconButton>
