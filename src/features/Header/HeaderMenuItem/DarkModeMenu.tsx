@@ -22,6 +22,7 @@ export const DarkModeMenu: React.FC<DarkModeButtonProps> = (props) => {
           props.setMode(props.mode === "dark" ? "light" : "dark");
           props.setMenuAnchor(null)
         }}
+        data-testid="darkModeMenu"
       >
         <ListItemIcon>
           {props.mode === "dark" ? <LightModeIcon /> : <ModeNightIcon />}
