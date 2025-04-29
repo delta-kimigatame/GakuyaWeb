@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 
 import { Log } from "../../../lib/Logging";
-import { FullWidthButton } from "../../Common/FullWidthButton";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
 
 const mapWriter = new Array<number>();
 for (let i = 107; i >= 24; i--) {
@@ -26,6 +26,7 @@ export const AllSelectButton: React.FC<AllSelectButtonProps> = (props) => {
       color="inherit"
       disabled={!props.update}
       onClick={OnAllClick}
+      testId="prefixAllSelectButton"
     >
       <Typography variant="caption">{t("editor.prefixmap.all")}</Typography>
     </FullWidthButton>
@@ -34,10 +35,6 @@ export const AllSelectButton: React.FC<AllSelectButtonProps> = (props) => {
 export interface AllSelectButtonProps {
   /** ファイル更新の要否 */
   update: boolean;
-  /** prefix値の変更 */
-  setPrefix: React.Dispatch<React.SetStateAction<string>>;
-  /** suffix値の変更 */
-  setSuffix: React.Dispatch<React.SetStateAction<string>>;
   /** 選択している値*/
   setSelected: React.Dispatch<React.SetStateAction<Array<number>>>;
 }
