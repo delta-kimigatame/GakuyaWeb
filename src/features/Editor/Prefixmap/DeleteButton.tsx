@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
 import { Log } from "../../../lib/Logging";
-import { FullWidthButton } from "../../Common/FullWidthButton";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
 
 export const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
   const { t } = useTranslation();
@@ -25,12 +25,13 @@ export const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
 
   return (
     <FullWidthButton
-    color="inherit"
-    disabled={!props.update || props.color === ""}
-    onClick={OnDeleteClick}
-  >
-    {t("editor.prefixmap.delete")}
-  </FullWidthButton>
+      color="inherit"
+      disabled={!props.update || props.color === ""}
+      onClick={OnDeleteClick}
+      testId="prefixDeleteButton"
+    >
+      {t("editor.prefixmap.delete")}
+    </FullWidthButton>
   );
 };
 export interface DeleteButtonProps {
