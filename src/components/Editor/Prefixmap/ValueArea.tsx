@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { PrefixMap } from "../../../lib/PrefixMap";
 import { FullWidthTextField } from "../../Common/FullWidthTextField";
 import { ClearButton } from "../../../features/Editor/Prefixmap/ClearButton";
-import { SetButton } from "./SetButton";
+import { SetButton } from "../../../features/Editor/Prefixmap/SetButton";
 
 export const ValueArea: React.FC<ValueAreaProps> = (props) => {
   const { t } = useTranslation();
