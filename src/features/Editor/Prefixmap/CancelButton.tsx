@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 
 import { Log } from "../../../lib/Logging";
-import { FullWidthButton } from "../../Common/FullWidthButton";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
 
 export const CancelButton: React.FC<CancelButtonProps> = (props) => {
   const { t } = useTranslation();
@@ -24,6 +24,7 @@ export const CancelButton: React.FC<CancelButtonProps> = (props) => {
       color="inherit"
       disabled={!props.update}
       onClick={OnCancelClick}
+      testId="prefixCancelButton"
     >
       <Typography variant="caption">{t("editor.prefixmap.cancel")}</Typography>
     </FullWidthButton>

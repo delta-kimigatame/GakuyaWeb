@@ -8,8 +8,6 @@ export const SelectArea: React.FC<SelectAreaProps> = (props) => {
     <>
       <AllSelectButton
         update={props.update}
-        setPrefix={props.setPrefix}
-        setSuffix={props.setSuffix}
         setSelected={props.setSelected}
       />
       <CancelButton
