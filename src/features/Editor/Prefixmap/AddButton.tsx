@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
 import { Log } from "../../../lib/Logging";
-import { FullWidthButton } from "../../Common/FullWidthButton";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
 
 export const AddButton: React.FC<AddButtonProps> = (props) => {
   const { t } = useTranslation();
@@ -28,6 +28,7 @@ export const AddButton: React.FC<AddButtonProps> = (props) => {
       color="inherit"
       disabled={!props.update || props.colorName === ""}
       onClick={OnAddClick}
+      testId="prefixAddButton"
     >
       {t("editor.prefixmap.add")}
     </FullWidthButton>
