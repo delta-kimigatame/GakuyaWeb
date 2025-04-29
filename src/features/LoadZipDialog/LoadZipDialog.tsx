@@ -30,21 +30,9 @@ export const LoadZipDialog: React.FC<LoadZipDialogProps> = (props) => {
    * @param file 読み込んだファイル
    * @param encoding 文字コード
    */
-  const LoadZip = (file: File, encoding: string = "utf-8") => {
-    const zip = new JSZip();
-    const td = new TextDecoder(encoding);
-    Log.log(`zip読込。文字コード:${encoding}`,"LoadZipDialog")
-    props.setZipFileName(file.name);
-    zip
-      .loadAsync(file, {
-        decodeFileName: (fileNameBinary: Uint8Array) =>
-          td.decode(fileNameBinary),
-      })
-      .then((z) => {
-        setProcessing(false);
-        setZipFiles(z.files);
-        Log.log(`zip読込完了`,"LoadZipDialog")
-      });
+  const LoadZip = async (file: File, encoding: string = "utf-8") => {
+    const files = await LoadZipCore(file,encoding,props.setZipFileName,setProcessing)
+    setZipFiles(files)
   };
 
   /** ファイルが変更された際の処理。 */
@@ -100,3 +88,35 @@ export interface LoadZipDialogProps {
   /** 読み込んだファイル名を変更する処理 */
   setZipFileName: React.Dispatch<React.SetStateAction<string>>;
 }
+
+/**
+ * zipを指定した文字コードで解凍する
+ * @param file 読み込んだファイル
+ * @param encoding 文字コード
+ * @param setZipFileName zipファイル名を保存するコールバック
+ * @param setProcessing 処理中の状況を保存するコールバック
+ */
+export const LoadZipCore = async(
+  file: File,
+  encoding: string,
+  setZipFileName: (string) => void,
+  setProcessing: (boolean) => void,
+):Promise<{
+  [key: string]: JSZip.JSZipObject;
+}> => {
+  const zip = new JSZip();
+  const td = new TextDecoder(encoding);
+  Log.log(`zip読込。文字コード:${encoding}`, "LoadZipDialog");
+  setZipFileName(file.name);
+  return new Promise((resolve)=>{
+    zip
+      .loadAsync(file, {
+        decodeFileName: (fileNameBinary: Uint8Array) => td.decode(fileNameBinary),
+      })
+      .then((z) => {
+        setProcessing(false);
+        Log.log(`zip読込完了`, "LoadZipDialog");
+        resolve(z.files);
+      });
+  })
+};
