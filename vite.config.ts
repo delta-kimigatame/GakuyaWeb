@@ -56,6 +56,14 @@ export default defineConfig({
       ],
     },
   }),],
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext'
+    }
+  },
+  esbuild: {
+    target: 'esnext'
+  },
   test: {
     globals: true, // Jestの `global` な関数 (`describe`, `test` など) を有効にする
     environment: "jsdom", // JSDOM環境を使う
@@ -71,6 +79,7 @@ export default defineConfig({
     port: 8080,
   },
   build: {
+    target: 'esnext',
     rollupOptions: {
       output: {
         entryFileNames: `assets/[name].js`,
