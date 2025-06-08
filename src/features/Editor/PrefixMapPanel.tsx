@@ -13,7 +13,7 @@ import { Log } from "../../lib/Logging";
 import { ValueArea } from "../../components/Editor/Prefixmap/ValueArea";
 import { SelectArea } from "../../components/Editor/Prefixmap/SelectArea";
 import { ColorArea } from "../../components/Editor/Prefixmap/ColorArea";
-import { MapTable } from "../../components/Editor/Prefixmap/MapTable";
+import { MapTable } from "./Prefixmap/MapTable";
 
 export const PrefixMapPanel: React.FC<PrefixMapPanelProps> = (props) => {
   const { t } = useTranslation();

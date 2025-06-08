@@ -11,10 +11,10 @@ import { getDesignTokens } from "../settings/theme";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { BasePaper } from "./Common/BasePaper";
-import { Footer } from "./Fotter";
-import { FullWidthButton } from "./Common/FullWidthButton";
-import { LogPaper } from "./Top/LogPaper";
+import { BasePaper } from "../components/Common/BasePaper";
+import { Footer } from "../components/Fotter";
+import { FullWidthButton } from "../components/Common/FullWidthButton";
+import { LogPaper } from "../components/Top/LogPaper";
 
 import { Log } from "../lib/Logging";
 

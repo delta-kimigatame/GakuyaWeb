@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
 import { Log } from "../../../lib/Logging";
-import { FullWidthButton } from "../../Common/FullWidthButton";
+import { FullWidthButton } from "../../../components/Common/FullWidthButton";
 
 export const ChangeButton: React.FC<ChangeButtonProps> = (props) => {
   const { t } = useTranslation();

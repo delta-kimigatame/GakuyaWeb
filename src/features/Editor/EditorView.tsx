@@ -219,6 +219,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             wav.RemoveDCOffset();
             Log.log(`${f}のDCoffsetを除去しました`, "EditorView");
           }
+          console.log(wav)
           newZip.file(newFileName, wav.Output());
           Log.log(
             `${f}を${newFileName}としてzipに格納しました。`,

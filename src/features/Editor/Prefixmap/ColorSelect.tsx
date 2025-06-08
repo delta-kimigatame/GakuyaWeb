@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { PrefixMap, NoteNumToTone } from "../../../lib/PrefixMap";
 import { Log } from "../../../lib/Logging";
-import { FullWidthSelect } from "../../Common/FullWidthSelect";
+import { FullWidthSelect } from "../../../components/Common/FullWidthSelect";
 
 export const ColorSelect: React.FC<ColorSelectProps> = (props) => {
   const { t } = useTranslation();

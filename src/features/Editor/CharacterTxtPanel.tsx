@@ -7,8 +7,8 @@ import { CharacterTxt } from "../../lib/CharacterTxt";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { CommonCheckBox } from "../Common/CommonCheckBox";
-import { FullWidthTextField } from "../Common/FullWidthTextField";
+import { CommonCheckBox } from "../../components/Common/CommonCheckBox";
+import { FullWidthTextField } from "../../components/Common/FullWidthTextField";
 import { SampleWavSelect } from "./Character/SampleWavSelect";
 import { IconSelect } from "./Character/IconSelect";
 
