@@ -8,6 +8,7 @@ export const translation_ja = {
     toLightMode: "ライトモードにする",
     changeLanguage: "言語設定",
     showLog: "操作ログ表示",
+    clearAppCache: "アプリのキャッシュクリア",
     logAttention:
       "ログは自動では送信されません。必要に応じて開発者に送付してください。",
   },
@@ -24,7 +25,7 @@ export const translation_ja = {
     privacyCookie:
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
-    changelog: ["2025/04/13_2 character.txtのバージョン情報にwebの情報が表示されてしまう不具合の修正","2025/04/13 voice colorを設定するとwavがすべて削除される不具合の修正。","2025/03/27 character.yaml対応の強化","2025/03/24 frqがやたら巨大なファイルになる不具合の修正","2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"],
+    changelog: ["2025/06/08 一部のwavが読み込めない不具合の修正","2025/04/13_2 character.txtのバージョン情報にwebの情報が表示されてしまう不具合の修正","2025/04/13 voice colorを設定するとwavがすべて削除される不具合の修正。","2025/03/27 character.yaml対応の強化","2025/03/24 frqがやたら巨大なファイルになる不具合の修正","2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"],
   },
   editor: {
     file_check: {
