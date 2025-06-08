@@ -69,13 +69,14 @@ export const GetCharacterTxt = async (
     [key: string]: JSZip.JSZipObject;
   }
 ): Promise<{ value: CharacterTxt; update: boolean }> => {
+  const targetPath=rootDir===""?"character.txt":rootDir + "/character.txt"
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(rootDir + "/character.txt")) {
+    if (Object.keys(zipFiles).includes(targetPath)) {
       Log.log(
-        `character.txtがみつかりました。${rootDir + "/character.txt"}`,
+        `character.txtがみつかりました。${targetPath}`,
         "EditorView"
       );
-      zipFiles[rootDir + "/character.txt"]
+      zipFiles[targetPath]
         .async("arraybuffer")
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
@@ -117,13 +118,14 @@ export const GetReadme = async (
     [key: string]: JSZip.JSZipObject;
   }
 ): Promise<string> => {
+  const targetPath=rootDir===""?"readme.txt":rootDir + "/readme.txt"
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(rootDir + "/readme.txt")) {
+    if (Object.keys(zipFiles).includes(targetPath)) {
       Log.log(
-        `readme.txtがみつかりました。${rootDir + "/readme.txt"}`,
+        `readme.txtがみつかりました。${targetPath}`,
         "EditorView"
       );
-      zipFiles[rootDir + "/readme.txt"]
+      zipFiles[targetPath]
         .async("arraybuffer")
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
@@ -148,14 +150,15 @@ export const GetPrefixMap = async (
     [key: string]: JSZip.JSZipObject;
   }
 ): Promise<{ string?: PrefixMap }> => {
+  const targetPath=rootDir===""?"prefix.map":rootDir + "/prefix.map"
   return new Promise((resolve, reject) => {
     let maps = {};
-    if (Object.keys(zipFiles).includes(rootDir + "/prefix.map")) {
+    if (Object.keys(zipFiles).includes(targetPath)) {
       Log.log(
-        `prefix.mapがみつかりました。${rootDir + "/prefix.map"}`,
+        `prefix.mapがみつかりました。${targetPath}`,
         "EditorView"
       );
-      zipFiles[rootDir + "/prefix.map"]
+      zipFiles[targetPath]
         .async("arraybuffer")
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
@@ -185,13 +188,14 @@ export const GetCharacterYaml = async (
   },
   maps: { string?: PrefixMap }
 ): Promise<{ yaml: {} | null; maps: { string?: PrefixMap } }> => {
+  const targetPath=rootDir===""?"character.yaml":rootDir + "/character.yaml"
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(rootDir + "/character.yaml")) {
+    if (Object.keys(zipFiles).includes(targetPath)) {
       Log.log(
-        `character.yamlがみつかりました。${rootDir + "/character.yaml"}`,
+        `character.yamlがみつかりました。${targetPath}`,
         "EditorView"
       );
-      zipFiles[rootDir + "/character.yaml"]
+      zipFiles[targetPath]
         .async("arraybuffer")
         .then(async (buf) => {
           const txt = await FileReadAsync(buf, "UTF8");
