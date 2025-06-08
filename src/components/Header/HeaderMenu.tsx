@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import { DarkModeMenu } from "../../features/Header/HeaderMenuItem/DarkModeMenu";
 import { LanguageMenu } from "../../features/Header/HeaderMenuItem/LanguageMenu";
 import { ShowLogMenu } from "../../features/Header/HeaderMenuItem/ShowLogMenu";
+import { HeaderMenuClearCache } from "../../features/Header/HeaderMenuItem/HeaderMenuClearCache";
 
 /**
  * ヘッダメニュー
@@ -37,6 +38,8 @@ export const HeaderMenu: React.FC<HeaderMenuProps> = (props) => {
           setMode={props.setMode}
           setMenuAnchor={props.setMenuAnchor}
         />
+        <Divider />
+        <HeaderMenuClearCache setMenuAnchor={props.setMenuAnchor} />
         <Divider />
         <ShowLogMenu setMenuAnchor={props.setMenuAnchor} />
       </Menu>
