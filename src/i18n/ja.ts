@@ -2,6 +2,7 @@ export const translation_ja = {
   language: {
     ja: "日本語",
     en: "英語",
+    zh: "中文",
   },
   menu: {
     toDarkMode: "ダークモードにする",

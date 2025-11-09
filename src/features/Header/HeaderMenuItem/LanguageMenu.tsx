@@ -56,6 +56,15 @@ export const LanguageMenu: React.FC<LanguageButtonProps> = (props) => {
         >
           {t("language.en")}
         </MenuItem>
+        <MenuItem
+          onClick={() => {
+            props.setLanguage("zh");
+            setMenuAnchor(null);
+            props.setMenuAnchor(null);
+          }}
+        >
+          {t("language.zh")}
+        </MenuItem>
       </Menu>
     </>
   );

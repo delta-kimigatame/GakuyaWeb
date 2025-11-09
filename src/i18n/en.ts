@@ -2,6 +2,7 @@ export const translation_en = {
   language: {
     ja: "JA",
     en: "EN",
+    zh: "ZH",
   },
   menu: {
     toDarkMode: "to Dark Mode",

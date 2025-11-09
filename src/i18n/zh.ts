@@ -1,0 +1,166 @@
+export const translation_zh = {
+  language: {
+    ja: "日语",
+    en: "英语",
+    zh: "中文",
+  },
+  menu: {
+    toDarkMode: "切换到深色模式",
+    toLightMode: "切换到浅色模式",
+    changeLanguage: "语言设置",
+    changeWorkersCount: "生成器数量",
+    showLog: "显示操作日志",
+    clearAppCache: "清除应用缓存",
+    logAttention:
+      "日志不会自动发送，如有需要请发送给开发者。",
+  },
+  top: {
+    description: "Gakuya是UTAU音源的打包工具",
+    selectZipButtonText: "同意使用条款并选择UTAU音源的zip文件",
+    rule: "使用条款",
+    ruleDescription: "只能使用获得声音权利人许可的音源。",
+    ruleDescription2:
+      "人力音源不可使用。为UTAU录制的音源，如果使用条款中没有禁止则可以使用",
+    privacy: "隐私政策",
+    privacyAnalytics:
+      "本网站使用Google的访问分析工具「Google Analytics」。Google Analytics使用Cookie收集数据。这些数据是匿名收集的，不会识别个人身份。",
+    privacyCookie:
+      "本网站使用cookie来自定义显示方式。",
+    history: "更新历史",
+    changelog: ["2025/08/31 修复部分wav文件无法正常转换的问题","2025/06/09 修复最顶层文件夹中的文件无法读取的问题","2025/06/08 修复部分wav文件无法读取的问题","2025/04/13_2 修复character.txt的版本信息中显示web信息的问题","2025/04/13 修复设置voice color时所有wav文件被删除的问题","2025/03/27 增强character.yaml支持","2025/03/24 修复frq文件过大的问题","2025/02/17 添加文件列表标签页", "2025/02/13 首次发布"],
+  },
+  editor: {
+    file_check: {
+      title: "文件检查",
+      all: "全选",
+      file_list: "文件列表",
+      contentsdir: {
+        title: "音源根目录（包含要安装文件的文件夹）",
+        description:
+          "更改此设置将丢弃对character.txt、character.yaml、readme.txt、install.txt、prefix.map的编辑内容。",
+      },
+      remove: {
+        title: "删除不必要的文件",
+        read: "删除$read",
+        uspec: "删除UTAU原音设置缓存文件(*.uspec)",
+        setparam: "删除setParam缓存文件(oto.setParam-Scache)",
+        vlabeler: "删除vLabeler缓存文件夹(*.lbp.caches/)",
+      },
+      frq: {
+        title: "频率表文件",
+        description:
+          "基本上删除除frq以外的文件。如果手动修改了频率表请保留。",
+        frq: "如果不存在UTAU标准频率表 *.frq则生成",
+        pmk: "删除tips引擎频率表 *.pmk",
+        frc: "删除model4引擎频率表 *.frc（使用条款禁止分发）",
+        vs4ufrq: "删除VS4U引擎频率表 *.vs4ufrq",
+        world: "删除w4u引擎频率表 *.dio、*.stac、*.platinum",
+        llsm: "删除moresampler分析文件 *.llsm",
+        mrq: "删除moresampler分析文件 *.mrq",
+      },
+      oto: {
+        title: "oto.ini",
+        root: "如果音源根目录不存在oto.ini，则生成空文件",
+      },
+      wav: {
+        title: "音频数据",
+        description: "基本上全部勾选",
+        stereo: "将立体声音源转换为单声道",
+        sampleRate: "将采样频率设为44,100Hz",
+        depth: "将bit深度设为16bit",
+        dcoffset: "去除DC偏移",
+      },
+    },
+    character: {
+      title: "角色",
+      description: "音源信息。必需项目。",
+      check: "创建或更新character.txt（如果不存在则必须创建）",
+      convertBmp: "选择图像并转换为UTAU图标(bmp/jpg/gif/png)",
+      field: {
+        name: "音源名称",
+        image: "图标图像(bmp/jpg/gif)",
+        sample: "示例音频",
+        author: "管理员",
+        web: "网站",
+        version: "版本信息",
+        convertBmp: "选择zip外的图像(bmp/jpg/gif/png)",
+        uploadSample: "选择zip外的音频(wav)",
+      },
+    },
+    characterYaml: {
+      description: "OpenUtau的附加设置（自动设为singer_type=utau）",
+      check: "创建或更新character.yaml",
+      TextFileEncoding: "显示字符编码(shift-jis)",
+      Portrait: "立绘插图",
+      PortraitUpload: "选择zip外的图像(png)",
+      PortraitOpacity: "立绘透明度",
+      PortraitHeight: "立绘高度",
+      Voice: "声音提供者",
+      DefaultPhonemizer:"为日语音源设置音素化器"
+    },
+    readme: {
+      title: "说明书·使用条款",
+      check: "创建或更新readme.txt",
+      description:
+        "首次使用此音源时显示。建议写入使用条款和音源说明。",
+    },
+    install: {
+      title: "安装设置",
+      check: "创建或更新install.txt",
+      description:
+        "可以通过拖放到UTAU进行安装。",
+      field: {
+        folder: "安装目标文件夹",
+        contentsdir: "包含要安装文件的文件夹",
+        description: "安装时的一行说明",
+      },
+    },
+    prefixmap: {
+      title: "prefix.map",
+      description: "根据音高自动切换音源的设置。",
+      description2: "Voice Color在原版UTAU中无法使用。",
+      check: "创建或更新prefix.map",
+      header: {
+        tone: "音阶",
+        prefix: "前缀",
+        suffix: "后缀",
+      },
+      voiceColor: "Voice Color",
+      add: "添加",
+      change: "更改",
+      delete: "删除",
+      all: "全选",
+      cancel: "取消选择",
+      set: "设置",
+      clear: "清除",
+    },
+    output: "生成zip文件",
+    download: "下载",
+  },
+  footer: {
+    disclaimer:
+      "UTAU是由飴屋／菖蒲发布的Windows歌声合成软件。",
+    disclaimer2: "本软件与UTAU官方无关。",
+    developerx: "开发者X账号",
+    github: "github",
+    discord: "discord",
+  },
+  loadZipDialog: {
+    title: "读取ZIP",
+    encodeCheck: "确认乱码",
+    encoding: "字符编码",
+    reload: "用指定字符编码重新读取",
+    submit: "确定",
+    error: "读取失败",
+  },
+  xbutton: {
+    share: "分享",
+  },
+  error: {
+    title: "错误",
+    message:
+      "发生了意外错误。请通过下方按钮下载日志并发送给开发者。",
+    download: "下载日志",
+    log: "操作日志",
+  },
+};
