@@ -61,7 +61,7 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
   ) => {
     const k = Object.keys(files)[index];
     files[k].async("arraybuffer").then((result) => {
-      newZip.file(NormalizeJP(k), result);
+      newZip.file(k.normalize("NFC"), result);
       if (index < Object.keys(files).length - 1) {
         ZipExtract(files, index + 1, newZip);
       } else {
