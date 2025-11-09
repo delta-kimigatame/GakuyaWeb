@@ -183,6 +183,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("character.txt") && characterUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.gtag("UpdateCharacterTxt");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (
       f.endsWith("character.yaml") &&
@@ -190,12 +191,15 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
         (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2))
     ) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.gtag("UpdateCharacterYaml");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("readme.txt") && readmeUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.gtag("UpdateReadmeTxt");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("prefix.map") && prefixMapsUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.gtag("UpdatePrefixMap");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else {
       const newFileName = GetNewFileName(rootDir, newRootDir, f);
@@ -228,6 +232,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
           const frqPath = f.replace(".wav", "_wav.frq");
           if (flags.frq.frq && !(frqPath in props.zipFiles)) {
             Log.info(`${frqPath}が存在しないため生成します。`, "EditorView");
+            Log.gtag("GenerateFrq");
             const ndata = Float64Array.from(wav.LogicalNormalize(1));
             const frq = GenerateFrq(world, ndata, 44100, 256);
             newZip.file(frqPath, frq.Output());
@@ -296,6 +301,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     const world = new World();
     await world.Initialize();
     Log.info(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
+    Log.gtag("OutputZip");
     ZipExtractBase(
       newRootDir,
       Object.keys(props.zipFiles)

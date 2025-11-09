@@ -29,6 +29,7 @@ export const PortraitUploadButton: React.FC<PortraitUploadButtonProps> = (
       `立ち絵読み込み。${e.target.files[0].name}`,
       "PortraitUploadButton"
     );
+    Log.gtag("UploadPortraitImage");
   };
   /**
    * ボタンをクリックした際の処理 \

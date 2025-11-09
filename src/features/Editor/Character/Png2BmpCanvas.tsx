@@ -84,6 +84,7 @@ export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
     if (e.target.files.length === 0) return;
     setReadFile(e.target.files[0]);
     Log.info(`ファイル読み込み。${e.target.files[0].name}`, "Png2BmpCanvas");
+    Log.gtag("UploadIconImage");
   };
   /**
    * ボタンをクリックした際の処理 \

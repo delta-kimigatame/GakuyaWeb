@@ -33,6 +33,7 @@ export const SampleWavUploadButton: React.FC<SampleWavUploadButtonProps> = (
       `音声ファイル読み込み。${e.target.files[0].name}`,
       "SampleWavUploadButton"
     );
+    Log.gtag("UploadSampleWav");
   };
   /**
    * ボタンをクリックした際の処理 \
