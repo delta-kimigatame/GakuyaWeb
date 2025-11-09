@@ -7,6 +7,7 @@ export const translation_en = {
     toDarkMode: "to Dark Mode",
     toLightMode: "to Light Mode",
     changeLanguage: "Language setting",
+    changeWorkersCount: "Number of generators",
     showLog: "Show Log",
     clearAppCache: "Clear this app caches",
     logAttention:

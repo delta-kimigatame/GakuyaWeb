@@ -31,6 +31,7 @@ import { FileCheckPanel } from "./FileCheckPanel";
 import { FullWidthButton } from "../../components/Common/FullWidthButton";
 import { Wave } from "utauwav";
 import { GenerateFrq } from "../../lib/GenerateFrq";
+import { GenerateFrqWorkerPool } from "../../services/workerPool";
 import { World } from "tsworld";
 import {
   ExtractCharacterTxt,
@@ -99,6 +100,32 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [zipUrl, setZipUrl] = React.useState<string>("");
   /** 現在処理中のファイル */
   const [outputIndex, setOutputIndex] = React.useState<number>(0);
+  /** Worker Pool for FRQ generation */
+  const [workerPool, setWorkerPool] =
+    React.useState<GenerateFrqWorkerPool | null>(null);
+  /** 生成するfrqの数を管理する状態。デフォルトは0 */
+  const [frqCount, setFrqCount] = React.useState<number>(0);
+  /** 生成したfrqの数を管理する状態。デフォルトは0 */
+  const [generatedFrqCount, setGeneratedFrqCount] = React.useState<number>(0);
+  /**
+   * EditorViewがロードされたときにWorkerPoolを初期化
+   */
+  React.useEffect(() => {
+    Log.info(
+      `WorkerPool初期化開始。ワーカー数: ${props.workersCount}`,
+      "EditorView"
+    );
+    const pool = new GenerateFrqWorkerPool(props.workersCount);
+    setWorkerPool(pool);
+
+    return () => {
+      // クリーンアップ: 不要なタスクをクリア
+      if (pool) {
+        pool.clearTasks();
+      }
+    };
+  }, [props.workersCount]);
+
   /**
    * zipが読み込まれた際の処理
    */
@@ -172,19 +199,54 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     filelist: string[],
     index: number,
     newZip: JSZip,
-    world: World
+    world: World,
+    frqPromises: Promise<void>[] = []
   ) => {
     const f = filelist[index];
     setOutputIndex(index);
     if (index >= filelist.length) {
-      ZipExtractMake(newRootDir, newZip);
+      // すべてのファイル処理完了後、FRQ生成の完了を待つ
+      if (frqPromises.length > 0) {
+        Log.info(
+          `FRQ生成完了待機中... (${frqPromises.length}件)`,
+          "EditorView"
+        );
+        Promise.all(frqPromises)
+          .then(() => {
+            Log.info(`すべてのFRQ生成が完了しました`, "EditorView");
+            ZipExtractMake(newRootDir, newZip);
+          })
+          .catch((error) => {
+            Log.error(
+              `FRQ生成中にエラーが発生しました: ${error}`,
+              "EditorView"
+            );
+            ZipExtractMake(newRootDir, newZip);
+          });
+      } else {
+        ZipExtractMake(newRootDir, newZip);
+      }
     } else if (IsDelete(f, flags)) {
       Log.info(`${f}は設定に従い削除されました。`, "EditorView");
-      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      ZipExtractBase(
+        newRootDir,
+        filelist,
+        index + 1,
+        newZip,
+        world,
+        frqPromises
+      );
     } else if (f.endsWith("character.txt") && characterUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       Log.gtag("UpdateCharacterTxt");
-      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      ZipExtractBase(
+        newRootDir,
+        filelist,
+        index + 1,
+        newZip,
+        world,
+        frqPromises
+      );
     } else if (
       f.endsWith("character.yaml") &&
       (characterYamlUpdate ||
@@ -192,15 +254,36 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     ) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       Log.gtag("UpdateCharacterYaml");
-      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      ZipExtractBase(
+        newRootDir,
+        filelist,
+        index + 1,
+        newZip,
+        world,
+        frqPromises
+      );
     } else if (f.endsWith("readme.txt") && readmeUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       Log.gtag("UpdateReadmeTxt");
-      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      ZipExtractBase(
+        newRootDir,
+        filelist,
+        index + 1,
+        newZip,
+        world,
+        frqPromises
+      );
     } else if (f.endsWith("prefix.map") && prefixMapsUpdate) {
       Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       Log.gtag("UpdatePrefixMap");
-      ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+      ZipExtractBase(
+        newRootDir,
+        filelist,
+        index + 1,
+        newZip,
+        world,
+        frqPromises
+      );
     } else {
       const newFileName = GetNewFileName(rootDir, newRootDir, f);
       props.zipFiles[f].async("arraybuffer").then((buf) => {
@@ -223,7 +306,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             wav.RemoveDCOffset();
             Log.info(`${f}のDCoffsetを除去しました`, "EditorView");
           }
-          console.log(wav)
+          console.log(wav);
           newZip.file(newFileName, wav.Output());
           Log.info(
             `${f}を${newFileName}としてzipに格納しました。`,
@@ -233,10 +316,46 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
           if (flags.frq.frq && !(frqPath in props.zipFiles)) {
             Log.info(`${frqPath}が存在しないため生成します。`, "EditorView");
             Log.gtag("GenerateFrq");
-            const ndata = Float64Array.from(wav.LogicalNormalize(1));
-            const frq = GenerateFrq(world, ndata, 44100, 256);
-            newZip.file(frqPath, frq.Output());
-            Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
+            setFrqCount(prev => prev + 1);
+
+            if (workerPool) {
+              // WorkerPoolを使用した非同期FRQ生成（完了は待たない）
+              const ndata = Float64Array.from(wav.LogicalNormalize(1));
+              const request = {
+                data: ndata,
+                sample_rate: 44100,
+                perSamples: 256,
+              };
+
+              const frqPromise = workerPool
+                .runGenerateFrq(request, index)
+                .then((frq) => {
+                  if (frq) {
+                    newZip.file(frqPath, frq.Output());
+                    setGeneratedFrqCount(prev => prev + 1);
+                    Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
+                  } else {
+                    Log.warn(`${frqPath}の生成に失敗しました。`, "EditorView");
+                  }
+                })
+                .catch((error) => {
+                  Log.error(
+                    `${frqPath}生成中にエラーが発生しました: ${error}`,
+                    "EditorView"
+                  );
+                });
+
+              frqPromises.push(frqPromise);
+            } else {
+              // Fallback: 従来の同期処理
+              const ndata = Float64Array.from(wav.LogicalNormalize(1));
+              const frq = GenerateFrq(world, ndata, 44100, 256);
+              if (frq) {
+                newZip.file(frqPath, frq.Output());
+                setGeneratedFrqCount(prev => prev + 1);
+                Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
+              }
+            }
           }
         } else {
           newZip.file(newFileName, buf);
@@ -245,7 +364,14 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             "EditorView"
           );
         }
-        ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
+        ZipExtractBase(
+          newRootDir,
+          filelist,
+          index + 1,
+          newZip,
+          world,
+          frqPromises
+        );
       });
     }
   };
@@ -293,6 +419,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
 
   const OnOutputClick = async () => {
     setProgress(true);
+    // FRQカウンターをリセット
+    setFrqCount(0);
+    setGeneratedFrqCount(0);
     const newZip = new JSZip();
     const newRootDir =
       rootDir === ""
@@ -325,12 +454,10 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
           >
             {progress ? (
               <>
-                <CircularProgress />({outputIndex}/
-                {
-                  Object.keys(props.zipFiles).filter((f) =>
-                    f.startsWith(rootDir)
-                  ).length
-                }
+                <CircularProgress />({outputIndex+generatedFrqCount}/
+                {Object.keys(props.zipFiles).filter((f) =>
+                  f.startsWith(rootDir)
+                ).length + frqCount}
                 )
               </>
             ) : (
@@ -474,6 +601,8 @@ export interface EditorViewProps {
   zipFileName: string;
   /**ダークモードかライトモードか */
   mode: PaletteMode;
+  /**ワーカー数 */
+  workersCount: number;
 }
 
 interface RemoveFlags {

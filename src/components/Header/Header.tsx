@@ -58,6 +58,8 @@ export const Header: React.FC<HeaderProps> = (props) => {
         setMode={props.setMode}
         language={props.language}
         setLanguage={props.setLanguage}
+        workersCount={props.workersCount}
+        setWorkersCount={props.setWorkersCount}
         menuAnchor={menuAnchor}
         setMenuAnchor={setMenuAnchor}
       />
@@ -74,6 +76,10 @@ export interface HeaderProps {
   language: string;
   /**言語設定を変更する処理 */
   setLanguage: React.Dispatch<React.SetStateAction<string>>;
+  /**ワーカー数 */
+  workersCount: number;
+  /**ワーカー数を変更する処理 */
+  setWorkersCount: React.Dispatch<React.SetStateAction<number>>;
   /**画面サイズ */
   windowSize: [number, number];
 }

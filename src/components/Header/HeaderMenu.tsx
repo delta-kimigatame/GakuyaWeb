@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 
 import { DarkModeMenu } from "../../features/Header/HeaderMenuItem/DarkModeMenu";
 import { LanguageMenu } from "../../features/Header/HeaderMenuItem/LanguageMenu";
+import { WorkersCountMenu } from "../../features/Header/HeaderMenuItem/WorkersCountMenu";
 import { ShowLogMenu } from "../../features/Header/HeaderMenuItem/ShowLogMenu";
 import { HeaderMenuClearCache } from "../../features/Header/HeaderMenuItem/HeaderMenuClearCache";
 
@@ -38,6 +39,11 @@ export const HeaderMenu: React.FC<HeaderMenuProps> = (props) => {
           setMode={props.setMode}
           setMenuAnchor={props.setMenuAnchor}
         />
+        <WorkersCountMenu
+          workersCount={props.workersCount}
+          setWorkersCount={props.setWorkersCount}
+          setMenuAnchor={props.setMenuAnchor}
+        />
         <Divider />
         <HeaderMenuClearCache setMenuAnchor={props.setMenuAnchor} />
         <Divider />
@@ -56,6 +62,10 @@ export interface HeaderMenuProps {
   language: string;
   /**言語設定を変更する処理 */
   setLanguage: React.Dispatch<React.SetStateAction<string>>;
+  /**ワーカー数 */
+  workersCount: number;
+  /**ワーカー数を変更する処理 */
+  setWorkersCount: React.Dispatch<React.SetStateAction<number>>;
   /** メニューの表示位置。nullの時は非表示 */
   menuAnchor: null | HTMLElement;
   /**メニューの表示制御 */

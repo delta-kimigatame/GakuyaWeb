@@ -22,7 +22,7 @@ export const App: React.FC = () => {
     "(prefers-color-scheme: dark)"
   );
   // cookieの取得
-  const [cookies, setCookie, removeCookie] = useCookies(["mode", "language"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["mode", "language", "workersCount"]);
   const mode_: PaletteMode =
     cookies.mode !== undefined
       ? cookies.mode
@@ -31,8 +31,11 @@ export const App: React.FC = () => {
       : "light";
   const language_: string =
     cookies.language !== undefined ? cookies.language : "ja";
+  const workersCount_: number =
+    cookies.workersCount !== undefined ? cookies.workersCount : 3;
   const [mode, setMode] = React.useState<PaletteMode>(mode_);
   const [language, setLanguage] = React.useState<string>(language_);
+  const [workersCount, setWorkersCount] = React.useState<number>(workersCount_);
   const [zipFileName, setZipFileName] = React.useState<string>("");
   const [readZip, setReadZip] = React.useState<{
     [key: string]: JSZip.JSZipObject;
@@ -50,6 +53,13 @@ export const App: React.FC = () => {
     i18n.changeLanguage(language);
     Log.info(language + ":表示言語を変更", "App");
   }, [language]);
+  /**
+   * ワーカー数設定が切り替わった際、クッキーに保存する。
+   */
+  React.useMemo(() => {
+    setCookie("workersCount", workersCount);
+    Log.info(workersCount + ":ワーカー数を変更", "App");
+  }, [workersCount]);
 
   const [windowSize, setWindowSize] = React.useState<[number, number]>([0, 0]);
   React.useLayoutEffect(() => {
@@ -74,6 +84,8 @@ export const App: React.FC = () => {
         setMode={setMode}
         language={language}
         setLanguage={setLanguage}
+        workersCount={workersCount}
+        setWorkersCount={setWorkersCount}
         windowSize={windowSize}
       />
       {readZip === null ? (
@@ -87,7 +99,12 @@ export const App: React.FC = () => {
         </>
       ) : (
         <>
-          <EditorView zipFiles={readZip} zipFileName={zipFileName} mode={mode}/>
+          <EditorView 
+            zipFiles={readZip} 
+            zipFileName={zipFileName} 
+            mode={mode}
+            workersCount={workersCount}
+          />
         </>
       )}
       <Footer theme={theme} />
