@@ -29,7 +29,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       return;
     }
     const hasCharacterYaml_ = props.files.includes(characterYamlPath);
-    Log.log(
+    Log.info(
       `rootDirの変更に伴うcharacter.yaml有無の確認。${hasCharacterYaml_}`,
       "CharacterYamlPanel"
     );
@@ -41,7 +41,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
     const newValue = !props.update;
     props.setUpdate(newValue);
     if (newValue && props.characterYaml === null) {
-      Log.log(`character.yamlが存在しないため自動生成。`, "CharacterYamlPanel");
+      Log.info(`character.yamlが存在しないため自動生成。`, "CharacterYamlPanel");
       props.setCharacterYaml({});
     }
   };
@@ -51,7 +51,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       const c = { ...props.characterYaml };
       c.text_file_encoding = "";
       props.setCharacterYaml(c);
-      Log.log(
+      Log.info(
         `character.yamlの変更。key=TextFileEncoding,value=""`,
         "CharacterYamlPanel"
       );
@@ -59,7 +59,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       const c = { ...props.characterYaml };
       c.text_file_encoding = "shift_jis";
       props.setCharacterYaml(c);
-      Log.log(
+      Log.info(
         `character.yamlの変更。key=TextFileEncoding,value="shift_jis"`,
         "CharacterYamlPanel"
       );
@@ -71,7 +71,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       const c = { ...props.characterYaml };
       c.default_phonemizer = "";
       props.setCharacterYaml(c);
-      Log.log(
+      Log.info(
         `character.yamlの変更。key=DefaultPhonemizer,value=""`,
         "CharacterYamlPanel"
       );
@@ -79,7 +79,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
       const c = { ...props.characterYaml };
       c.default_phonemizer = "OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer";
       props.setCharacterYaml(c);
-      Log.log(
+      Log.info(
         `character.yamlの変更。key=DefaultPhonemizer,value="OpenUtau.Plugin.Builtin.JapanesePresampPhonemizer"`,
         "CharacterYamlPanel"
       );
@@ -91,7 +91,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
     const c = { ...props.characterYaml };
     c.voice = e.target.value;
     props.setCharacterYaml(c);
-    Log.log(
+    Log.info(
       `character.yamlの変更。key=Voice,value=${e.target.value}`,
       "CharacterYamlPanel"
     );
@@ -101,7 +101,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
     const c = { ...props.characterYaml };
     c.portrait_opacity = newValue;
     props.setCharacterYaml(c);
-    Log.log(
+    Log.info(
       `character.yamlの変更。key=PortraitOpacity,value=${newValue}`,
       "CharacterYamlPanel"
     );
@@ -111,7 +111,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
     const c = { ...props.characterYaml };
     c.portrait_height = parseInt(e.target.value);
     props.setCharacterYaml(c);
-    Log.log(
+    Log.info(
       `character.yamlの変更。key=PortraitHeight,value=${e.target.value}`,
       "CharacterYamlPanel"
     );

@@ -33,7 +33,7 @@ export const PrefixMapPanel: React.FC<PrefixMapPanelProps> = (props) => {
       const ps: { string?: PrefixMap } = {};
       ps[""] = p;
       props.setPrefixMaps(ps);
-      Log.log(`prefix.mapが存在しないため生成しました。`, "PrefixMapPanel");
+      Log.info(`prefix.mapが存在しないため生成しました。`, "PrefixMapPanel");
     }
   };
 

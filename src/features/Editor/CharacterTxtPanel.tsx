@@ -28,7 +28,7 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
       return;
     }
     const hasCharacterTxt_ = props.files.includes(characterTxtPath);
-    Log.log(
+    Log.info(
       `rootDirの変更に伴うcharacter.txt有無の確認。${hasCharacterTxt_}`,
       "CharacterPanel"
     );
@@ -46,7 +46,7 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
     e: React.ChangeEvent<HTMLInputElement>,
     key: string
   ) => {
-    Log.log(
+    Log.info(
       `character.txtの変更。key=${key},value=${e.target.value}`,
       "CharacterPanel"
     );

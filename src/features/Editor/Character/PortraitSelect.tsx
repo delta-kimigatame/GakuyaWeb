@@ -17,7 +17,7 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
   const loadPotrait = (value: string) => {
     const samplePath =
       props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
-    Log.log(
+    Log.info(
       `character.yamlに基づき立ち絵load ${samplePath}`,
       "CharacterYamlPanel"
     );
@@ -45,7 +45,7 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
 
   /** サンプル音声が変更された際の処理 */
   const OnChangePortait = (e: SelectChangeEvent) => {
-    Log.log(
+    Log.info(
       `character.yamlの変更。key=Portrait,value=${e.target.value}`,
       "CharacterYamlPanel"
     );

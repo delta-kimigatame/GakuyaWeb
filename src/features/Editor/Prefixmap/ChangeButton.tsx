@@ -17,7 +17,7 @@ export const ChangeButton: React.FC<ChangeButtonProps> = (props) => {
     ps[props.colorName] = new PrefixMap(ps[props.color].OutputMap());
     delete ps[props.color];
     props.setPrefixMaps(ps);
-    Log.log(
+    Log.info(
       `voice colorの変更${props.color}->${props.colorName}`,
       "PrefixMapPanel"
     );

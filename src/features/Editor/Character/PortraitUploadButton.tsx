@@ -25,7 +25,7 @@ export const PortraitUploadButton: React.FC<PortraitUploadButtonProps> = (
     if (!e.target.files) return;
     if (e.target.files.length === 0) return;
     setReadFile(e.target.files[0]);
-    Log.log(
+    Log.info(
       `立ち絵読み込み。${e.target.files[0].name}`,
       "PortraitUploadButton"
     );

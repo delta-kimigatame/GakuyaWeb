@@ -32,7 +32,7 @@ export const MapTable: React.FC<MapTableProps> = (props) => {
     if (props.selected.includes(i)) {
       const selected_ = props.selected.filter((n) => n !== i);
       props.setSelected(selected_);
-      Log.log(`選択中の列。${selected_.join()}`, "PrefixMapPanel");
+      Log.info(`選択中の列。${selected_.join()}`, "PrefixMapPanel");
       if (selected_.length === 0) {
         props.setPrefix("");
         props.setSuffix("");
@@ -41,7 +41,7 @@ export const MapTable: React.FC<MapTableProps> = (props) => {
       const selected_ = props.selected.slice();
       selected_.push(i);
       props.setSelected(selected_);
-      Log.log(`選択中の列。${selected_.join()}`, "PrefixMapPanel");
+      Log.info(`選択中の列。${selected_.join()}`, "PrefixMapPanel");
       if (selected_.length === 1) {
         props.setPrefix(props.prefixMaps[props.color].GetValue(i).prefix);
         props.setSuffix(props.prefixMaps[props.color].GetValue(i).suffix);

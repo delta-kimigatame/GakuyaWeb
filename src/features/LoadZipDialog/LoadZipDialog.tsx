@@ -106,7 +106,7 @@ export const LoadZipCore = async(
 }> => {
   const zip = new JSZip();
   const td = new TextDecoder(encoding);
-  Log.log(`zip読込。文字コード:${encoding}`, "LoadZipDialog");
+  Log.info(`zip読込。文字コード:${encoding}`, "LoadZipDialog");
   setZipFileName(file.name);
   return new Promise((resolve)=>{
     zip
@@ -115,7 +115,7 @@ export const LoadZipCore = async(
       })
       .then((z) => {
         setProcessing(false);
-        Log.log(`zip読込完了`, "LoadZipDialog");
+        Log.info(`zip読込完了`, "LoadZipDialog");
         resolve(z.files);
       });
   })

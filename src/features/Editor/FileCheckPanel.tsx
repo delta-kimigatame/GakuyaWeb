@@ -15,7 +15,7 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
     const f: FileCheckFlags = { ...props.flags };
     const newValue = key2 in f[key1] ? !f[key1][key2] : true;
     f[key1][key2] = newValue;
-    Log.log(`flags.${key1}.${key2}の変更。${newValue}`, "FileCheckPanel");
+    Log.info(`flags.${key1}.${key2}の変更。${newValue}`, "FileCheckPanel");
     props.setFlags(f);
   };
 
@@ -40,7 +40,7 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
       f["wav"]["depth"] = true;
       f["wav"]["dcoffset"] = true;
     }
-    Log.log(`flags.${key1}をすべて変更。${true}`, "FileCheckPanel");
+    Log.info(`flags.${key1}をすべて変更。${true}`, "FileCheckPanel");
     props.setFlags(f);
   };
 

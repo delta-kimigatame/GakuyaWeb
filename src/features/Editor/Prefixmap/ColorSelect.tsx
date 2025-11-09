@@ -17,7 +17,7 @@ export const ColorSelect: React.FC<ColorSelectProps> = (props) => {
   const OnChangeColor = (e: SelectChangeEvent) => {
     props.setColor(e.target.value);
     props.setColorName(e.target.value);
-    Log.log(`Voice Colorの切替。${e.target.value}`, "PrefixMapPanel");
+    Log.info(`Voice Colorの切替。${e.target.value}`, "PrefixMapPanel");
   };
 
   return (

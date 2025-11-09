@@ -13,7 +13,7 @@ export const CancelButton: React.FC<CancelButtonProps> = (props) => {
    * すべて選択解除を押した際の処理
    */
   const OnCancelClick = () => {
-    Log.log(`選択解除`, "PrefixMapPanel");
+    Log.info(`選択解除`, "PrefixMapPanel");
     props.setSelected(new Array());
     props.setPrefix("");
     props.setSuffix("");

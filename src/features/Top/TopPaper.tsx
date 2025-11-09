@@ -41,7 +41,7 @@ export const TopPaper: React.FC<TopPaperProps> = (props) => {
     setProcessing(true);
     setReadFile(e.target.files[0]);
     setDialogOpen(true);
-    Log.log(`ファイル読み込み。${e.target.files[0].name}`,"TOPPaper")
+    Log.info(`ファイル読み込み。${e.target.files[0].name}`,"TOPPaper")
   };
 
   /**
@@ -60,7 +60,7 @@ export const TopPaper: React.FC<TopPaperProps> = (props) => {
   React.useEffect(() => {
     if (props.readZip !== null) {
       setProcessing(false);
-      Log.log(`zip読込完了`,"TOPPaper")
+      Log.info(`zip読込完了`,"TOPPaper")
     }
   }, [props.readZip]);
   return (

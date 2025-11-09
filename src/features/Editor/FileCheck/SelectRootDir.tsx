@@ -13,7 +13,7 @@ export const SelectRootDir: React.FC<SelectRootDirProps> = (props) => {
 
   const OnChangeRootDir = (e: SelectChangeEvent) => {
     props.setRootDir(e.target.value);
-    Log.log(
+    Log.info(
       `rootDirの変更。${props.rootDir}->${e.target.value}`,
       "FileCheckPanel"
     );

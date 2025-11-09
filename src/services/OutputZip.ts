@@ -25,7 +25,7 @@ export const ExtractInstallTxt = (
       { type: "text/plane;charset=shift-jis" }
     );
     newZip.file("install.txt", i_output);
-    Log.log(`${"install.txt"}をzipに格納しました。`, "OutputZip");
+    Log.info(`${"install.txt"}をzipに格納しました。`, "OutputZip");
   }
   return newZip;
 };
@@ -51,7 +51,7 @@ export const ExtractPrefixMap = (
       { type: "text/plane;charset=shift-jis" }
     );
     newZip.file(newRootDir + "/prefix.map", p_output);
-    Log.log(`${newRootDir + "/prefix.map"}をzipに格納しました。`, "OutputZip");
+    Log.info(`${newRootDir + "/prefix.map"}をzipに格納しました。`, "OutputZip");
   }
   return newZip;
 };
@@ -77,7 +77,7 @@ export const ExtractReadme = (
       { type: "text/plane;charset=shift-jis" }
     );
     newZip.file(newRootDir + "/readme.txt", r_output);
-    Log.log(`${newRootDir + "/readme.txt"}をzipに格納しました。`, "OutputZip");
+    Log.info(`${newRootDir + "/readme.txt"}をzipに格納しました。`, "OutputZip");
   }
   return newZip;
 };
@@ -135,7 +135,7 @@ export const ExtractCharacterYaml = (
       );
       characterYaml_["portrait"] = portraitPath;
       newZip.file(newRootDir + "/" + portraitPath, portraitBuf);
-      Log.log(
+      Log.info(
         `${newRootDir + "/" + portraitPath}をzipに格納しました。`,
         "OutputZip"
       );
@@ -150,7 +150,7 @@ export const ExtractCharacterYaml = (
       type: "text/plane;charset=utf-8",
     });
     newZip.file(newRootDir + "/character.yaml", c_output);
-    Log.log(
+    Log.info(
       `${newRootDir + "/character.yaml"}をzipに格納しました。`,
       "OutputZip"
     );
@@ -189,7 +189,7 @@ export const ExtractCharacterTxt = (
       const iconPath = GetAddFilePath(newRootDir, newZip, "icon", "bmp");
       c.image = iconPath;
       newZip.file(newRootDir + "/" + iconPath, iconBuf);
-      Log.log(
+      Log.info(
         `${newRootDir + "/" + iconPath}をzipに格納しました。`,
         "OutputZip"
       );
@@ -198,7 +198,7 @@ export const ExtractCharacterTxt = (
       const samplePath = GetAddFilePath(newRootDir, newZip, "sample", "wav");
       c.sample = samplePath;
       newZip.file(newRootDir + "/" + samplePath, sampleBuf);
-      Log.log(
+      Log.info(
         `${newRootDir + "/" + samplePath}をzipに格納しました。`,
         "OutputZip"
       );
@@ -209,7 +209,7 @@ export const ExtractCharacterTxt = (
       { type: "text/plane;charset=shift-jis" }
     );
     newZip.file(newRootDir + "/character.txt", c_output);
-    Log.log(
+    Log.info(
       `${newRootDir + "/character.txt"}をzipに格納しました。`,
       "OutputZip"
     );
@@ -234,7 +234,7 @@ export const ExtractRootOto = (
       type: "text/plane;charset=shift-jis",
     });
     newZip.file(newRootDir + "/oto.ini", o_output);
-    Log.log(
+    Log.info(
       `空のoto.iniを作成し、${newRootDir + "/oto.ini"}に格納しました。`,
       "OutputZip"
     );

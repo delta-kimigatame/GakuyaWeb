@@ -18,7 +18,7 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
   const loadWav = (value: string) => {
     const samplePath =
       props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
-    Log.log(
+    Log.info(
       `character.txtに基づきサンプル音声load ${samplePath}`,
       "CharacterPanel"
     );
@@ -46,7 +46,7 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
 
   /** サンプル音声が変更された際の処理 */
   const OnChangeSample = (e: SelectChangeEvent) => {
-    Log.log(
+    Log.info(
       `character.txtの変更。key=sample,value=${e.target.value}`,
       "CharacterPanel"
     );

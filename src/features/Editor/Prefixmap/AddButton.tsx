@@ -16,7 +16,7 @@ export const AddButton: React.FC<AddButtonProps> = (props) => {
     const ps: { string?: PrefixMap } = { ...props.prefixMaps };
     ps[props.colorName] = p;
     props.setPrefixMaps(ps);
-    Log.log(`voice colorの追加${props.colorName}`, "PrefixMapPanel");
+    Log.info(`voice colorの追加${props.colorName}`, "PrefixMapPanel");
     props.setColor(props.colorName);
     props.setSelected(new Array());
     props.setPrefix("");

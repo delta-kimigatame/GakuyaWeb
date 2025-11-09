@@ -16,7 +16,7 @@ export const SetButton: React.FC<SetButtonProps> = (props) => {
   const OnSetClick = () => {
     const ps: { string?: PrefixMap } = { ...props.prefixMaps };
     for (let i = 0; i < props.selected.length; i++) {
-      Log.log(
+      Log.info(
         `${props.color}の${NoteNumToTone(props.selected[i])}の値更新。prefix:${
           props.prefix
         }、suffix:${props.suffix}`,

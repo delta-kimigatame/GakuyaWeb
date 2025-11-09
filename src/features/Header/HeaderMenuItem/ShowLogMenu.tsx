@@ -31,7 +31,7 @@ export const ShowLogMenu: React.FC<ShowLogMenuProps> = (props) => {
    * メニューをクリックした際の処理。ダイアログを開く
    */
   const OnMenuClick = () => {
-    Log.log(`ログ表示`, "ShowLogMenu");
+    Log.info(`ログ表示`, "ShowLogMenu");
     setDialogOpen(true);
   };
 

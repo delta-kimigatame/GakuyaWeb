@@ -15,7 +15,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
     const ps: { string?: PrefixMap } = { ...props.prefixMaps };
     delete ps[props.color];
     props.setPrefixMaps(ps);
-    Log.log(`voice colorの削除${props.color}`, "PrefixMapPanel");
+    Log.info(`voice colorの削除${props.color}`, "PrefixMapPanel");
     props.setColor("");
     props.setColorName("");
     props.setSelected(new Array());

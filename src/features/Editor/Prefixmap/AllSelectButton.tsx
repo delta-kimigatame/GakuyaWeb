@@ -17,7 +17,7 @@ export const AllSelectButton: React.FC<AllSelectButtonProps> = (props) => {
    * すべて選択ボタンを押した際の処理
    */
   const OnAllClick = () => {
-    Log.log(`全て選択`, "PrefixMapPanel");
+    Log.info(`全て選択`, "PrefixMapPanel");
     props.setSelected(mapWriter.slice());
   };
 

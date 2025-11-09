@@ -17,7 +17,7 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
   const [iconUrl, setIconUrl] = React.useState<string>("");
   const loadIcon = (value: string) => {
     const imagePath = props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
-    Log.log(
+    Log.info(
       `character.txtに基づきアイコン画像load ${imagePath}`,
       "CharacterPanel"
     );
@@ -42,7 +42,7 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
 
   /** アイコン画像が変更された際の処理 */
   const OnChangeImage = (e: SelectChangeEvent) => {
-    Log.log(
+    Log.info(
       `character.txtの変更。key=image,value=${e.target.value}`,
       "CharacterPanel"
     );

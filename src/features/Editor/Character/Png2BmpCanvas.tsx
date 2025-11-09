@@ -25,7 +25,7 @@ export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
       const img = new Image();
       img.src = objectUrl;
       img.onload = () => {
-        Log.log(`画像読込完了。サイズ[${img.naturalWidth},${img.naturalHeight}]`, "Png2BmpCanvas");
+        Log.info(`画像読込完了。サイズ[${img.naturalWidth},${img.naturalHeight}]`, "Png2BmpCanvas");
         const maxSize = Math.max(img.naturalWidth, img.naturalHeight);
         const afterWidth = Math.floor(
           (img.naturalWidth * utauIcon.width) / maxSize
@@ -44,7 +44,7 @@ export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
           afterWidth,
           afterHeight
         );
-        Log.log(`canvasに描画`, "Png2BmpCanvas");
+        Log.info(`canvasに描画`, "Png2BmpCanvas");
         const pixelInfo: Array<{ r: number; g: number; b: number }> =
           new Array();
         for (let i = utauIcon.height - 1; i >= 0; i--) {
@@ -57,14 +57,14 @@ export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
             });
           }
         }
-        Log.log(`pixelデータ取得`, "Png2BmpCanvas");
+        Log.info(`pixelデータ取得`, "Png2BmpCanvas");
         const bitmapBuf = OutputBitmap(
           utauIcon.width,
           utauIcon.height,
           utauIcon.depth,
           pixelInfo
         );
-        Log.log(`bitmapに変換`, "Png2BmpCanvas");
+        Log.info(`bitmapに変換`, "Png2BmpCanvas");
         const bitmapBlob = new Blob([bitmapBuf], { type: "image/bmp" });
         const newUrl = URL.createObjectURL(bitmapBlob);
         setImgSrc(newUrl);
@@ -83,7 +83,7 @@ export const Png2BmpCanvas: React.FC<Png2BmpCanvasProps> = (props) => {
     if (!e.target.files) return;
     if (e.target.files.length === 0) return;
     setReadFile(e.target.files[0]);
-    Log.log(`ファイル読み込み。${e.target.files[0].name}`, "Png2BmpCanvas");
+    Log.info(`ファイル読み込み。${e.target.files[0].name}`, "Png2BmpCanvas");
   };
   /**
    * ボタンをクリックした際の処理 \

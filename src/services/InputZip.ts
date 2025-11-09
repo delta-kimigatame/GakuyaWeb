@@ -36,15 +36,15 @@ export const GetInstallTxt = async (
   }
   return new Promise((resolve, reject) => {
     if (Object.keys(zipFiles).includes(installTextTemp)) {
-      Log.log(`install.txtが見つかりました。${installTextTemp}`, "EditorView");
+      Log.info(`install.txtが見つかりました。${installTextTemp}`, "EditorView");
       zipFiles[installTextTemp].async("arraybuffer").then(async (buf) => {
         const txt = await FileReadAsync(buf);
         const value = new InstallTxt({ txt: txt });
-        Log.log(`install.txtの読込完了 folder=${value.folder}`, "EditorView");
+        Log.info(`install.txtの読込完了 folder=${value.folder}`, "EditorView");
         resolve(value);
       });
     } else {
-      Log.log(`rootDirの変更に伴うinstall.txtの変更。`, "EditorView");
+      Log.info(`rootDirの変更に伴うinstall.txtの変更。`, "EditorView");
       const install = new InstallTxt({
         folder: rootDir === "" ? zipFileName.replace(".zip", "") : rootDir,
         contentsDir: rootDir === "" ? zipFileName.replace(".zip", "") : rootDir,
@@ -72,7 +72,7 @@ export const GetCharacterTxt = async (
   const targetPath=rootDir===""?"character.txt":rootDir + "/character.txt"
   return new Promise((resolve, reject) => {
     if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.log(
+      Log.info(
         `character.txtがみつかりました。${targetPath}`,
         "EditorView"
       );
@@ -81,11 +81,11 @@ export const GetCharacterTxt = async (
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
           const value = new CharacterTxt({ txt: txt });
-          Log.log(`character.txtの読込完了 name=${value.name}`, "EditorView");
+          Log.info(`character.txtの読込完了 name=${value.name}`, "EditorView");
           resolve({ value: value, update: false });
         });
     } else {
-      Log.log(
+      Log.info(
         `character.txtが存在しないため自動生成。name=${
           rootDir ? rootDir : zipFileName.slice(0, -4)
         }`,
@@ -121,7 +121,7 @@ export const GetReadme = async (
   const targetPath=rootDir===""?"readme.txt":rootDir + "/readme.txt"
   return new Promise((resolve, reject) => {
     if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.log(
+      Log.info(
         `readme.txtがみつかりました。${targetPath}`,
         "EditorView"
       );
@@ -129,7 +129,7 @@ export const GetReadme = async (
         .async("arraybuffer")
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
-          Log.log(`readme.txtの読込完了 ${txt}`, "EditorView");
+          Log.info(`readme.txtの読込完了 ${txt}`, "EditorView");
           resolve(txt);
         });
     } else {
@@ -154,7 +154,7 @@ export const GetPrefixMap = async (
   return new Promise((resolve, reject) => {
     let maps = {};
     if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.log(
+      Log.info(
         `prefix.mapがみつかりました。${targetPath}`,
         "EditorView"
       );
@@ -163,7 +163,7 @@ export const GetPrefixMap = async (
         .then(async (buf) => {
           const txt = await FileReadAsync(buf);
           const value = new PrefixMap(txt);
-          Log.log(`prefix.mapの読込完了 ${txt}`, "EditorView");
+          Log.info(`prefix.mapの読込完了 ${txt}`, "EditorView");
           maps[""] = value;
           resolve(maps);
         });
@@ -191,7 +191,7 @@ export const GetCharacterYaml = async (
   const targetPath=rootDir===""?"character.yaml":rootDir + "/character.yaml"
   return new Promise((resolve, reject) => {
     if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.log(
+      Log.info(
         `character.yamlがみつかりました。${targetPath}`,
         "EditorView"
       );
@@ -200,15 +200,15 @@ export const GetCharacterYaml = async (
         .then(async (buf) => {
           const txt = await FileReadAsync(buf, "UTF8");
           const value = yaml.load(txt);
-          Log.log(`character.yamlの読込完了 name=${txt}`, "EditorView");
+          Log.info(`character.yamlの読込完了 name=${txt}`, "EditorView");
           if (value.subbanks) {
-            Log.log(`character.yamlにsubbanksが見つかりました`, "EditorView");
+            Log.info(`character.yamlにsubbanksが見つかりました`, "EditorView");
             for (let i = 0; i < value.subbanks.length; i++) {
               if (
                 value.subbanks[i].color === "" &&
                 Object.keys(zipFiles).includes(rootDir + "/prefix.map")
               ) {
-                Log.log(
+                Log.info(
                   `subbanks.color=""はprefix.mapと競合するため無視されました`,
                   "EditorView"
                 );
@@ -220,13 +220,13 @@ export const GetCharacterYaml = async (
                       value.subbanks[i].prefix,
                       value.subbanks[i].suffix
                     );
-                    Log.log(
+                    Log.info(
                       `subbanks.color=${value.subbanks[i].color}にprefix=${value.subbanks[i].prefix}、suffix=${value.subbanks[i].suffix}、range=${value.subbanks[i].tone_ranges[j]}を設定しました`,
                       "EditorView"
                     );
                   } else {
                     maps[value.subbanks[i].color] = new PrefixMap();
-                    Log.log(
+                    Log.info(
                       `subbanks.color=${value.subbanks[i].color}を追加しました`,
                       "EditorView"
                     );
@@ -235,7 +235,7 @@ export const GetCharacterYaml = async (
                       value.subbanks[i].prefix,
                       value.subbanks[i].suffix
                     );
-                    Log.log(
+                    Log.info(
                       `subbanks.color=${value.subbanks[i].color}にprefix=${value.subbanks[i].prefix}、suffix=${value.subbanks[i].suffix}、range=${value.subbanks[i].tone_ranges[j]}を設定しました`,
                       "EditorView"
                     );

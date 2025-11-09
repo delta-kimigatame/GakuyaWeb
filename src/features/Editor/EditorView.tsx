@@ -104,9 +104,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
    */
   React.useEffect(() => {
     if (props.zipFiles === null) {
-      Log.log(`初期化`, "EditorView");
+      Log.info(`初期化`, "EditorView");
     } else {
-      Log.log(`zipファイル読み込み、フォルダ構造探索`, "EditorView");
+      Log.info(`zipファイル読み込み、フォルダ構造探索`, "EditorView");
       const dirs: Array<string> = new Array("");
       let rootDir_ = "";
       Object.keys(props.zipFiles).forEach((f) => {
@@ -115,13 +115,13 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
           dirs.push(tmps);
         }
         if (f.endsWith("character.txt")) {
-          Log.log(`character.txtがみつかりました。${f}`, "EditorView");
+          Log.info(`character.txtがみつかりました。${f}`, "EditorView");
           rootDir_ = tmps;
         }
       });
-      Log.log(`フォルダ読込完了。[${dirs}]`, "EditorView");
-      Log.log(`音源ルート。${rootDir_}`, "EditorView");
-      Log.log(`zipFilesからファイル一覧の取得`, "EditorView");
+      Log.info(`フォルダ読込完了。[${dirs}]`, "EditorView");
+      Log.info(`音源ルート。${rootDir_}`, "EditorView");
+      Log.info(`zipFilesからファイル一覧の取得`, "EditorView");
       const files_ =
         props.zipFiles !== null
           ? Object.keys(props.zipFiles)
@@ -156,7 +156,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
 
   React.useEffect(() => {
     if (rootDir === null) {
-      Log.log(`rootDir初期化`, "EditorView");
+      Log.info(`rootDir初期化`, "EditorView");
       setInstall(null);
       setCharacter(null);
       setCharacterYaml(null);
@@ -179,63 +179,63 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     if (index >= filelist.length) {
       ZipExtractMake(newRootDir, newZip);
     } else if (IsDelete(f, flags)) {
-      Log.log(`${f}は設定に従い削除されました。`, "EditorView");
+      Log.info(`${f}は設定に従い削除されました。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("character.txt") && characterUpdate) {
-      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (
       f.endsWith("character.yaml") &&
       (characterYamlUpdate ||
         (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2))
     ) {
-      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("readme.txt") && readmeUpdate) {
-      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else if (f.endsWith("prefix.map") && prefixMapsUpdate) {
-      Log.log(`${f}は設定項目から別途作成されます。`, "EditorView");
+      Log.info(`${f}は設定項目から別途作成されます。`, "EditorView");
       ZipExtractBase(newRootDir, filelist, index + 1, newZip, world);
     } else {
       const newFileName = GetNewFileName(rootDir, newRootDir, f);
       props.zipFiles[f].async("arraybuffer").then((buf) => {
         if (f.endsWith(".wav")) {
           const wav = new Wave(buf);
-          Log.log(`${f}をwavとして読み込みました。`, "EditorView");
+          Log.info(`${f}をwavとして読み込みました。`, "EditorView");
           if (flags.wav.stereo) {
             wav.channels = 1;
-            Log.log(`${f}をモノラルに変換しました。`, "EditorView");
+            Log.info(`${f}をモノラルに変換しました。`, "EditorView");
           }
           if (flags.wav.sampleRate) {
             wav.sampleRate = 44100;
-            Log.log(`${f}を44,100Hzに変換しました`, "EditorView");
+            Log.info(`${f}を44,100Hzに変換しました`, "EditorView");
           }
           if (flags.wav.depth) {
             wav.bitDepth = 16;
-            Log.log(`${f}のbit深度を16bitに設定しました`, "EditorView");
+            Log.info(`${f}のbit深度を16bitに設定しました`, "EditorView");
           }
           if (flags.wav.dcoffset) {
             wav.RemoveDCOffset();
-            Log.log(`${f}のDCoffsetを除去しました`, "EditorView");
+            Log.info(`${f}のDCoffsetを除去しました`, "EditorView");
           }
           console.log(wav)
           newZip.file(newFileName, wav.Output());
-          Log.log(
+          Log.info(
             `${f}を${newFileName}としてzipに格納しました。`,
             "EditorView"
           );
           const frqPath = f.replace(".wav", "_wav.frq");
           if (flags.frq.frq && !(frqPath in props.zipFiles)) {
-            Log.log(`${frqPath}が存在しないため生成します。`, "EditorView");
+            Log.info(`${frqPath}が存在しないため生成します。`, "EditorView");
             const ndata = Float64Array.from(wav.LogicalNormalize(1));
             const frq = GenerateFrq(world, ndata, 44100, 256);
             newZip.file(frqPath, frq.Output());
-            Log.log(`${frqPath}をzipに格納しました。`, "EditorView");
+            Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
           }
         } else {
           newZip.file(newFileName, buf);
-          Log.log(
+          Log.info(
             `${f}を${newFileName}としてzipに格納しました。`,
             "EditorView"
           );
@@ -295,7 +295,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
         : rootDir.split("/").slice(-1)[0];
     const world = new World();
     await world.Initialize();
-    Log.log(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
+    Log.info(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
     ZipExtractBase(
       newRootDir,
       Object.keys(props.zipFiles)

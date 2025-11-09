@@ -29,7 +29,7 @@ export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
       contentsDir: props.install.contentsDir,
       description: props.install.description,
     });
-    Log.log(`Install.folderの変更。${e.target.value}`, "InstallTextPanel");
+    Log.info(`Install.folderの変更。${e.target.value}`, "InstallTextPanel");
     props.setInstall(install);
   };
   /**
@@ -42,16 +42,16 @@ export const InstallTextPanel: React.FC<InstallTxtPanelProps> = (props) => {
       contentsDir: props.install.contentsDir,
       description: e.target.value,
     });
-    Log.log(`Install.descriptionの変更。${e.target.value}`, "InstallTextPanel");
+    Log.info(`Install.descriptionの変更。${e.target.value}`, "InstallTextPanel");
     props.setInstall(install);
   };
 
   const OnChangeUpdate = () => {
     const newValue = !props.update;
-    Log.log(`Install.txt出力設定の変更。${newValue}`, "InstallTextPanel");
+    Log.info(`Install.txt出力設定の変更。${newValue}`, "InstallTextPanel");
     props.setUpdate(newValue);
     if (newValue && props.install === null) {
-      Log.log(`Install.txtが存在しないため生成しました。`, "InstallTextPanel");
+      Log.info(`Install.txtが存在しないため生成しました。`, "InstallTextPanel");
       const install = new InstallTxt({
         folder: props.rootDir === "" ? props.zipFileName.replace(".zip","") : props.rootDir,
         contentsDir: props.rootDir === "" ? props.zipFileName.replace(".zip","") : props.rootDir,

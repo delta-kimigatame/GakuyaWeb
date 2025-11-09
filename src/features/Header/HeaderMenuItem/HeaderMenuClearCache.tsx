@@ -8,8 +8,8 @@ import { Log } from "../../../lib/Logging";
 export const HeaderMenuClearCache: React.FC<HeaderMenuClearCacheProps> = (props) => {
   const { t } = useTranslation();
   const handleClick = () => {
-    Log.log("click", "HeaderMenuClearCache");
-    Log.log("アプリのキャッシュクリア", "HeaderMenuClearCache");
+    Log.info("click", "HeaderMenuClearCache");
+    Log.info("アプリのキャッシュクリア", "HeaderMenuClearCache");
     clearAppCache();
   };
 
@@ -17,16 +17,16 @@ export const HeaderMenuClearCache: React.FC<HeaderMenuClearCacheProps> = (props)
     const registration = await navigator.serviceWorker.getRegistration();
     if (registration) {
       await registration.unregister();
-      Log.log("swクリア", "HeaderMenuClearCache");
+      Log.info("swクリア", "HeaderMenuClearCache");
     } else {
-      Log.log("sw未登録", "HeaderMenuClearCache");
+      Log.info("sw未登録", "HeaderMenuClearCache");
     }
     const cacheKeys = await caches.keys();
     for (const key of cacheKeys) {
       await caches.delete(key);
-      Log.log("キャッシュクリア${key}", "HeaderMenuClearCache");
+      Log.info("キャッシュクリア${key}", "HeaderMenuClearCache");
     }
-    Log.log("アプリのキャッシュクリア完了", "HeaderMenuClearCache");
+    Log.info("アプリのキャッシュクリア完了", "HeaderMenuClearCache");
     props.setMenuAnchor(null);
   };
   return (

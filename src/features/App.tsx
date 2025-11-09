@@ -43,21 +43,21 @@ export const App: React.FC = () => {
    */
   const SetCookieMode = React.useMemo(() => {
     setCookie("mode", mode);
-    Log.log(mode + ":モードを変更", "App");
+    Log.info(mode + ":モードを変更", "App");
   }, [mode]);
   React.useMemo(() => {
     setCookie("language", language);
     i18n.changeLanguage(language);
-    Log.log(language + ":表示言語を変更", "App");
+    Log.info(language + ":表示言語を変更", "App");
   }, [language]);
 
   const [windowSize, setWindowSize] = React.useState<[number, number]>([0, 0]);
   React.useLayoutEffect(() => {
-    Log.log(window.navigator.userAgent, "App");
+    Log.info(window.navigator.userAgent, "App");
     const updateSize = (): void => {
       setTimeout(() => {
         setWindowSize([window.innerWidth, window.innerHeight]);
-        Log.log("画面サイズ:" + [window.innerWidth, window.innerHeight], "App");
+        Log.info("画面サイズ:" + [window.innerWidth, window.innerHeight], "App");
       }, 100);
     };
     window.addEventListener("orientationchange", updateSize);
