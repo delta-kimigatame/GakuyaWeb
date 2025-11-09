@@ -87,6 +87,10 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
       >
         <MenuItem value={"utf-8"}>UTF-8</MenuItem>
         <MenuItem value={"Shift-Jis"}>Shift-JIS</MenuItem>
+        <MenuItem value={"gb18030"}>GB18030</MenuItem>
+        <MenuItem value={"gbk"}>GBK</MenuItem>
+        <MenuItem value={"big5"}>BIG5</MenuItem>
+        <MenuItem value={"windows-1252"}>WINDOWS_1252</MenuItem>
       </FullWidthSelect>
       <Divider />
     </>
