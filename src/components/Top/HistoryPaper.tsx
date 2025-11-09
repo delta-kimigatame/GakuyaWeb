@@ -13,6 +13,7 @@ import { BasePaper } from "../Common/BasePaper";
  */
 export const HistoryPaper: React.FC = () => {
   const { t } = useTranslation();
+  /** lを\r\nで分割し、mapを使って1要素ずつ出力する。それぞれ<br />する */
   return (
     <>
       <BasePaper
@@ -22,7 +23,12 @@ export const HistoryPaper: React.FC = () => {
             {(t("top.changelog", { returnObjects: true }) as Array<string>).map(
               (l) => (
                 <>
-                  <Typography variant="body2">{l}</Typography>
+                  <Typography variant="body2">{l.split("\r\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      {index < l.length - 1 && <br />}
+                    </React.Fragment>
+                  ))}</Typography>
                   <Divider />
                 </>
               )

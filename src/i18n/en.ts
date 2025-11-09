@@ -29,7 +29,7 @@ export const translation_en = {
     privacyCookie:
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
-    changelog: ["2025/08/31 Fixed a bug: Some wav files could not be converted properly","2025/06/09 Fixed a bug:Cannot read files on root folder.","2025/06/08 Fixed a bug:Cannot read wav file if it has metadata","2025/04/13_2 Fixed:output character.txt","2025/04/13 Fixed: when setting voice colors,all wav files deleted.","2025/03/27 Update features for character.yaml","2025/03/24 Fixed Make FrqFile","2025/02/17 Add File List Tab", "2025/02/13 Release"],
+    changelog: ["2025/11/09 Added Chinese UI\r\nAdded support for additional character encodings\r\nImproved frequency table generation performance","2025/08/31 Fixed a bug: Some wav files could not be converted properly","2025/06/09 Fixed a bug:Cannot read files on root folder.","2025/06/08 Fixed a bug:Cannot read wav file if it has metadata","2025/04/13_2 Fixed:output character.txt","2025/04/13 Fixed: when setting voice colors,all wav files deleted.","2025/03/27 Update features for character.yaml","2025/03/24 Fixed Make FrqFile","2025/02/17 Add File List Tab", "2025/02/13 Release"],
   },
   editor: {
     file_check: {
