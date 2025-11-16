@@ -31,8 +31,9 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
     if (props.zipFiles === null) return;
     const newZip = new JSZip();
     Log.info(`zipファイル名正規化開始`, "LoadZipButtonArea");
-    setProcessing(true)
+    setProcessing(true);
     ZipExtract(props.zipFiles, 0, newZip);
+    Log.gtag("LoadZip");
   };
 
   /**
@@ -67,7 +68,7 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
       } else {
         Log.info(`zipファイル名正規化終了`, "LoadZipButtonArea");
         props.setZipFiles(newZip.files);
-        setProcessing(false)
+        setProcessing(false);
         props.setDialogOpen(false);
       }
     });
@@ -75,8 +76,16 @@ export const LoadZipButtonArea: React.FC<LoadZipButtonAreaProps> = (props) => {
 
   return (
     <>
-      <FullWidthButton onClick={OnSubmitClick} disabled={processing} testId="loadZipSubbmitButton">
-        {processing?<CircularProgress color="inherit" size={20} />:t("loadZipDialog.submit")}
+      <FullWidthButton
+        onClick={OnSubmitClick}
+        disabled={processing}
+        testId="loadZipSubbmitButton"
+      >
+        {processing ? (
+          <CircularProgress color="inherit" size={20} />
+        ) : (
+          t("loadZipDialog.submit")
+        )}
       </FullWidthButton>
       <br />
       <FullWidthSelect

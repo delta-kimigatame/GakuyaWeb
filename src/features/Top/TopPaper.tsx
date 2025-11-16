@@ -61,7 +61,6 @@ export const TopPaper: React.FC<TopPaperProps> = (props) => {
     if (props.readZip !== null) {
       setProcessing(false);
       Log.info(`zip読込完了`,"TOPPaper")
-      Log.gtag("LoadZip");
     }
   }, [props.readZip]);
   return (
