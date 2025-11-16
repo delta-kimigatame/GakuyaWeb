@@ -11,8 +11,7 @@ export const translation_zh = {
     changeWorkersCount: "生成器数量",
     showLog: "显示操作日志",
     clearAppCache: "清除应用缓存",
-    logAttention:
-      "日志不会自动发送，如有需要请发送给开发者。",
+    logAttention: "日志不会自动发送，如有需要请发送给开发者。",
   },
   top: {
     description: "Gakuya是UTAU音源的打包工具",
@@ -24,10 +23,21 @@ export const translation_zh = {
     privacy: "隐私政策",
     privacyAnalytics:
       "本网站使用Google的访问分析工具「Google Analytics」。Google Analytics使用Cookie收集数据。这些数据是匿名收集的，不会识别个人身份。",
-    privacyCookie:
-      "本网站使用cookie来自定义显示方式。",
+    privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
-    changelog: ["2025/11/09 添加中文界面\r\n增加字符编码支持\r\n提高频率表生成性能","2025/08/31 修复部分wav文件无法正常转换的问题","2025/06/09 修复最顶层文件夹中的文件无法读取的问题","2025/06/08 修复部分wav文件无法读取的问题","2025/04/13_2 修复character.txt的版本信息中显示web信息的问题","2025/04/13 修复设置voice color时所有wav文件被删除的问题","2025/03/27 增强character.yaml支持","2025/03/24 修复frq文件过大的问题","2025/02/17 添加文件列表标签页", "2025/02/13 首次发布"],
+    changelog: [
+      "2025/11/16 修复一个错误：如果包含无效的character.txt，应用程序无法正常工作。",
+      "2025/11/09 添加中文界面\r\n增加字符编码支持\r\n提高频率表生成性能",
+      "2025/08/31 修复部分wav文件无法正常转换的问题",
+      "2025/06/09 修复最顶层文件夹中的文件无法读取的问题",
+      "2025/06/08 修复部分wav文件无法读取的问题",
+      "2025/04/13_2 修复character.txt的版本信息中显示web信息的问题",
+      "2025/04/13 修复设置voice color时所有wav文件被删除的问题",
+      "2025/03/27 增强character.yaml支持",
+      "2025/03/24 修复frq文件过大的问题",
+      "2025/02/17 添加文件列表标签页",
+      "2025/02/13 首次发布",
+    ],
   },
   editor: {
     file_check: {
@@ -48,8 +58,7 @@ export const translation_zh = {
       },
       frq: {
         title: "频率表文件",
-        description:
-          "基本上删除除frq以外的文件。如果手动修改了频率表请保留。",
+        description: "基本上删除除frq以外的文件。如果手动修改了频率表请保留。",
         frq: "如果不存在UTAU标准频率表 *.frq则生成",
         pmk: "删除tips引擎频率表 *.pmk",
         frc: "删除model4引擎频率表 *.frc（使用条款禁止分发）",
@@ -96,19 +105,17 @@ export const translation_zh = {
       PortraitOpacity: "立绘透明度",
       PortraitHeight: "立绘高度",
       Voice: "声音提供者",
-      DefaultPhonemizer:"为日语音源设置音素化器"
+      DefaultPhonemizer: "为日语音源设置音素化器",
     },
     readme: {
       title: "说明书·使用条款",
       check: "创建或更新readme.txt",
-      description:
-        "首次使用此音源时显示。建议写入使用条款和音源说明。",
+      description: "首次使用此音源时显示。建议写入使用条款和音源说明。",
     },
     install: {
       title: "安装设置",
       check: "创建或更新install.txt",
-      description:
-        "可以通过拖放到UTAU进行安装。",
+      description: "可以通过拖放到UTAU进行安装。",
       field: {
         folder: "安装目标文件夹",
         contentsdir: "包含要安装文件的文件夹",
@@ -138,8 +145,7 @@ export const translation_zh = {
     download: "下载",
   },
   footer: {
-    disclaimer:
-      "UTAU是由飴屋／菖蒲发布的Windows歌声合成软件。",
+    disclaimer: "UTAU是由飴屋／菖蒲发布的Windows歌声合成软件。",
     disclaimer2: "本软件与UTAU官方无关。",
     developerx: "开发者X账号",
     github: "github",
@@ -158,8 +164,7 @@ export const translation_zh = {
   },
   error: {
     title: "错误",
-    message:
-      "发生了意外错误。请通过下方按钮下载日志并发送给开发者。",
+    message: "发生了意外错误。请通过下方按钮下载日志并发送给开发者。",
     download: "下载日志",
     log: "操作日志",
   },

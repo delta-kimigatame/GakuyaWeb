@@ -27,7 +27,19 @@ export const translation_ja = {
     privacyCookie:
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
-    changelog: ["2025/11/09 中国語UIの追加\r\n対応文字コードの追加\r\n周波数表生成処理の高速化","2025/08/31 一部のwavがうまく変換できない不具合の修正","2025/06/09 最上位フォルダに含まれているファイルが読み込めない不具合の修正","2025/06/08 一部のwavが読み込めない不具合の修正","2025/04/13_2 character.txtのバージョン情報にwebの情報が表示されてしまう不具合の修正","2025/04/13 voice colorを設定するとwavがすべて削除される不具合の修正。","2025/03/27 character.yaml対応の強化","2025/03/24 frqがやたら巨大なファイルになる不具合の修正","2025/02/17 ファイル一覧タブの追加", "2025/02/13 初版公開"],
+    changelog: [
+      "2025/11/16 不正なcharacter.txtが含まれている場合うまく動作しない不具合の修正",
+      "2025/11/09 中国語UIの追加\r\n対応文字コードの追加\r\n周波数表生成処理の高速化",
+      "2025/08/31 一部のwavがうまく変換できない不具合の修正",
+      "2025/06/09 最上位フォルダに含まれているファイルが読み込めない不具合の修正",
+      "2025/06/08 一部のwavが読み込めない不具合の修正",
+      "2025/04/13_2 character.txtのバージョン情報にwebの情報が表示されてしまう不具合の修正",
+      "2025/04/13 voice colorを設定するとwavがすべて削除される不具合の修正。",
+      "2025/03/27 character.yaml対応の強化",
+      "2025/03/24 frqがやたら巨大なファイルになる不具合の修正",
+      "2025/02/17 ファイル一覧タブの追加",
+      "2025/02/13 初版公開",
+    ],
   },
   editor: {
     file_check: {
@@ -88,7 +100,8 @@ export const translation_ja = {
       },
     },
     characterYaml: {
-      description: "OpenUtau向けの追加設定です。(自動でsinger_type=utauとなります)",
+      description:
+        "OpenUtau向けの追加設定です。(自動でsinger_type=utauとなります)",
       check: "character.yamlを作成・更新する",
       TextFileEncoding: "文字コードを表示する(shift-jis)",
       Portrait: "立ち絵イラスト",
@@ -96,7 +109,7 @@ export const translation_ja = {
       PortraitOpacity: "立ち絵の透明度",
       PortraitHeight: "立ち絵の高さ",
       Voice: "音声提供者",
-      DefaultPhonemizer:"日本語音源向けPhonemizerを設定する"
+      DefaultPhonemizer: "日本語音源向けPhonemizerを設定する",
     },
     readme: {
       title: "説明書・利用規約",
