@@ -68,6 +68,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   /** character.txt */
   const [character, setCharacter] = React.useState<CharacterTxt | null>(null);
   const [characterUpdate, setCharacterUpdate] = React.useState<boolean>(false);
+  const [characterForceUpdate, setCharacterForceUpdate] = React.useState<boolean>(false);
   /** icon画像 */
   const [iconBuf, setIconBuf] = React.useState<ArrayBuffer>();
   /** sample音声 */
@@ -173,6 +174,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     );
     setCharacter(gcr.value);
     setCharacterUpdate(gcr.update);
+    setCharacterForceUpdate(gcr.update);
     const readme = await GetReadme(rootDir, props.zipFiles);
     setReadme(readme);
     const maps = await GetPrefixMap(rootDir, props.zipFiles);
@@ -542,6 +544,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 characterTxt={character}
                 setCharacterTxt={setCharacter}
                 characterTxtUpdate={characterUpdate}
+                characterForceUpdate={characterForceUpdate}
                 setCharacterTxtUpdate={setCharacterUpdate}
                 setIconBuf={setIconBuf}
                 setSampleBuf={setSampleBuf}

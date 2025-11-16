@@ -69,7 +69,7 @@ export const CharacterTxtPanel: React.FC<CharacterTxtPanelProps> = (props) => {
         checked={props.characterTxtUpdate}
         setChecked={OnChangeCharacterTxtUpdate}
         label={t("editor.character.check")}
-        disabled={!hasCharacterTxt}
+        disabled={!hasCharacterTxt || props.characterForceUpdate}
       />
       <br />
       <Typography variant="caption">
@@ -157,6 +157,8 @@ export interface CharacterTxtPanelProps {
   setCharacterTxt: React.Dispatch<React.SetStateAction<CharacterTxt | null>>;
   /** character.txtファイル更新の要否 */
   characterTxtUpdate: boolean;
+  /** character.txtファイル強制更新の要否 */
+  characterForceUpdate: boolean;
   /** character.txtファイル更新要否の変更処理 */
   setCharacterTxtUpdate: React.Dispatch<React.SetStateAction<boolean>>;
   /** アイコンアップロード */
