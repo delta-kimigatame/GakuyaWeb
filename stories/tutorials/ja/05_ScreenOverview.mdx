@@ -1,0 +1,105 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { EditorView } from '../../../src/features/Editor/EditorView';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { getDesignTokens } from '../../../src/settings/theme';
+import JSZip from 'jszip';
+
+export const ThemedEditorView = () => {
+  const theme = createTheme(getDesignTokens('light'));
+  
+  // 最小限のサンプルZIPデータを作成
+  const sampleZipFiles = {
+    'あ.wav': { async: (type) => Promise.resolve(new ArrayBuffer(0)) },
+    'い.wav': { async: (type) => Promise.resolve(new ArrayBuffer(0)) },
+    'う.wav': { async: (type) => Promise.resolve(new ArrayBuffer(0)) },
+    'oto.ini': { async: (type) => Promise.resolve(new ArrayBuffer(0)) },
+    'character.txt': { async: (type) => Promise.resolve(new ArrayBuffer(0)) },
+  };
+  
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div style={{ pointerEvents: 'none', opacity: 0.9 }}>
+        <EditorView 
+          zipFiles={sampleZipFiles}
+          zipFileName="sample.zip"
+          mode="light"
+          workersCount={3}
+        />
+      </div>
+    </ThemeProvider>
+  );
+};
+
+<Meta title="Tutorial/ja/05.画面の見方" />
+
+# 画面の見方
+
+音源を読み込むと、GAKUYAのメイン画面が表示されます。
+ここでは、画面の構成と基本的な操作の流れを説明します。
+
+## メイン画面の構成
+
+GAKUYAのメイン画面は、以下の要素で構成されています：
+### 🔧 ヘッダメニュー
+
+画面上部には、言語設定やテーマ変更などのメニューがあります。
+ヘッダメニューは、音源を読み込む前からアクセスできます。
+
+<div style={{marginTop: '16px', marginBottom: '16px', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', height: '400px'}}>
+  <iframe 
+    src="iframe.html?id=components-header-header--opened&viewMode=story" 
+    style={{width: '100%', height: '100%', border: 'none', pointerEvents: 'none'}}
+    title="ヘッダメニュー表示"
+  />
+</div>
+
+ヘッダメニューには以下の項目があります：
+
+- **言語設定** - 日本語/英語/中国語の切り替え
+- **ダークモード切替** - 画面テーマの変更
+- **生成器の数** - 周波数表生成の並列処理数（1〜8）
+- **操作ログ表示** - エラー時のログ確認
+- **アプリのキャッシュクリア** - 設定のリセット
+
+> 💡 **生成器の数について**: スマートフォンやタブレットでは通常3が最適です。パソコンでご利用の方は、お使いのPCの性能に応じて数値を上げることで、周波数表の生成を高速化できます。
+
+### 📋 6つのタブ
+
+<div style={{marginTop: '16px', marginBottom: '16px', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', height: '250px'}}>
+  <ThemedEditorView />
+</div>
+
+画面には以下の6つのタブがあり、それぞれ異なる設定を行います：
+
+1. **ファイルの確認** - 不要ファイルの削除や音声フォーマットの設定 → [6.ファイルの確認](/docs/tutorial-ja-06-ファイルの確認--docs)
+2. **ファイル一覧** - 最終的に含まれるファイルの確認（操作なし）
+3. **キャラクター** - 音源情報やアイコン、立ち絵の設定 → [7.音源情報を設定する](/docs/tutorial-ja-07-音源情報を設定する--docs)
+4. **説明書・利用規約** - readme.txtの作成 → [8.利用規約を書く](/docs/tutorial-ja-08-利用規約を書く--docs)
+5. **インストール設定** - install.txtの設定 → [9.インストール設定](/docs/tutorial-ja-09-インストール設定--docs)
+6. **prefix.map** - 多音階音源の設定 → [10.多音階設定](/docs/tutorial-ja-10-多音階設定--docs)
+
+### 📦 出力ボタン
+
+すべての設定が終わったら、画面上部の「zipファイルを生成する」ボタンで最終ファイルを作成します。
+生成が完了すると、「ダウンロード」ボタンが表示されます。
+
+詳しくは → [11.ZIPファイルを出力する](/docs/tutorial-ja-11-zipファイルを出力する--docs)
+
+## 基本的な操作の流れ
+
+基本的には、タブを上から順番に設定していけば完成します：
+
+1. **ファイルの確認** - まずここで不要なファイルを削除
+2. **キャラクター** - 音源情報を入力（最も重要）
+3. **説明書・利用規約** - 利用規約を記入（推奨）
+4. （必要に応じて）**インストール設定**、**prefix.map**
+5. **出力ボタン** - ZIPファイルを生成
+
+> 💡 **ファイル一覧**タブは、設定内容を確認するためのタブです。操作は必要ありません。
+
+---
+
+- 前のページ: [4.音源を読み込む](/docs/tutorial-ja-04-音源を読み込む--docs)
+- 次のページ: [6.ファイルの確認](/docs/tutorial-ja-06-ファイルの確認--docs)

@@ -1,0 +1,139 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Tutorial/ja/06.ファイルの確認" />
+
+# ファイルの確認
+
+音源を読み込んだら、最初に「ファイルの確認」タブで設定を行います。
+ここでは、配布に不要なファイルを削除したり、音声ファイルの形式を調整したりできます。
+
+> 💡 **迷ったら全部チェック**: よくわからない項目があっても大丈夫です。基本的に全てのチェックボックスにチェックを入れておけば問題ありません。
+
+## 1. 音源ルートの選択
+
+音源ルートは、インストールしたいファイルが入っているフォルダを指定します。
+
+<iframe 
+  src="?path=/story/components-filecheck-selectrootdir--default&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="200"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+> 💡 **音源ルートについて**: サブフォルダがある音源の場合、ここでフォルダを選択できます。この設定を変更すると、character.txt、character.yaml、readme.txt、install.txt、prefix.mapの編集内容が破棄されます。
+
+## 2. 不要ファイルの削除
+
+音源制作時に生成されるキャッシュファイルを削除します。これらのファイルは配布の際に不要です。
+
+<iframe 
+  src="?path=/story/components-filecheck-removefilearea--all-checked&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="400"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+### 削除されるファイル
+
+- **$readの削除**: UTAUで初回使用時に作成されるファイル。これが存在すると初回起動とみなされず、readmeが表示されません
+- **UTAU 原音設定キャッシュファイル(*.uspec)の削除**: UTAUの原音設定エディタが生成するキャッシュ
+- **setParamキャッシュファイル(oto.setParam-Scache)の削除**: setParamプラグインのキャッシュファイル
+- **vLabelerキャッシュフォルダ(*.lbp.caches/)の削除**: vLabelerの作業用キャッシュフォルダ
+
+> 💡 基本的には全てチェックを入れます。これらのファイルは音源の動作に不要で、ファイルサイズが増えるだけです。
+
+## 3. 周波数表ファイル
+
+周波数表は、UTAUやその他のエンジンで音源を使う際に必要なファイルです。
+
+### 周波数表とは？
+
+UTAUで音声合成を行うには、録音した音の音程情報が必要です。音程の解析には時間がかかり、場合によっては解析に失敗することもあります。そこで、事前に音程を解析して保存しておくのが**周波数表**です。
+
+Windows版のUTAUには、音声合成を行うエンジン（resampler）のバリエーションが豊富にあります。エンジンごとに対応する周波数表の形式が異なりますが、**基本的には標準の `*.frq` があれば問題ありません。**
+
+<iframe 
+  src="?path=/story/components-filecheck-frqarea--all-checked&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="600"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+### 各周波数表について
+
+- **UTAU標準周波数表 `*.frq`**: 存在しない場合は自動生成されます。**必ず必要です。**
+- **tipsエンジン周波数表 `*.pmk`**: tipsエンジン専用。削除推奨。
+- **model4エンジン周波数表 `*.frc`**: model4エンジン専用。**利用規約で配布禁止**のため必ず削除してください。
+- **VS4Uエンジン周波数表 `*.vs4ufrq`**: VS4Uエンジン専用。削除推奨。
+- **w4uエンジン周波数表 `*.dio`, `*.stac`, `*.platinum`**: worldエンジン専用。削除推奨。
+- **moresampler解析ファイル `*.llsm`**: moresampler専用。削除推奨。
+- **moresampler解析ファイル `*.mrq`**: moresampler専用。削除推奨。
+
+> 💡 **周波数表の手動修正について**: もし周波数表を手動で調整している場合は、該当する周波数表のチェックを外してください。調整した内容が失われてしまいます。
+
+> ⚠️ **model4エンジン周波数表について**: `*.frc`ファイルは利用規約で配布が禁止されています。必ず削除してください。
+
+## 4. oto.ini
+
+音源ルートにoto.iniが存在しない場合、空のファイルを自動生成します。
+
+<iframe 
+  src="?path=/story/components-filecheck-otoarea--checked&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="200"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+> 💡 基本的にはチェックを入れておきます。空のoto.iniファイルがあることで、UTAUで音源フォルダをドラッグ&ドロップして使う際などに互換性が向上します。
+
+## 5. 音声データ
+
+WAV音声ファイルのフォーマットを統一します。
+
+<iframe 
+  src="?path=/story/components-filecheck-wavarea--all-checked&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="400"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+### 各設定について
+
+- **ステレオ音源をモノラルに変換する**: UTAUの標準フォーマットはモノラルです
+- **サンプリング周波数を44,100にする**: UTAUの標準サンプリング周波数です
+- **bit深度を16bitにする**: UTAUの標準bit深度です
+- **DCオフセットを除去する**: 音声データの直流成分を除去し、音質を改善します
+
+> 💡 **録音ソフトについて**: oremo（Windows）やRecStar（スマホ）などのUTAU向け録音ソフトで録音している場合、通常は最初から推奨フォーマットになっています。その場合、DCオフセット除去以外はチェックを外しても問題ありません。
+
+> ⚠️ **フォーマットの重要性**: UTAUのエンジンは推奨フォーマット以外では正常に動作しない場合があります。よくわからない場合は全てチェックを入れておくことをおすすめします。
+
+---
+
+## まとめ
+
+「ファイルの確認」タブでは、音源配布に向けてファイルの整理と最適化を行います。
+
+**推奨設定**: 基本的に全てのチェックボックスにチェックを入れることをおすすめします。
+- 不要なキャッシュファイルを削除してファイルサイズを削減
+- 標準周波数表(`*.frq`)を自動生成
+- 非標準周波数表を削除
+- 音声ファイルをUTAU標準フォーマットに統一
+
+### ファイル一覧で確認
+
+設定が完了したら、「ファイル一覧」タブで最終的にどのファイルが残るか確認できます。削除されるファイルは赤文字で表示されます。
+
+<iframe 
+  src="?path=/story/components-filecheck-filelist--with-deleted-files&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="400"
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+/>
+
+設定が完了したら、次は「キャラクター」タブで音源の情報を設定しましょう。
+
+---
+
+- 前のページ: [5.画面の見方](/docs/tutorial-ja-05-画面の見方--docs)
+- 次のページ: [7.音源情報を設定する](/docs/tutorial-ja-07-音源情報を設定する--docs)

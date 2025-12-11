@@ -1,0 +1,88 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TopPaper } from '../../../src/features/Top/TopPaper';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { getDesignTokens } from '../../../src/settings/theme';
+
+export const ThemedTopPaper = () => {
+  const theme = createTheme(getDesignTokens('light'));
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <TopPaper />
+    </ThemeProvider>
+  );
+};
+
+<Meta title="Tutorial/ja/04.音源を読み込む" />
+
+# 音源を読み込む
+
+GAKUYAで音源をパッケージングするには、まず音源を読み込む必要があります。
+
+準備したZIPファイルをGAKUYAに読み込んでいきましょう。
+
+## 読み込み方法
+
+### 1. GAKUYAを開く
+ブラウザで [GAKUYA](https://k-uta.jp/gakuya/) にアクセスします。
+
+### 2. 利用規約に同意してZIPファイルを選ぶ
+画面中央の「利用規約に同意して、UTAU音源のzipファイルを選択」ボタンをタップ（またはクリック）します。
+
+<div style={{marginTop: '16px', marginBottom: '16px', pointerEvents: 'none'}}>
+  <ThemedTopPaper />
+</div>
+
+
+### 3. ファイルを選択
+ 📱 スマホやタブレットの場合：
+- ファイルアプリから音源のZIPを選択
+
+ 💻 パソコンの場合：
+- エクスプローラーから音源のZIPを選択
+
+### 4. 文字コードを確認
+音源が読み込まれると、ファイル名の確認画面が表示されます。
+ファイル名が正しく表示されていることを確認してください。
+
+<div style={{marginTop: '16px', marginBottom: '16px', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', height: '600px'}}>
+  <iframe 
+    src="iframe.html?id=components-loadzipdialog-loadzipdialog--opened&viewMode=story" 
+    style={{width: '100%', height: '100%', border: 'none', pointerEvents: 'none'}}
+    title="ZIP読み込み完了画面"
+  />
+</div>
+
+ファイル名が正しく表示されていたら、「OK」ボタンをタップして編集画面に進みます。
+
+## 読み込めないとき
+
+以下の場合、読み込みがうまくいかないことがあります：
+
+### ファイル名が文字化けしている
+- ZIPの文字コードが合っていない可能性があります
+- 文字コードを選び直して再度読み込んでみてください
+
+<div style={{marginTop: '16px', marginBottom: '16px', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', height: '600px'}}>
+  <iframe 
+    src="iframe.html?id=components-loadzipdialog-loadzipdialog--character-corruption&viewMode=story" 
+    style={{width: '100%', height: '100%', border: 'none', pointerEvents: 'none'}}
+    title="文字化けの例"
+  />
+</div>
+
+このように文字が正しく表示されない場合は、文字コード選択で「Shift-JIS」などを試してみてください。
+
+### ZIPが大きすぎる
+- ブラウザのメモリ制限により、非常に大きなZIPは読み込めないことがあります
+- 音源を分割して読み込んでください
+
+### 音声ファイルが見つからない
+- ZIPの中に音声ファイルが入っているか確認してください
+- フォルダの中に入っている場合も読み込めます
+
+---
+
+- 前のページ: [3.準備するもの](/docs/tutorial-ja-03-準備するもの--docs)
+- 次のページ: [5.ファイルを確認する](/docs/tutorial-ja-05-ファイルを確認する--docs)

@@ -1,0 +1,87 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Tutorial/ja/10.多音階設定" />
+
+# prefix.mapの設定
+
+「prefix.map」タブでは、声の高さによって使う音声ファイルを自動で切り替える設定ができます。
+
+> 💡 **単音階音源の場合**: 1つの音階のみで録音した音源では、この設定は不要です。スキップしてOKです。
+
+<iframe 
+  src="?path=/story/components-prefixmappanel--basic-with-suffix&full=1&shortcuts=false&singleStory=true" 
+  width="100%" 
+  height="650px" 
+  style={{ border: 'none', pointerEvents: 'none', opacity: 0.9 }}
+></iframe>
+
+## prefix.mapとは
+
+音階(ピッチ)に応じて自動的に異なる音源ファイルを切り替える設定です。
+
+現代的な音源では、3〜5音階を1セットとして録音することが一般的です。例えば、低音域・中音域・高音域で別々に録音した音声を、この設定で自動切り替えします。
+
+## 基本的な使い方
+
+### ステップ1: 設定を有効にする
+
+「prefix.mapを作成・更新する」にチェックを入れます。
+
+### ステップ2: 音階を選択する
+
+左側のテーブルから、設定したい音階の行をクリックして選択します。
+
+- **全て選択**: 全音階を一括選択
+- **選択解除**: 選択を解除
+
+### ステップ3: suffixを設定する
+
+**suffix**(ファイル名の末尾に追加される文字列)を入力し、「セット」ボタンを押します。
+
+現在の標準的な方法は、suffixに音階名を使うことです。例:
+- `あ_C3.wav` (低音域)
+- `あ_G4.wav` (高音域)
+
+入力例: C1からB4まで選択 → suffix欄に`_C3`と入力 → セット
+
+> 💡 **suffixとprefix**: 現在はsuffixの使用が推奨されます。prefixは前方互換性のため残されていますが、新規音源ではsuffixを使用してください。
+
+## 上級: Voice Color機能
+
+⚠️ **本家UTAUでは使えません**: この機能はOpenUtauとUTAletでのみ動作します。
+
+Voice Colorを使うと、1つの音源で「通常の声」「強い声」など複数の声色を切り替えられます。
+
+大規模な音源でなければ使用しません。基本的な多音階設定のみで十分な場合は、この機能はスキップして構いません。
+
+### Voice Colorの操作方法
+
+右側のパネルに、Voice Color管理用のコントロールがあります。
+
+#### 編集対象のVoice Colorを切り替える
+
+一番上のセレクトボックスで、現在編集中のVoice Colorを選択できます。選択したVoice Colorのprefix/suffix設定が表示されます。
+
+#### 新しいVoice Colorを追加する
+
+1. テキスト欄に新しいVoice Color名を入力(例: `strong`, `whisper`)
+2. 「追加」ボタンをクリック
+3. 空のprefix.mapが作成され、セレクトボックスに追加されます
+
+#### Voice Color名を変更する
+
+1. セレクトボックスで変更したいVoice Colorを選択
+2. テキスト欄で名前を編集
+3. 「変更」ボタンをクリック
+
+#### Voice Colorを削除する
+
+1. セレクトボックスで削除したいVoice Colorを選択
+2. 「削除」ボタンをクリック
+
+> 💡 **注意**: Voice Color機能は大規模な音源向けです。通常の多音階設定で十分な場合は使用しないでください。
+
+---
+
+- 前のページ: [9.インストール設定](/docs/tutorial-ja-09-インストール設定--docs)
+- 次のページ: [11.ZIPファイルを出力する](/docs/tutorial-ja-11-zipファイルを出力する--docs)
