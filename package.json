@@ -33,7 +33,7 @@
     "@types/react-dom": "^19.0.3",
     "i18next": "^24.2.2",
     "iconv-lite": "^0.6.3",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "jszip": "^3.10.1",
     "react": "^19.0.0",
     "react-cookie": "^7.2.2",
