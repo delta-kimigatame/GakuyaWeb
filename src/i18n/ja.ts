@@ -109,6 +109,7 @@ export const translation_ja = {
         selection_to_file_average: "選択範囲の平均値をファイル全体の平均周波数にする",
         file_average_to_selection: "ファイル全体の平均周波数を選択範囲の平均値にする",
         linear_interpolate: "選択範囲の始点と終点の値を使って間を線形補完する",
+        regenerate: "周波数表を再生成する",
         save: "保存",
         back: "一覧画面に戻る",
       },

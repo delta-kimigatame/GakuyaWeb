@@ -111,6 +111,7 @@ export const translation_en = {
         selection_to_file_average: "Set selection average to file average frequency",
         file_average_to_selection: "Set file average frequency to selection average",
         linear_interpolate: "Linear interpolation between start and end of selection",
+        regenerate: "Regenerate frequency table",
         save: "Save",
         back: "Back to list",
       },

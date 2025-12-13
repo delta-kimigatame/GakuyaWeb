@@ -26,6 +26,7 @@ interface FrqEditorViewProps {
   workerPool: GenerateFrqWorkerPool | null;
   mode: "light" | "dark";
   onSave: (updatedFrq: Frq) => void;
+  onRegenerate: () => void;
   onBack: () => void;
   open: boolean;
 }
@@ -36,6 +37,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   workerPool,
   mode,
   onSave,
+  onRegenerate,
   onBack,
   open,
 }) => {
@@ -304,6 +306,11 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
     onSave(editedFrq);
   }, [editedFrq, onSave]);
 
+  // 再生成
+  const handleRegenerate = React.useCallback(() => {
+    onRegenerate();
+  }, [onRegenerate]);
+
   return (
     <Dialog
       fullScreen
@@ -454,6 +461,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
           onLinearInterpolate={handleLinearInterpolate}
           onSelectAll={handleSelectAll}
           onClearSelection={handleClearSelection}
+          onRegenerate={handleRegenerate}
           onSave={handleSave}
           onBack={onBack}
         />

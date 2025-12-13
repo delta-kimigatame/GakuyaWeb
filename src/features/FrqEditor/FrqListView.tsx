@@ -230,6 +230,26 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     Log.info(`${editingWavFile}の周波数表を保存しました`, 'FrqListView.handleSave');
   };
 
+  // 周波数表を再生成
+  const handleRegenerate = async () => {
+    if (!editingWavFile) return;
+
+    // 編集画面を閉じる
+    setEditingWavFile(null);
+
+    // 生成中状態にする
+    setFrqStates((prev) => {
+      const newStates = new Map(prev);
+      newStates.set(editingWavFile, { frq: null, isGenerating: true, progress: 0 });
+      return newStates;
+    });
+
+    // frqを再生成
+    await generateFrqWithWorkerPool(editingWavFile);
+    
+    Log.info(`${editingWavFile}の周波数表を再生成しました`, 'FrqListView.handleRegenerate');
+  };
+
   // 編集画面を表示中の場合
   if (editingWavFile && editingFrq) {
     return (
@@ -239,6 +259,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
         workerPool={workerPool}
         mode={mode}
         onSave={handleSave}
+        onRegenerate={handleRegenerate}
         onBack={handleBack}
         open={true}
       />

@@ -106,6 +106,7 @@ export const translation_zh = {
         selection_to_file_average: "将选择范围的平均值设置为文件整体的平均频率",
         file_average_to_selection: "将文件整体的平均频率设置为选择范围的平均值",
         linear_interpolate: "使用选择范围的起点和终点值进行线性插值",
+        regenerate: "重新生成频率表",
         save: "保存",
         back: "返回列表",
       },

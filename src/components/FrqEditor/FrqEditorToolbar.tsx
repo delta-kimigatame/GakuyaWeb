@@ -8,6 +8,7 @@ import { Box, Button, ButtonGroup, IconButton, Tooltip } from '@mui/material';
 import {
   Save as SaveIcon,
   ArrowBack as BackIcon,
+  Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +31,8 @@ export interface FrqEditorToolbarProps {
   onSelectAll: () => void;
   /** 選択解除 */
   onClearSelection: () => void;
+  /** 周波数表を再生成する */
+  onRegenerate: () => void;
   /** 保存 */
   onSave: () => void;
   /** 一覧画面に戻る */
@@ -51,6 +54,7 @@ export const FrqEditorToolbar: React.FC<FrqEditorToolbarProps> = ({
   onLinearInterpolate,
   onSelectAll,
   onClearSelection,
+  onRegenerate,
   onSave,
   onBack,
   selectionCount,
@@ -155,8 +159,14 @@ export const FrqEditorToolbar: React.FC<FrqEditorToolbarProps> = ({
         </span>
       </Tooltip>
 
-      {/* 保存・戻る */}
+      {/* 再生成・保存・戻る */}
       <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+        <Tooltip title={t('editor.frq_editor.toolbar.regenerate')}>
+          <IconButton onClick={onRegenerate} color="secondary" size="small">
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
+
         <Tooltip title={t('editor.frq_editor.toolbar.save')}>
           <IconButton onClick={onSave} color="primary" size="small">
             <SaveIcon />
