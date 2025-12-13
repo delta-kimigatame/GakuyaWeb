@@ -3,7 +3,7 @@ import { Box, Dialog, AppBar, Toolbar, Typography, IconButton } from "@mui/mater
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 import { Frq } from "../../lib/UtauFrq";
-import { FrqDataTable } from "../../components/FrqEditor/FrqDataTable";
+import { FrqDataTable, FrqDataTableRef } from "../../components/FrqEditor/FrqDataTable";
 import { FrqFreqCanvas } from "../../components/FrqEditor/FrqFreqCanvas";
 import { FrqFreqCanvasLabel } from "../../components/FrqEditor/FrqFreqCanvasLabel";
 import { FrqAmpCanvas } from "../../components/FrqEditor/FrqAmpCanvas";
@@ -50,6 +50,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   );
   const [editedFrq, setEditedFrq] = React.useState<Frq>(frq);
   const [isDialogReady, setIsDialogReady] = React.useState(false);
+  const [isRangeSelectionMode, setIsRangeSelectionMode] = React.useState(false);
   
   // wavファイル名から音源ルートパスを除外
   const displayFileName = React.useMemo(() => {
@@ -66,6 +67,9 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   const ampScrollRef = React.useRef<HTMLDivElement>(null);
   const ampContainerRef = React.useRef<HTMLDivElement>(null);
   const labelRef = React.useRef<{ updateScroll: (scrollTop: number) => void }>(null); // ラベルの直接制御用
+  const dataTableRef = React.useRef<FrqDataTableRef>(null); // データテーブルのスクロール制御用
+  const lastFreqScrollLeftRef = React.useRef<number>(0); // 前回の周波数グラフのscrollLeft
+  const lastAmpScrollLeftRef = React.useRef<number>(0); // 前回の音量グラフのscrollLeft
   
   // 音量グラフコンテナの高さを取得
   const [ampContainerHeight, setAmpContainerHeight] = React.useState<number>(100);
@@ -90,15 +94,33 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
 
   // X軸スクロール同期（周波数グラフと音量グラフ）- 双方向
   const handleFreqXScroll = React.useCallback(() => {
-    if (freqXScrollRef.current && ampScrollRef.current) {
-      ampScrollRef.current.scrollLeft = freqXScrollRef.current.scrollLeft;
+    if (!freqXScrollRef.current || !ampScrollRef.current) return;
+    
+    const currentScrollLeft = freqXScrollRef.current.scrollLeft;
+    // 前回と同じ値、または音量グラフと同じ値の場合は何もしない（無限ループ防止）
+    if (currentScrollLeft === lastFreqScrollLeftRef.current || 
+        currentScrollLeft === lastAmpScrollLeftRef.current) {
+      return;
     }
+    
+    lastFreqScrollLeftRef.current = currentScrollLeft;
+    lastAmpScrollLeftRef.current = currentScrollLeft;
+    ampScrollRef.current.scrollLeft = currentScrollLeft;
   }, []);
 
   const handleAmpScroll = React.useCallback(() => {
-    if (ampScrollRef.current && freqXScrollRef.current) {
-      freqXScrollRef.current.scrollLeft = ampScrollRef.current.scrollLeft;
+    if (!ampScrollRef.current || !freqXScrollRef.current) return;
+    
+    const currentScrollLeft = ampScrollRef.current.scrollLeft;
+    // 前回と同じ値、または周波数グラフと同じ値の場合は何もしない（無限ループ防止）
+    if (currentScrollLeft === lastAmpScrollLeftRef.current || 
+        currentScrollLeft === lastFreqScrollLeftRef.current) {
+      return;
     }
+    
+    lastAmpScrollLeftRef.current = currentScrollLeft;
+    lastFreqScrollLeftRef.current = currentScrollLeft;
+    freqXScrollRef.current.scrollLeft = currentScrollLeft;
   }, []);
 
   // Y軸スクロール処理（ラベル同期用）- 直接DOM操作
@@ -313,6 +335,35 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
     Log.info(`選択を解除しました`, 'FrqEditorView');
   }, []);
 
+  // 範囲選択モードの切り替え
+  const handleToggleRangeSelectionMode = React.useCallback(() => {
+    setIsRangeSelectionMode(prev => {
+      const newMode = !prev;
+      Log.info(`範囲選択モード: ${newMode ? 'ON' : 'OFF'}`, 'FrqEditorView');
+      return newMode;
+    });
+  }, []);
+
+  // 範囲選択による選択
+  const handleRangeSelect = React.useCallback((startIndex: number, endIndex: number) => {
+    setSelection(selectRange(startIndex, endIndex, editedFrq.frq.length));
+    Log.info(`範囲選択: ${startIndex} - ${endIndex}`, 'FrqEditorView');
+  }, [editedFrq]);
+
+  // 範囲選択完了時の処理
+  const handleRangeSelectComplete = React.useCallback((startIndex: number, endIndex: number) => {
+    // 選択モードを終了
+    setIsRangeSelectionMode(false);
+    Log.info('範囲選択モードを終了しました', 'FrqEditorView');
+    
+    // 選択された一番小さいインデックスにテーブルをスクロール
+    const minIndex = Math.min(startIndex, endIndex);
+    if (dataTableRef.current) {
+      dataTableRef.current.scrollToIndex(minIndex);
+      Log.info(`テーブルをインデックス ${minIndex} にスクロールしました`, 'FrqEditorView');
+    }
+  }, []);
+
   // ファイル全体の平均周波数変更
   const handleAverageFreqChange = React.useCallback((newAverage: number) => {
     setEditedFrq(
@@ -418,6 +469,9 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
             onXScroll={handleFreqXScroll}
             yScrollContainerRef={freqYScrollRef}
             xScrollContainerRef={freqXScrollRef}
+            isRangeSelectionMode={isRangeSelectionMode}
+            onRangeSelect={handleRangeSelect}
+            onRangeSelectComplete={handleRangeSelectComplete}
           />
         </Box>
 
@@ -462,6 +516,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
       {/* データテーブル (残りのスペースを占有) */}
       <Box sx={{ flex: "1 1 auto", overflow: "hidden" }}>
         <FrqDataTable
+          ref={dataTableRef}
           frq={editedFrq}
           selection={selection}
           onSelectionChange={setSelection}
@@ -489,6 +544,8 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
           onLinearInterpolate={handleLinearInterpolate}
           onSelectAll={handleSelectAll}
           onClearSelection={handleClearSelection}
+          onToggleRangeSelectionMode={handleToggleRangeSelectionMode}
+          isRangeSelectionMode={isRangeSelectionMode}
           onRegenerate={handleRegenerate}
           onSave={handleSave}
         />

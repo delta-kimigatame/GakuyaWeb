@@ -102,39 +102,112 @@ function drawFreqGraph(
     }
   }
   
+  // 選択範囲の描画：連続した閉区間ごとに処理
   if (selectedIndices.length > 0) {
+    // 選択インデックスを連続した区間に分割
+    const ranges: Array<{ start: number; end: number }> = [];
+    let rangeStart = selectedIndices[0];
+    
+    for (let idx = 1; idx <= selectedIndices.length; idx++) {
+      const current = selectedIndices[idx];
+      const prev = selectedIndices[idx - 1];
+      
+      // 区間が途切れた場合、または最後の要素の場合
+      if (idx === selectedIndices.length || current !== prev + 1) {
+        ranges.push({ start: rangeStart, end: prev });
+        if (idx < selectedIndices.length) {
+          rangeStart = current;
+        }
+      }
+    }
+    
+    // 各区間の背景を描画
+    ctx.fillStyle = colors.selectionBackground;
+    for (const range of ranges) {
+      const startX = range.start * xStep;
+      const endX = (range.end + 1) * xStep; // 右端は次のフレームの開始位置まで
+      const rectWidth = endX - startX;
+      
+      // 選択範囲が1点のみの場合は縦線として描画
+      if (range.start === range.end) {
+        const lineWidth = Math.max(2, xStep / 2); // 最低2px、最大xStep/2
+        ctx.fillRect(startX - lineWidth / 2, 0, lineWidth, height);
+      } else {
+        // 複数点の場合は範囲全体を塗りつぶし
+        ctx.fillRect(startX, 0, rectWidth, height);
+      }
+    }
+    
+    // 選択範囲の周波数線を描画
     ctx.strokeStyle = colors.freqSelected;
     ctx.lineWidth = 3;
     
-    for (let idx = 0; idx < selectedIndices.length; idx++) {
-      const i = selectedIndices[idx];
-      if (i < 0 || i >= dataLength) continue;
-      
-      const freq = freqData[i];
-      
-      if (freq <= 0) continue;
-      
-      const x = i * xStep;
-      const y = hzToCanvasY(freq, height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
-      
-      const prevIdx = idx > 0 ? selectedIndices[idx - 1] : -1;
-      const isPrevAdjacent = prevIdx === i - 1;
-      const prevFreq = isPrevAdjacent && prevIdx >= 0 ? freqData[prevIdx] : 0;
-      
-      if (!isPrevAdjacent || prevFreq <= 0) {
+    // 各区間を描画
+    for (const range of ranges) {
+      // 始点の1つ前から始点までは通常色で描画（ポルタメント）
+      const startPrev = range.start - 1;
+      if (startPrev >= 0 && freqData[startPrev] > 0 && freqData[range.start] > 0) {
+        ctx.save();
+        ctx.strokeStyle = colors.freqStroke;
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
+        const xPrev = startPrev * xStep;
+        const yPrev = hzToCanvasY(freqData[startPrev], height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
+        const xStart = range.start * xStep;
+        const yStart = hzToCanvasY(freqData[range.start], height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
+        ctx.moveTo(xPrev, yPrev);
+        ctx.lineTo(xStart, yStart);
+        ctx.stroke();
+        ctx.restore();
       }
       
-      const isLast = idx === selectedIndices.length - 1;
-      const nextIdx = !isLast ? selectedIndices[idx + 1] : -1;
-      const isNextAdjacent = nextIdx === i + 1;
-      const nextFreq = isNextAdjacent && nextIdx >= 0 ? freqData[nextIdx] : 0;
+      // 選択範囲を選択色で描画（値0の点で線を切る）
+      ctx.beginPath();
+      let hasDrawn = false;
       
-      if (isLast || !isNextAdjacent || nextFreq <= 0) {
+      for (let i = range.start; i <= range.end; i++) {
+        const freq = freqData[i];
+        
+        if (freq <= 0) {
+          // 値0の点では線を切る
+          if (hasDrawn) {
+            ctx.stroke();
+            hasDrawn = false;
+          }
+          continue;
+        }
+        
+        const x = i * xStep;
+        const y = hzToCanvasY(freq, height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
+        
+        if (!hasDrawn) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          hasDrawn = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      if (hasDrawn) {
         ctx.stroke();
+      }
+      
+      // 終点から終点+1までは通常色で描画（ポルタメント）
+      const endNext = range.end + 1;
+      if (endNext < dataLength && freqData[range.end] > 0 && freqData[endNext] > 0) {
+        ctx.save();
+        ctx.strokeStyle = colors.freqStroke;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const xEnd = range.end * xStep;
+        const yEnd = hzToCanvasY(freqData[range.end], height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
+        const xNext = endNext * xStep;
+        const yNext = hzToCanvasY(freqData[endNext], height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
+        ctx.moveTo(xEnd, yEnd);
+        ctx.lineTo(xNext, yNext);
+        ctx.stroke();
+        ctx.restore();
       }
     }
   }
@@ -155,6 +228,12 @@ export interface FrqFreqCanvasProps {
   yScrollContainerRef?: React.RefObject<HTMLDivElement>;
   /** X軸スクロールコンテナのref（音量グラフとの同期用） */
   xScrollContainerRef?: React.RefObject<HTMLDivElement>;
+  /** 短形選択モードが有効か */
+  isRangeSelectionMode?: boolean;
+  /** 範囲選択のコールバック（開始インデックス、終了インデックス） */
+  onRangeSelect?: (startIndex: number, endIndex: number) => void;
+  /** 範囲選択完了時のコールバック */
+  onRangeSelectComplete?: (startIndex: number, endIndex: number) => void;
 }
 
 /**
@@ -168,12 +247,18 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   onXScroll,
   yScrollContainerRef,
   xScrollContainerRef,
+  isRangeSelectionMode = false,
+  onRangeSelect,
+  onRangeSelectComplete,
 }) => {
   const graphCanvasRef = React.useRef<HTMLCanvasElement>(null);
   const internalYScrollRef = React.useRef<HTMLDivElement>(null);
   const internalXScrollRef = React.useRef<HTMLDivElement>(null);
   const graphScrollRef = yScrollContainerRef || internalYScrollRef;
   const outerScrollRef = xScrollContainerRef || internalXScrollRef;
+  
+  // 範囲選択用の状態
+  const touchStartIndexRef = React.useRef<number | null>(null);
 
   // frqのフレーム数から幅を計算
   const dataLength = frq.getLength();
@@ -201,6 +286,75 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   const handleXScroll = React.useCallback(() => {
     onXScroll?.();
   }, [onXScroll]);
+
+  // 範囲選択用のタッチイベントハンドラ
+  const handleTouchStart = React.useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isRangeSelectionMode || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // スクロールを無効化
+    e.stopPropagation(); // 親要素へのイベント伝播を停止
+    const touch = e.touches[0];
+    const canvas = graphCanvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const index = Math.floor(x / xStep);
+    
+    if (index >= 0 && index < dataLength) {
+      touchStartIndexRef.current = index;
+      Log.debug(`範囲選択開始: インデックス ${index}`, 'FrqFreqCanvas');
+    }
+  }, [isRangeSelectionMode, xStep, dataLength]);
+
+  const handleTouchMove = React.useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isRangeSelectionMode || touchStartIndexRef.current === null || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // スクロールを無効化
+    e.stopPropagation(); // 親要素へのイベント伝播を停止
+    const touch = e.touches[0];
+    const canvas = graphCanvasRef.current;
+    if (!canvas || !onRangeSelect) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const endIndex = Math.floor(x / xStep);
+    
+    if (endIndex >= 0 && endIndex < dataLength && touchStartIndexRef.current !== null) {
+      const startIndex = Math.min(touchStartIndexRef.current, endIndex);
+      const finalEndIndex = Math.max(touchStartIndexRef.current, endIndex);
+      onRangeSelect(startIndex, finalEndIndex);
+    }
+  }, [isRangeSelectionMode, xStep, dataLength, onRangeSelect]);
+
+  const handleTouchEnd = React.useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isRangeSelectionMode || touchStartIndexRef.current === null) return;
+    
+    e.preventDefault();
+    e.stopPropagation(); // 親要素へのイベント伝播を停止
+    const canvas = graphCanvasRef.current;
+    if (!canvas || !onRangeSelect) {
+      touchStartIndexRef.current = null;
+      return;
+    }
+    
+    const touch = e.changedTouches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const endIndex = Math.floor(x / xStep);
+    
+    if (endIndex >= 0 && endIndex < dataLength && touchStartIndexRef.current !== null) {
+      const startIndex = Math.min(touchStartIndexRef.current, endIndex);
+      const finalEndIndex = Math.max(touchStartIndexRef.current, endIndex);
+      onRangeSelect(startIndex, finalEndIndex);
+      Log.debug(`範囲選択完了: ${startIndex} - ${finalEndIndex}`, 'FrqFreqCanvas');
+      
+      // 選択完了を通知
+      onRangeSelectComplete?.(startIndex, finalEndIndex);
+    }
+    
+    touchStartIndexRef.current = null;
+  }, [isRangeSelectionMode, xStep, dataLength, onRangeSelect, onRangeSelectComplete]);
 
   React.useEffect(() => {
     const graphCanvas = graphCanvasRef.current;
@@ -244,6 +398,7 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
         },
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
+        WebkitOverflowScrolling: 'touch', // iOS慣性スクロール
       }}
     >
       <Box
@@ -254,9 +409,19 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
           height: '100%', 
           overflowY: 'auto',
           overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch', // iOS慣性スクロール
         }}
       >
-        <canvas ref={graphCanvasRef} />
+        <canvas
+          ref={graphCanvasRef}
+          onTouchStart={isRangeSelectionMode ? handleTouchStart : undefined}
+          onTouchMove={isRangeSelectionMode ? handleTouchMove : undefined}
+          onTouchEnd={isRangeSelectionMode ? handleTouchEnd : undefined}
+          style={{ 
+            cursor: isRangeSelectionMode ? 'crosshair' : 'default',
+            touchAction: isRangeSelectionMode ? 'none' : 'auto'
+          }}
+        />
       </Box>
     </Box>
   );

@@ -34,19 +34,38 @@ export interface FrqDataTableProps {
   mode: 'light' | 'dark';
 }
 
+export interface FrqDataTableRef {
+  scrollToIndex: (index: number) => void;
+}
+
 /**
  * 周波数表データテーブル
  */
-export const FrqDataTable: React.FC<FrqDataTableProps> = ({
+export const FrqDataTable = React.forwardRef<FrqDataTableRef, FrqDataTableProps>(({
   frq,
   selection,
   onSelectionChange,
   onSelectAll,
   mode,
-}) => {
+}, ref) => {
   const { t } = useTranslation();
   const frqArray = Array.from(frq.frq);
   const dataLength = frqArray.length;
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // 外部から行へのスクロールを可能にする
+  React.useImperativeHandle(ref, () => ({
+    scrollToIndex: (index: number) => {
+      if (tableContainerRef.current) {
+        // 行の高さは約33px（small size）+ ヘッダー分
+        const rowHeight = 33;
+        const headerHeight = 33;
+        const scrollTop = index * rowHeight;
+        tableContainerRef.current.scrollTop = scrollTop;
+        Log.debug(`テーブルをインデックス ${index} にスクロールしました`, 'FrqDataTable');
+      }
+    }
+  }), []);
 
   // ヘッダーのチェックボックス状態
   const allSelected = selection.selectedIndices.size === dataLength;
@@ -89,6 +108,7 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
 
   return (
     <TableContainer
+      ref={tableContainerRef}
       component={Paper}
       sx={{
         height: '100%',
@@ -158,4 +178,4 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
       )}
     </TableContainer>
   );
-};
+});

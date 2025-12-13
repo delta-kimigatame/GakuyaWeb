@@ -30,6 +30,10 @@ export interface FrqEditorToolbarProps {
   onSelectAll: () => void;
   /** 選択解除 */
   onClearSelection: () => void;
+  /** 範囲選択モードの切り替え */
+  onToggleRangeSelectionMode: () => void;
+  /** 範囲選択モードが有効か */
+  isRangeSelectionMode: boolean;
   /** 周波数表を再生成する */
   onRegenerate: () => void;
   /** 保存 */
@@ -51,6 +55,8 @@ export const FrqEditorToolbar: React.FC<FrqEditorToolbarProps> = ({
   onLinearInterpolate,
   onSelectAll,
   onClearSelection,
+  onToggleRangeSelectionMode,
+  isRangeSelectionMode,
   onRegenerate,
   onSave,
   selectionCount,
@@ -84,6 +90,15 @@ export const FrqEditorToolbar: React.FC<FrqEditorToolbarProps> = ({
               {t('editor.frq_editor.toolbar.clear_selection')}
             </Button>
           </span>
+        </Tooltip>
+        <Tooltip title="範囲選択モード">
+          <Button 
+            onClick={onToggleRangeSelectionMode}
+            variant={isRangeSelectionMode ? 'contained' : 'outlined'}
+            color={isRangeSelectionMode ? 'primary' : 'inherit'}
+          >
+            □
+          </Button>
         </Tooltip>
       </ButtonGroup>
 

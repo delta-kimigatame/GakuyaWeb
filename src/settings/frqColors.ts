@@ -12,6 +12,8 @@ export interface FrqColors {
   freqStroke: string;
   /** 選択範囲の周波数折れ線の色 */
   freqSelected: string;
+  /** 選択範囲の背景色 */
+  selectionBackground: string;
   /** トーン補助線の色 */
   gridLine: string;
   /** キャンバス背景色 */
@@ -37,6 +39,7 @@ export const lightFrqColors: FrqColors = {
   ampStroke: 'rgba(149, 117, 205, 0.8)',   // deepPurple[300]系
   freqStroke: 'rgba(229, 115, 115, 0.8)',  // red[300]系
   freqSelected: 'rgba(206, 147, 216, 1)',  // deepPurple[200] - 選択時
+  selectionBackground: 'rgba(206, 147, 216, 0.15)', // deepPurple[200]の薄い背景
   gridLine: 'rgba(0, 0, 0, 0.12)',         // grey系の薄いグリッド
   background: '#eeeeee',                   // grey[200] - theme.tsと一致
   text: 'rgba(0, 0, 0, 0.87)',            // grey[900]系
@@ -55,6 +58,7 @@ export const darkFrqColors: FrqColors = {
   ampStroke: 'rgba(179, 157, 219, 0.9)',   // deepPurple[200]系 - 明るめ
   freqStroke: 'rgba(229, 115, 115, 0.9)',  // red[300]系
   freqSelected: 'rgba(206, 147, 216, 1)',  // deepPurple[200] - 選択時
+  selectionBackground: 'rgba(206, 147, 216, 0.2)', // deepPurple[200]の薄い背景(dark用に少し濃いめ)
   gridLine: 'rgba(255, 255, 255, 0.15)',   // 白系の薄いグリッド
   background: '#37474f',                   // blueGrey[900] - theme.tsと一致
   text: 'rgba(255, 255, 255, 0.87)',      // white系
