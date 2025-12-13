@@ -57,9 +57,9 @@ export const FrqDataTable = React.forwardRef<FrqDataTableRef, FrqDataTableProps>
   React.useImperativeHandle(ref, () => ({
     scrollToIndex: (index: number) => {
       if (tableContainerRef.current) {
-        // 行の高さは約33px（small size）+ ヘッダー分
-        const rowHeight = 33;
-        const headerHeight = 33;
+        // 行の高さは約28px（縮小版）
+        const rowHeight = 28;
+        const headerHeight = 28;
         const scrollTop = index * rowHeight;
         tableContainerRef.current.scrollTop = scrollTop;
         Log.debug(`テーブルをインデックス ${index} にスクロールしました`, 'FrqDataTable');
@@ -118,15 +118,20 @@ export const FrqDataTable = React.forwardRef<FrqDataTableRef, FrqDataTableProps>
     >
       <Table stickyHeader size="small">
         <TableHead>
-          <TableRow>
-            <TableCell padding="checkbox">
+          <TableRow sx={{ height: 28 }}>
+            <TableCell padding="checkbox" sx={{ py: 0, px: 0.5 }}>
               <Checkbox
+                size="small"
                 indeterminate={someSelected}
                 checked={allSelected}
                 onChange={handleSelectAll}
               />
             </TableCell>
-            <TableCell align="left">{t('editor.frq_editor.table.frequency')}</TableCell>
+            <TableCell align="left" sx={{ py: 0, px: 1 }}>
+              <Typography variant="caption" fontWeight="bold">
+                {t('editor.frq_editor.table.frequency')}
+              </Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -141,16 +146,17 @@ export const FrqDataTable = React.forwardRef<FrqDataTableRef, FrqDataTableProps>
                 onClick={(e) => handleRowClick(index, e)}
                 sx={{
                   cursor: 'pointer',
+                  height: 28,
                   '&.Mui-selected': {
                     backgroundColor: mode === 'dark' ? 'primary.dark' : 'primary.light',
                   },
                 }}
               >
-                <TableCell padding="checkbox">
-                  <Checkbox checked={selected} />
+                <TableCell padding="checkbox" sx={{ py: 0, px: 0.5 }}>
+                  <Checkbox size="small" checked={selected} />
                 </TableCell>
-                <TableCell align="left">
-                  <Typography variant="body2" fontFamily="monospace">
+                <TableCell align="left" sx={{ py: 0, px: 1 }}>
+                  <Typography variant="caption" fontFamily="monospace" fontSize="0.7rem">
                     {freq === 0 ? '-' : freq}
                   </Typography>
                 </TableCell>
