@@ -1,5 +1,6 @@
 /**
  * 周波数表(Frq)描画用のカラーテーマ定義
+ * theme.tsのMUIカラーパレット(deepPurple/red)と整合性を持つ
  */
 
 export interface FrqColors {
@@ -21,36 +22,46 @@ export interface FrqColors {
   generatingBackground: string;
   /** 平均周波数線の色 */
   averageFreqLine: string;
+  /** サムネイル枠線の色 */
+  thumbnailBorder: string;
+  /** サムネイルホバー時の枠線の色 */
+  thumbnailBorderHover: string;
 }
 
 /**
  * ライトモード用のfrq描画カラー
+ * theme.ts: primary=deepPurple[300], secondary=red[300], background=grey[200]
  */
 export const lightFrqColors: FrqColors = {
-  ampFill: 'rgba(66, 165, 245, 0.2)',      // 青系の半透明
-  ampStroke: 'rgba(66, 165, 245, 0.8)',    // 青系
-  freqStroke: 'rgba(239, 83, 80, 0.8)',    // 赤系
-  freqSelected: 'rgba(255, 193, 7, 1)',    // アンバー(選択時)
-  gridLine: 'rgba(0, 0, 0, 0.15)',          // 濃いグレー
-  background: '#eeeeee',                    // grey[200] - theme.tsと一致
-  text: 'rgba(0, 0, 0, 0.87)',
+  ampFill: 'rgba(179, 157, 219, 0.2)',     // deepPurple[200]の半透明
+  ampStroke: 'rgba(149, 117, 205, 0.8)',   // deepPurple[300]系
+  freqStroke: 'rgba(229, 115, 115, 0.8)',  // red[300]系
+  freqSelected: 'rgba(206, 147, 216, 1)',  // deepPurple[200] - 選択時
+  gridLine: 'rgba(0, 0, 0, 0.12)',         // grey系の薄いグリッド
+  background: '#eeeeee',                   // grey[200] - theme.tsと一致
+  text: 'rgba(0, 0, 0, 0.87)',            // grey[900]系
   generatingBackground: 'rgba(245, 245, 245, 1)',
-  averageFreqLine: 'rgba(255, 152, 0, 0.7)', // オレンジ系
+  averageFreqLine: 'rgba(239, 83, 80, 0.6)', // red[500]系 - アクセント
+  thumbnailBorder: '#e0e0e0',              // grey[300]
+  thumbnailBorderHover: '#9575cd',         // deepPurple[300]
 };
 
 /**
  * ダークモード用のfrq描画カラー
+ * theme.ts: primary=deepPurple[300], secondary=red[300], background=blueGrey[900]
  */
 export const darkFrqColors: FrqColors = {
-  ampFill: 'rgba(100, 181, 246, 0.3)',     // 明るめの青系半透明
-  ampStroke: 'rgba(100, 181, 246, 0.9)',   // 明るめの青系
-  freqStroke: 'rgba(244, 143, 177, 0.9)',  // ピンク系
-  freqSelected: 'rgba(255, 213, 79, 1)',   // 明るめのアンバー
-  gridLine: 'rgba(255, 255, 255, 0.2)',   // 濃い白
+  ampFill: 'rgba(179, 157, 219, 0.25)',    // deepPurple[200]の半透明
+  ampStroke: 'rgba(179, 157, 219, 0.9)',   // deepPurple[200]系 - 明るめ
+  freqStroke: 'rgba(229, 115, 115, 0.9)',  // red[300]系
+  freqSelected: 'rgba(206, 147, 216, 1)',  // deepPurple[200] - 選択時
+  gridLine: 'rgba(255, 255, 255, 0.15)',   // 白系の薄いグリッド
   background: '#37474f',                   // blueGrey[900] - theme.tsと一致
-  text: 'rgba(255, 255, 255, 0.87)',
-  generatingBackground: 'rgba(30, 30, 30, 1)',
-  averageFreqLine: 'rgba(255, 167, 38, 0.8)', // 明るいオレンジ系
+  text: 'rgba(255, 255, 255, 0.87)',      // white系
+  generatingBackground: 'rgba(38, 50, 56, 1)', // blueGrey[900]より暗め
+  averageFreqLine: 'rgba(239, 83, 80, 0.7)', // red[500]系 - アクセント
+  thumbnailBorder: '#455a64',              // blueGrey[700]
+  thumbnailBorderHover: '#b39ddb',         // deepPurple[200]
 };
 
 /**

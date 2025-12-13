@@ -94,11 +94,11 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
         width: "100%",
         height: `${height}px`,
         cursor: "pointer",
-        border: `1px solid ${mode === "light" ? "#e0e0e0" : "#424242"}`,
+        border: `1px solid ${colors.thumbnailBorder}`,
         borderRadius: 1,
         overflow: "hidden",
         "&:hover": {
-          borderColor: mode === "light" ? "#1976d2" : "#90caf9",
+          borderColor: colors.thumbnailBorderHover,
           boxShadow: 2,
         },
       }}
