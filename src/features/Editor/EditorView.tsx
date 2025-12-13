@@ -33,6 +33,8 @@ import { Wave } from "utauwav";
 import { GenerateFrq } from "../../lib/GenerateFrq";
 import { GenerateFrqWorkerPool } from "../../services/workerPool";
 import { World } from "tsworld";
+import { FrqListView } from "../FrqEditor/FrqListView";
+import { Frq } from "../../lib/UtauFrq";
 import {
   ExtractCharacterTxt,
   ExtractCharacterYaml,
@@ -108,6 +110,10 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [frqCount, setFrqCount] = React.useState<number>(0);
   /** 生成したfrqの数を管理する状態。デフォルトは0 */
   const [generatedFrqCount, setGeneratedFrqCount] = React.useState<number>(0);
+  
+  /** Frqエディタで更新されたfrqを保持 */
+  const [updatedFrqs, setUpdatedFrqs] = React.useState<Map<string, Frq>>(new Map());
+  
   /**
    * EditorViewがロードされたときにWorkerPoolを初期化
    */
@@ -288,6 +294,31 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       );
     } else {
       const newFileName = GetNewFileName(rootDir, newRootDir, f);
+      
+      // .frqファイルで、FrqEditorで更新されたものがあればそれを使用
+      if (f.endsWith(".frq")) {
+        const wavFileName = f.replace(/_wav\.frq$/, ".wav");
+        const updatedFrq = updatedFrqs.get(wavFileName);
+        
+        if (updatedFrq) {
+          // 更新されたfrqを使用
+          newZip.file(newFileName, updatedFrq.Output());
+          Log.info(
+            `${f}を更新されたデータから${newFileName}としてzipに格納しました。`,
+            "EditorView"
+          );
+          ZipExtractBase(
+            newRootDir,
+            filelist,
+            index + 1,
+            newZip,
+            world,
+            frqPromises
+          );
+          return;
+        }
+      }
+      
       props.zipFiles[f].async("arraybuffer").then((buf) => {
         if (f.endsWith(".wav")) {
           const wav = new Wave(buf);
@@ -314,8 +345,25 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             `${f}を${newFileName}としてzipに格納しました。`,
             "EditorView"
           );
+          
+          // frq処理: 優先順位は updatedFrqs > 元のzip > 新規生成
           const frqPath = f.replace(".wav", "_wav.frq");
-          if (flags.frq.frq && !(frqPath in props.zipFiles)) {
+          const newFrqPath = frqPath.replace(rootDir, newRootDir);
+          // updatedFrqsのキーはフルパス（f）を使用
+          const updatedFrq = updatedFrqs.get(f);
+          
+          if (updatedFrq) {
+            // 1. updatedFrqsにあれば問答無用でzip
+            newZip.file(newFrqPath, updatedFrq.Output());
+            Log.info(
+              `${frqPath}を更新されたデータから${newFrqPath}としてzipに格納しました。`,
+              "EditorView"
+            );
+          } else if (frqPath in props.zipFiles) {
+            // 2. 元のzipにfrqがあればそれをzip（既に別のブロックで処理されるのでスキップ）
+            // この分岐は実際には到達しない（frqファイルは別途処理される）
+          } else if (flags.frq.frq) {
+            // 3. 生成設定が有効で、updatedFrqsにも元のzipにもない場合は生成
             Log.info(`${frqPath}が存在しないため生成します。`, "EditorView");
             Log.gtag("GenerateFrq");
             setFrqCount(prev => prev + 1);
@@ -333,7 +381,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 .runGenerateFrq(request, index)
                 .then((frq) => {
                   if (frq) {
-                    newZip.file(frqPath, frq.Output());
+                    newZip.file(newFrqPath, frq.Output());
                     setGeneratedFrqCount(prev => prev + 1);
                     Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
                   } else {
@@ -353,7 +401,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               const ndata = Float64Array.from(wav.LogicalNormalize(1));
               const frq = GenerateFrq(world, ndata, 44100, 256);
               if (frq) {
-                newZip.file(frqPath, frq.Output());
+                newZip.file(newFrqPath, frq.Output());
                 setGeneratedFrqCount(prev => prev + 1);
                 Log.info(`${frqPath}をzipに格納しました。`, "EditorView");
               }
@@ -521,6 +569,11 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 style={{ textTransform: "none" }}
                 value={5}
               />
+              <Tab
+                label={t("editor.frq_editor.title")}
+                style={{ textTransform: "none" }}
+                value={6}
+              />
             </Tabs>
             <TabPanel value={0} sx={{ p: 1 }}>
               <FileCheckPanel
@@ -587,6 +640,22 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setUpdate={setPrefixMapsUpdate}
                 mode={props.mode}
               />
+            </TabPanel>
+            <TabPanel value={6} sx={{ p: 0 }}>
+              {props.zipFiles && workerPool && (
+                <FrqListView
+                  zipFiles={props.zipFiles}
+                  workerPool={workerPool}
+                  mode={props.mode}
+                  onFrqUpdate={(wavFileName: string, frq: Frq) => {
+                    setUpdatedFrqs((prev) => {
+                      const updated = new Map(prev);
+                      updated.set(wavFileName, frq);
+                      return updated;
+                    });
+                  }}
+                />
+              )}
             </TabPanel>
           </TabContext>
         </>

@@ -83,6 +83,39 @@ export const translation_ja = {
         dcoffset: "DCオフセットを除去する。",
       },
     },
+    frq_editor: {
+      title: "周波数表編集",
+      list: {
+        title: "周波数表一覧",
+        files_count: "{{count}}ファイル中 {{start}}～{{end}}を表示",
+        no_wav_files: "wavファイルが見つかりません",
+      },
+      thumbnail: {
+        no_frq: "周波数表なし",
+        generating: "生成中...",
+      },
+      table: {
+        index: "インデックス",
+        frequency: "周波数 (Hz)",
+        no_data: "データがありません",
+      },
+      toolbar: {
+        select_all: "全選択",
+        clear_selection: "選択解除",
+        multiply_by_2: "選択範囲を2倍にする",
+        multiply_by_3: "選択範囲を3倍にする",
+        divide_by_2: "選択範囲を1/2にする",
+        divide_by_3: "選択範囲を1/3にする",
+        selection_to_file_average: "選択範囲の平均値をファイル全体の平均周波数にする",
+        file_average_to_selection: "ファイル全体の平均周波数を選択範囲の平均値にする",
+        linear_interpolate: "選択範囲の始点と終点の値を使って間を線形補完する",
+        save: "保存",
+        back: "一覧画面に戻る",
+      },
+      average: {
+        file_average: "Avg",
+      },
+    },
     character: {
       title: "キャラクター",
       description: "音源の情報です。必ず必要になります。",

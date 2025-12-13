@@ -85,6 +85,39 @@ export const translation_en = {
         dcoffset: "Remove DC offset",
       },
     },
+    frq_editor: {
+      title: "Frequency Table Editor",
+      list: {
+        title: "Frequency Table List",
+        files_count: "Showing {{start}}～{{end}} of {{count}} files",
+        no_wav_files: "No wav files found",
+      },
+      thumbnail: {
+        no_frq: "No frequency table",
+        generating: "Generating...",
+      },
+      table: {
+        index: "Index",
+        frequency: "Frequency (Hz)",
+        no_data: "No data",
+      },
+      toolbar: {
+        select_all: "Select All",
+        clear_selection: "Clear Selection",
+        multiply_by_2: "Multiply selection by 2",
+        multiply_by_3: "Multiply selection by 3",
+        divide_by_2: "Divide selection by 2",
+        divide_by_3: "Divide selection by 3",
+        selection_to_file_average: "Set selection average to file average frequency",
+        file_average_to_selection: "Set file average frequency to selection average",
+        linear_interpolate: "Linear interpolation between start and end of selection",
+        save: "Save",
+        back: "Back to list",
+      },
+      average: {
+        file_average: "Avg",
+      },
+    },
     character: {
       title: "Character",
       description: "Information about the voicebank. This is required.",
