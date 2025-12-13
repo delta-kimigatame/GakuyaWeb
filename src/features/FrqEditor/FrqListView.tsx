@@ -150,14 +150,15 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     }
   };
 
-  // コンテナの高さを計算
+  // コンテナの高さを計算（画面の70%を使用）
   React.useEffect(() => {
     const updateHeight = () => {
       const windowHeight = window.innerHeight;
+      const targetHeight = windowHeight * 0.7; // 画面の70%
       const headerHeight = 64; // ヘッダーの高さ
       const paginationHeight = 60; // ページネーションの高さ
       const padding = 32;
-      setContainerHeight(windowHeight - headerHeight - paginationHeight - padding);
+      setContainerHeight(targetHeight - headerHeight - paginationHeight - padding);
     };
 
     updateHeight();
@@ -190,11 +191,11 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     }
   }, [currentPageFiles, workerPool, frqStates]);
 
-  // サムネイルの高さを計算
+  // サムネイルの高さを計算（itemsPerPage基準で固定）
   const thumbnailHeight = containerHeight > 0 
     ? Math.max(
         FRQ_CONSTANTS.MIN_THUMBNAIL_HEIGHT,
-        (containerHeight - (currentPageFiles.length - 1) * 16) / currentPageFiles.length
+        (containerHeight - (itemsPerPage - 1) * 16) / itemsPerPage
       )
     : FRQ_CONSTANTS.MIN_THUMBNAIL_HEIGHT;
 
@@ -246,10 +247,9 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', p: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '70vh', p: 2 }}>
       {/* ヘッダー */}
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">{t('editor.frq_editor.list.title')}</Typography>
         <Typography variant="body2" color="text.secondary">
           {t('editor.frq_editor.list.files_count', {
             count: wavFiles.length,

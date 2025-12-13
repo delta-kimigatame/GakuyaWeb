@@ -19,7 +19,7 @@ export const FRQ_CONSTANTS = {
   CANVAS_SCALE: 2,
   
   /** 一覧画面のデフォルト表示件数(1ページあたり) */
-  DEFAULT_ITEMS_PER_PAGE: 10,
+  DEFAULT_ITEMS_PER_PAGE: 5,
   
   /** サムネイルの最小高さ(px) */
   MIN_THUMBNAIL_HEIGHT: 60,
