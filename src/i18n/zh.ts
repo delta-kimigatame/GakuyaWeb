@@ -26,6 +26,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2025/12/13 添加频率表编辑功能",
       "2025/11/16 修复一个错误：如果包含无效的character.txt，应用程序无法正常工作。",
       "2025/11/09 添加中文界面\r\n增加字符编码支持\r\n提高频率表生成性能",
       "2025/08/31 修复部分wav文件无法正常转换的问题",
