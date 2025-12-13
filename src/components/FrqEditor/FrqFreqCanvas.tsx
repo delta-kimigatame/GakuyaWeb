@@ -10,6 +10,7 @@ import { ArraySelection, getSelectedIndices } from '../../utils/ArraySelection';
 import { FRQ_CONSTANTS } from '../../settings/frqConstants';
 import { getFrqColors, FrqColors } from '../../settings/frqColors';
 import { hzToCanvasY, hzToTone, getToneGridPositions, toneToHz } from '../../utils/FreqToTone';
+import { Log } from '../../lib/Logging';
 
 /**
  * トーングリッド線の描画（スクロール部分）

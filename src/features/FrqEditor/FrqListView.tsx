@@ -98,6 +98,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
       }
 
       setFrqStates(newStates);
+      Log.info(`${wavFiles.length}件のwavファイルの初期化が完了しました`, 'FrqListView');
     };
 
     initializeFrqs();
@@ -159,7 +160,9 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
       const headerHeight = 64; // ヘッダーの高さ
       const paginationHeight = 60; // ページネーションの高さ
       const padding = 32;
-      setContainerHeight(targetHeight - headerHeight - paginationHeight - padding);
+      const newHeight = targetHeight - headerHeight - paginationHeight - padding;
+      setContainerHeight(newHeight);
+      Log.debug(`コンテナ高さを更新しました: ${newHeight.toFixed(0)}px`, 'FrqListView');
     };
 
     updateHeight();
@@ -179,6 +182,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
 
     workerPool.clearTasks();
 
+    let generatingCount = 0;
     for (const wavName of currentPageFiles) {
       const state = frqStates.get(wavName);
       if (state && !state.frq && !state.isGenerating) {
@@ -188,7 +192,12 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
           return newStates;
         });
         generateFrqWithWorkerPool(wavName);
+        generatingCount++;
       }
+    }
+    
+    if (generatingCount > 0) {
+      Log.info(`ページ ${currentPage}: ${generatingCount}件の周波数表生成を開始しました`, 'FrqListView');
     }
   }, [currentPageFiles, workerPool, frqStates]);
 
@@ -212,6 +221,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
 
   // 編集画面から戻る
   const handleBack = () => {
+    Log.info(`編集画面から一覧画面に戻りました`, 'FrqListView');
     setEditingWavFile(null);
   };
 

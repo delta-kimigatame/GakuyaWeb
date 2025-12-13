@@ -8,6 +8,7 @@ import { Box } from '@mui/material';
 import { Frq } from '../../lib/UtauFrq';
 import { FRQ_CONSTANTS } from '../../settings/frqConstants';
 import { getFrqColors, FrqColors } from '../../settings/frqColors';
+import { Log } from '../../lib/Logging';
 
 /**
  * 音量面グラフの描画
@@ -98,6 +99,8 @@ export const FrqAmpCanvas: React.FC<FrqAmpCanvasProps> = ({
     // グラフCanvas設定
     graphCanvas.width = graphWidth * scale;
     graphCanvas.height = height * scale;
+    
+    Log.debug(`音量グラフを描画しました: 幅${graphWidth}px, 高さ${height}px`, 'FrqAmpCanvas');
     graphCanvas.style.width = `${graphWidth}px`;
     graphCanvas.style.height = `${height}px`;
     graphCtx.scale(scale, scale);

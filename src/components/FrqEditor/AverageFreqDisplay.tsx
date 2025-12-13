@@ -6,6 +6,7 @@
 import React from 'react';
 import { Box, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Log } from '../../lib/Logging';
 
 export interface AverageFreqDisplayProps {
   /** ファイル全体の平均周波数 */
@@ -27,6 +28,7 @@ export const AverageFreqDisplay: React.FC<AverageFreqDisplayProps> = ({
 
   React.useEffect(() => {
     setValue(averageFreq.toString());
+    Log.debug(`平均周波数が変更されました: ${averageFreq}Hz`, 'AverageFreqDisplay');
   }, [averageFreq]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,10 +48,12 @@ export const AverageFreqDisplay: React.FC<AverageFreqDisplayProps> = ({
     if (!isNaN(num) && num >= 0) {
       onAverageFreqChange(num);
       setError(false);
+      Log.info(`平均周波数を変更しました: ${num}Hz`, 'AverageFreqDisplay');
     } else {
       // エラーの場合は元の値に戻す
       setValue(averageFreq.toString());
       setError(false);
+      Log.debug(`無効な値が入力されたため元の値に戻しました: ${value}`, 'AverageFreqDisplay');
     }
   };
 

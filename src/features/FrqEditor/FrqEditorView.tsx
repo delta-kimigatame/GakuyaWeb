@@ -19,6 +19,7 @@ import {
   clearSelection as clearArraySelection,
 } from "../../utils/ArraySelection";
 import type { GenerateFrqWorkerPool } from "../../services/workerPool";
+import { Log } from "../../lib/Logging";
 
 interface FrqEditorViewProps {
   wavFileName: string;
@@ -70,7 +71,9 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   
   React.useEffect(() => {
     if (ampContainerRef.current) {
-      setAmpContainerHeight(ampContainerRef.current.clientHeight);
+      const height = ampContainerRef.current.clientHeight;
+      setAmpContainerHeight(height);
+      Log.debug(`音量グラフコンテナの高さ: ${height}px`, 'FrqEditorView');
     }
   }, []);
 
@@ -136,6 +139,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
     const clampedScrollTop = Math.max(0, Math.min(targetScrollTop, maxScrollTop));
     
     scrollContainer.scrollTop = clampedScrollTop;
+    Log.info(`平均周波数(${avgHz.toFixed(2)}Hz)を中心にスクロールしました: ${clampedScrollTop.toFixed(0)}px`, 'FrqEditorView');
   }, [isDialogReady, editedFrq.frqAverage]); // ダイアログ準備完了時に実行
 
   // 選択されているインデックスを取得
@@ -171,6 +175,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${selectedIndices.length}点)を2倍にしました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 3倍
@@ -188,6 +193,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${selectedIndices.length}点)を3倍にしました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 1/2
@@ -205,6 +211,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${selectedIndices.length}点)を1/2にしました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 1/3
@@ -222,6 +229,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${selectedIndices.length}点)を1/3にしました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: ファイル全体の平均周波数を選択範囲に適用する
@@ -239,6 +247,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${selectedIndices.length}点)に平均周波数(${editedFrq.frqAverage.toFixed(2)}Hz)を適用しました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 選択範囲の平均値をファイル全体の平均周波数にする
@@ -252,6 +261,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: selectionAverageFreq,
       })
     );
+    Log.info(`選択範囲の平均値(${selectionAverageFreq.toFixed(2)}Hz)をファイルの平均周波数に設定しました`, 'FrqEditorView');
   }, [editedFrq, selectionAverageFreq]);
 
   // 編集操作: 線形補完
@@ -277,16 +287,19 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: editedFrq.frqAverage,
       })
     );
+    Log.info(`選択範囲(${startIdx}-${endIdx})を線形補完しました`, 'FrqEditorView');
   }, [selectedIndices, editedFrq]);
 
   // 選択操作: 全選択
   const handleSelectAll = React.useCallback(() => {
     setSelection(selectRange(0, editedFrq.frq.length - 1, editedFrq.frq.length));
+    Log.info(`全データポイント(${editedFrq.frq.length}点)を選択しました`, 'FrqEditorView');
   }, [editedFrq]);
 
   // 選択操作: 選択解除
   const handleClearSelection = React.useCallback(() => {
     setSelection(clearArraySelection());
+    Log.info(`選択を解除しました`, 'FrqEditorView');
   }, []);
 
   // ファイル全体の平均周波数変更
@@ -299,6 +312,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         frqAverage: newAverage,
       })
     );
+    Log.info(`ファイル全体の平均周波数を${newAverage.toFixed(2)}Hzに変更しました`, 'FrqEditorView');
   }, [editedFrq]);
 
   // 保存

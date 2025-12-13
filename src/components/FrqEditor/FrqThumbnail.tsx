@@ -10,6 +10,7 @@ import { Frq } from "../../lib/UtauFrq";
 import { getFrqColors } from "../../settings/frqColors";
 import { FRQ_CONSTANTS } from "../../settings/frqConstants";
 import { drawFrqThumbnail, drawFileName } from "../../lib/FrqCanvas";
+import { Log } from "../../lib/Logging";
 
 export interface FrqThumbnailProps {
   /** wavファイル名 */
@@ -53,6 +54,7 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
         const containerWidth = containerRef.current.offsetWidth;
         if (containerWidth > 0) {
           setActualWidth(containerWidth);
+          Log.debug(`サムネイル幅を更新しました: ${containerWidth}px`, 'FrqThumbnail');
         }
       }
     };
@@ -79,10 +81,12 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
       // frqデータがある場合は描画
       drawFrqThumbnail(ctx, frqData, actualWidth, height, colors);
       drawFileName(ctx, wavFileName, actualWidth, height, colors);
+      Log.debug(`サムネイルを描画しました: ${wavFileName}`, 'FrqThumbnail');
     } else {
       // 生成中または未生成の場合は背景のみ
       ctx.fillStyle = colors.generatingBackground;
       ctx.fillRect(0, 0, actualWidth, height);
+      Log.debug(`サムネイル（生成中/未生成）: ${wavFileName}`, 'FrqThumbnail');
     }
   }, [frqData, actualWidth, height, colors, wavFileName, isGenerating]);
 

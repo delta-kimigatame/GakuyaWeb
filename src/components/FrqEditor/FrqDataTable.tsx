@@ -19,6 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Frq } from '../../lib/UtauFrq';
 import { ArraySelection, isSelected, updateSelection } from '../../utils/ArraySelection';
+import { Log } from '../../lib/Logging';
 
 export interface FrqDataTableProps {
   /** 表示するfrqデータ */
@@ -65,6 +66,7 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
         selectedIndices: newIndices,
         lastClickedIndex: selection.lastClickedIndex,
       };
+      Log.debug(`インデックス ${index} の選択を解除しました`, 'FrqDataTable');
     } else {
       // 未選択ならadd（選択追加）
       const newIndices = new Set(selection.selectedIndices);
@@ -73,6 +75,7 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
         selectedIndices: newIndices,
         lastClickedIndex: index,
       };
+      Log.debug(`インデックス ${index} を選択しました`, 'FrqDataTable');
     }
     
     onSelectionChange(newSelection);
@@ -80,6 +83,7 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
 
   // 全選択/全解除
   const handleSelectAll = () => {
+    Log.info(`${!allSelected ? '全選択' : '全解除'}を実行しました`, 'FrqDataTable');
     onSelectAll(!allSelected);
   };
 

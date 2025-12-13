@@ -8,6 +8,7 @@ import { Box } from '@mui/material';
 import { FRQ_CONSTANTS } from '../../settings/frqConstants';
 import { getFrqColors, FrqColors } from '../../settings/frqColors';
 import { hzToCanvasY, hzToTone, getToneGridPositions, toneToNoteName, toneToHz } from '../../utils/FreqToTone';
+import { Log } from '../../lib/Logging';
 
 /**
  * トーンラベルの描画（左側固定）
@@ -88,6 +89,8 @@ export const FrqFreqCanvasLabel = React.forwardRef<FrqFreqCanvasLabelHandle, Frq
     const colors = getFrqColors(mode);
     ctx.clearRect(0, 0, labelWidth, height);
     drawToneLabels(ctx, height, colors);
+    
+    Log.debug(`周波数ラベルを描画しました: 高さ${height}px`, 'FrqFreqCanvasLabel');
   }, [height, mode, labelWidth]);
 
   return (
