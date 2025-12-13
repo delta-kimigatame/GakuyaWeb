@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import React from "react";
 import { Box, Dialog, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
@@ -40,21 +40,21 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   open,
 }) => {
   const { t } = useTranslation();
-  const [selection, setSelection] = useState<ArraySelection>(
+  const [selection, setSelection] = React.useState<ArraySelection>(
     createEmptySelection()
   );
-  const [editedFrq, setEditedFrq] = useState<Frq>(frq);
-  const [isDialogReady, setIsDialogReady] = useState(false);
+  const [editedFrq, setEditedFrq] = React.useState<Frq>(frq);
+  const [isDialogReady, setIsDialogReady] = React.useState(false);
   
   // スクロール同期用のref
-  const freqYScrollRef = useRef<HTMLDivElement>(null); // 周波数グラフのY軸スクロール
-  const freqXScrollRef = useRef<HTMLDivElement>(null); // 周波数グラフのX軸スクロール
-  const ampScrollRef = useRef<HTMLDivElement>(null);
-  const ampContainerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<{ updateScroll: (scrollTop: number) => void }>(null); // ラベルの直接制御用
+  const freqYScrollRef = React.useRef<HTMLDivElement>(null); // 周波数グラフのY軸スクロール
+  const freqXScrollRef = React.useRef<HTMLDivElement>(null); // 周波数グラフのX軸スクロール
+  const ampScrollRef = React.useRef<HTMLDivElement>(null);
+  const ampContainerRef = React.useRef<HTMLDivElement>(null);
+  const labelRef = React.useRef<{ updateScroll: (scrollTop: number) => void }>(null); // ラベルの直接制御用
   
   // 音量グラフコンテナの高さを取得
-  const [ampContainerHeight, setAmpContainerHeight] = useState<number>(100);
+  const [ampContainerHeight, setAmpContainerHeight] = React.useState<number>(100);
   
 
   
@@ -66,32 +66,32 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   const canvasHeight = Math.ceil(toneRange * pixelsPerSemitone);
   const labelWidth = FRQ_CONSTANTS.FREQ_LABEL_WIDTH;
   
-  useEffect(() => {
+  React.useEffect(() => {
     if (ampContainerRef.current) {
       setAmpContainerHeight(ampContainerRef.current.clientHeight);
     }
   }, []);
 
   // X軸スクロール同期（周波数グラフと音量グラフ）- 双方向
-  const handleFreqXScroll = useCallback(() => {
+  const handleFreqXScroll = React.useCallback(() => {
     if (freqXScrollRef.current && ampScrollRef.current) {
       ampScrollRef.current.scrollLeft = freqXScrollRef.current.scrollLeft;
     }
   }, []);
 
-  const handleAmpScroll = useCallback(() => {
+  const handleAmpScroll = React.useCallback(() => {
     if (ampScrollRef.current && freqXScrollRef.current) {
       freqXScrollRef.current.scrollLeft = ampScrollRef.current.scrollLeft;
     }
   }, []);
 
   // Y軸スクロール処理（ラベル同期用）- 直接DOM操作
-  const handleFreqYScroll = useCallback((scrollTop: number) => {
+  const handleFreqYScroll = React.useCallback((scrollTop: number) => {
     labelRef.current?.updateScroll(scrollTop);
   }, []);
   
   // 初期表示時に平均周波数を中心に表示
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isDialogReady || !freqYScrollRef.current) return;
     
     const scrollContainer = freqYScrollRef.current;
@@ -137,13 +137,13 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [isDialogReady, editedFrq.frqAverage]); // ダイアログ準備完了時に実行
 
   // 選択されているインデックスを取得
-  const selectedIndices = useMemo(
+  const selectedIndices = React.useMemo(
     () => getSelectedIndices(selection),
     [selection]
   );
 
   // 選択範囲の平均周波数を計算
-  const selectionAverageFreq = useMemo(() => {
+  const selectionAverageFreq = React.useMemo(() => {
     if (selectedIndices.length === 0) return null;
     const sum = selectedIndices.reduce(
       (acc, idx) => acc + editedFrq.frq[idx],
@@ -155,7 +155,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
 
 
   // 編集操作: 2倍
-  const handleMultiplyBy2 = useCallback(() => {
+  const handleMultiplyBy2 = React.useCallback(() => {
     if (selectedIndices.length === 0) return;
     const newFrqArray = Array.from(editedFrq.frq);
     selectedIndices.forEach((idx) => {
@@ -172,7 +172,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 3倍
-  const handleMultiplyBy3 = useCallback(() => {
+  const handleMultiplyBy3 = React.useCallback(() => {
     if (selectedIndices.length === 0) return;
     const newFrqArray = Array.from(editedFrq.frq);
     selectedIndices.forEach((idx) => {
@@ -189,7 +189,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 1/2
-  const handleDivideBy2 = useCallback(() => {
+  const handleDivideBy2 = React.useCallback(() => {
     if (selectedIndices.length === 0) return;
     const newFrqArray = Array.from(editedFrq.frq);
     selectedIndices.forEach((idx) => {
@@ -206,7 +206,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 1/3
-  const handleDivideBy3 = useCallback(() => {
+  const handleDivideBy3 = React.useCallback(() => {
     if (selectedIndices.length === 0) return;
     const newFrqArray = Array.from(editedFrq.frq);
     selectedIndices.forEach((idx) => {
@@ -223,7 +223,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: ファイル全体の平均周波数を選択範囲に適用する
-  const handleFileAverageToSelection = useCallback(() => {
+  const handleFileAverageToSelection = React.useCallback(() => {
     if (selectedIndices.length === 0) return;
     const newFrqArray = Array.from(editedFrq.frq);
     selectedIndices.forEach((idx) => {
@@ -240,7 +240,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 編集操作: 選択範囲の平均値をファイル全体の平均周波数にする
-  const handleSelectionToFileAverage = useCallback(() => {
+  const handleSelectionToFileAverage = React.useCallback(() => {
     if (selectionAverageFreq === null) return;
     setEditedFrq(
       new Frq({
@@ -253,7 +253,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [editedFrq, selectionAverageFreq]);
 
   // 編集操作: 線形補完
-  const handleLinearInterpolate = useCallback(() => {
+  const handleLinearInterpolate = React.useCallback(() => {
     if (selectedIndices.length <= 1) return;
     const newFrqArray = Array.from(editedFrq.frq);
     const startIdx = selectedIndices[0];
@@ -278,17 +278,17 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [selectedIndices, editedFrq]);
 
   // 選択操作: 全選択
-  const handleSelectAll = useCallback(() => {
+  const handleSelectAll = React.useCallback(() => {
     setSelection(selectRange(0, editedFrq.frq.length - 1, editedFrq.frq.length));
   }, [editedFrq]);
 
   // 選択操作: 選択解除
-  const handleClearSelection = useCallback(() => {
+  const handleClearSelection = React.useCallback(() => {
     setSelection(clearArraySelection());
   }, []);
 
   // ファイル全体の平均周波数変更
-  const handleAverageFreqChange = useCallback((newAverage: number) => {
+  const handleAverageFreqChange = React.useCallback((newAverage: number) => {
     setEditedFrq(
       new Frq({
         frq: editedFrq.frq,
@@ -300,7 +300,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   }, [editedFrq]);
 
   // 保存
-  const handleSave = useCallback(() => {
+  const handleSave = React.useCallback(() => {
     onSave(editedFrq);
   }, [editedFrq, onSave]);
 

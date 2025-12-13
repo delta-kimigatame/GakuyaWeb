@@ -3,7 +3,7 @@
  * amp(音量)とfreq(周波数)を重ねて描画し、生成中はCircularProgressを表示
  */
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Frq } from "../../lib/UtauFrq";
@@ -41,13 +41,13 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
   onClick,
 }) => {
   const { t } = useTranslation();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [actualWidth, setActualWidth] = React.useState(width);
   const colors = getFrqColors(mode);
 
   // コンテナの実際の幅を取得
-  useEffect(() => {
+  React.useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
@@ -62,7 +62,7 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || actualWidth === 0) return;
 

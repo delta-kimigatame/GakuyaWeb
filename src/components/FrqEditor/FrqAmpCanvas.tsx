@@ -3,7 +3,7 @@
  * 音量グラフを表示（参考情報として、選択範囲のハイライトなし）
  */
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { Frq } from '../../lib/UtauFrq';
 import { FRQ_CONSTANTS } from '../../settings/frqConstants';
@@ -71,7 +71,7 @@ export const FrqAmpCanvas: React.FC<FrqAmpCanvasProps> = ({
   mode,
   containerHeight,
 }) => {
-  const graphCanvasRef = useRef<HTMLCanvasElement>(null);
+  const graphCanvasRef = React.useRef<HTMLCanvasElement>(null);
 
   // frqのフレーム数から幅を計算
   const dataLength = frq.getLength();
@@ -86,7 +86,7 @@ export const FrqAmpCanvas: React.FC<FrqAmpCanvasProps> = ({
   const height = containerHeight;
   const labelWidth = FRQ_CONSTANTS.FREQ_LABEL_WIDTH;
 
-  useEffect(() => {
+  React.useEffect(() => {
     const graphCanvas = graphCanvasRef.current;
     if (!graphCanvas) return;
 

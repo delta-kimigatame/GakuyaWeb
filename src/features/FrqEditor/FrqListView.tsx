@@ -3,7 +3,7 @@
  * 全wavファイルのfrqサムネイルを一覧表示し、生成・編集への遷移を管理
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { Box, Pagination, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { FrqThumbnail } from '../../components/FrqEditor/FrqThumbnail';
@@ -50,21 +50,21 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   onFrqUpdate,
 }) => {
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [frqStates, setFrqStates] = useState<Map<string, FrqState>>(new Map());
-  const [containerHeight, setContainerHeight] = useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [frqStates, setFrqStates] = React.useState<Map<string, FrqState>>(new Map());
+  const [containerHeight, setContainerHeight] = React.useState(0);
   
   // 編集画面の状態管理
-  const [editingWavFile, setEditingWavFile] = useState<string | null>(null);
+  const [editingWavFile, setEditingWavFile] = React.useState<string | null>(null);
   const editingFrq = editingWavFile ? frqStates.get(editingWavFile)?.frq : null;
 
   // wavファイルのリストを取得
-  const wavFiles = useMemo(() => {
+  const wavFiles = React.useMemo(() => {
     return Object.keys(zipFiles).filter((name) => name.toLowerCase().endsWith('.wav'));
   }, [zipFiles]);
 
   // frqファイルの存在を確認
-  const frqFileMap = useMemo(() => {
+  const frqFileMap = React.useMemo(() => {
     const map = new Map<string, string>();
     Object.keys(zipFiles).forEach((name) => {
       if (name.toLowerCase().endsWith('.frq')) {
@@ -76,7 +76,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   }, [zipFiles]);
 
   // 初期化：全wavファイルの状態を初期化
-  useEffect(() => {
+  React.useEffect(() => {
     const initializeFrqs = async () => {
       const newStates = new Map<string, FrqState>();
 
@@ -151,7 +151,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   };
 
   // コンテナの高さを計算
-  useEffect(() => {
+  React.useEffect(() => {
     const updateHeight = () => {
       const windowHeight = window.innerHeight;
       const headerHeight = 64; // ヘッダーの高さ
@@ -172,7 +172,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   const currentPageFiles = wavFiles.slice(startIndex, endIndex);
 
   // 現在のページに表示されているファイルのfrq生成を開始
-  useEffect(() => {
+  React.useEffect(() => {
     if (!workerPool) return;
 
     workerPool.clearTasks();

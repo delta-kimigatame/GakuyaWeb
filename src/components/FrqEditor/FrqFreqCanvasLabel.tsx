@@ -3,7 +3,7 @@
  * Y軸の音名ラベルを表示（固定表示）
  */
 
-import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { FRQ_CONSTANTS } from '../../settings/frqConstants';
 import { getFrqColors, FrqColors } from '../../settings/frqColors';
@@ -50,17 +50,17 @@ export interface FrqFreqCanvasLabelHandle {
 /**
  * 周波数キャンバスラベル
  */
-export const FrqFreqCanvasLabel = forwardRef<FrqFreqCanvasLabelHandle, FrqFreqCanvasLabelProps>(({
+export const FrqFreqCanvasLabel = React.forwardRef<FrqFreqCanvasLabelHandle, FrqFreqCanvasLabelProps>(({
   height,
   mode,
   scrollTop,
 }, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const labelWidth = FRQ_CONSTANTS.FREQ_LABEL_WIDTH;
 
   // 外部から直接スクロール位置を更新できるようにする
-  useImperativeHandle(ref, () => ({
+  React.useImperativeHandle(ref, () => ({
     updateScroll: (scrollTop: number) => {
       if (containerRef.current) {
         containerRef.current.style.transform = `translateY(-${scrollTop}px)`;
@@ -68,7 +68,7 @@ export const FrqFreqCanvasLabel = forwardRef<FrqFreqCanvasLabelHandle, FrqFreqCa
     },
   }), []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 

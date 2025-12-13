@@ -3,7 +3,7 @@
  * 周波数グラフを表示し、選択範囲のハイライトと編集をサポート
  */
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { Frq } from '../../lib/UtauFrq';
 import { ArraySelection, getSelectedIndices } from '../../utils/ArraySelection';
@@ -168,9 +168,9 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   yScrollContainerRef,
   xScrollContainerRef,
 }) => {
-  const graphCanvasRef = useRef<HTMLCanvasElement>(null);
-  const internalYScrollRef = useRef<HTMLDivElement>(null);
-  const internalXScrollRef = useRef<HTMLDivElement>(null);
+  const graphCanvasRef = React.useRef<HTMLCanvasElement>(null);
+  const internalYScrollRef = React.useRef<HTMLDivElement>(null);
+  const internalXScrollRef = React.useRef<HTMLDivElement>(null);
   const graphScrollRef = yScrollContainerRef || internalYScrollRef;
   const outerScrollRef = xScrollContainerRef || internalXScrollRef;
 
@@ -189,7 +189,7 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   const height = Math.ceil(toneRange * pixelsPerSemitone);
 
   // Y軸スクロールの処理
-  const handleYScroll = useCallback(() => {
+  const handleYScroll = React.useCallback(() => {
     if (graphScrollRef.current) {
       const scrollTop = graphScrollRef.current.scrollTop;
       onYScroll?.(scrollTop);
@@ -197,11 +197,11 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   }, [onYScroll, graphScrollRef]);
 
   // X軸スクロールの処理
-  const handleXScroll = useCallback(() => {
+  const handleXScroll = React.useCallback(() => {
     onXScroll?.();
   }, [onXScroll]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const graphCanvas = graphCanvasRef.current;
     if (!graphCanvas) return;
 
