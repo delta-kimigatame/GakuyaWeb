@@ -23,6 +23,8 @@ export interface ZipFiles {
 export interface FrqListViewProps {
   /** zipファイルの内容 */
   zipFiles: ZipFiles;
+  /** 音源ルートディレクトリ */
+  rootDir: string;
   /** Worker Pool for FRQ generation */
   workerPool: GenerateFrqWorkerPool | null;
   /** 1ページあたりの表示件数 */
@@ -44,6 +46,7 @@ interface FrqState {
  */
 export const FrqListView: React.FC<FrqListViewProps> = ({
   zipFiles,
+  rootDir,
   workerPool,
   itemsPerPage = FRQ_CONSTANTS.DEFAULT_ITEMS_PER_PAGE,
   mode,
@@ -269,12 +272,13 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     return (
       <FrqEditorView
         wavFileName={editingWavFile}
+        rootDir={rootDir}
         frq={editingFrq}
         workerPool={workerPool}
         mode={mode}
         onSave={handleSave}
         onRegenerate={handleRegenerate}
-        onBack={handleBack}
+        onClose={handleBack}
         open={true}
       />
     );
@@ -317,6 +321,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
                 <FrqThumbnail
                   key={wavName}
                   wavFileName={wavName}
+                  rootDir={rootDir}
                   frqData={state?.frq || null}
                   width={0} // 100%幅なので0でOK
                   height={thumbnailHeight}

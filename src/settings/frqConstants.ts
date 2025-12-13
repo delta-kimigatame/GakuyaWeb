@@ -22,7 +22,7 @@ export const FRQ_CONSTANTS = {
   DEFAULT_ITEMS_PER_PAGE: 5,
   
   /** サムネイルの最小高さ(px) */
-  MIN_THUMBNAIL_HEIGHT: 60,
+  MIN_THUMBNAIL_HEIGHT: 100,
   
   /** 個別編集画面の周波数キャンバスの高さ比率(%) */
   FREQ_CANVAS_HEIGHT_RATIO: 40,

@@ -642,9 +642,10 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               />
             </TabPanel>
             <TabPanel value={6} sx={{ p: 0 }}>
-              {props.zipFiles && workerPool && (
+              {props.zipFiles && workerPool && rootDir && (
                 <FrqListView
                   zipFiles={props.zipFiles}
+                  rootDir={rootDir}
                   workerPool={workerPool}
                   mode={props.mode}
                   onFrqUpdate={(wavFileName: string, frq: Frq) => {

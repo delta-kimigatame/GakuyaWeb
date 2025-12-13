@@ -23,23 +23,25 @@ import { Log } from "../../lib/Logging";
 
 interface FrqEditorViewProps {
   wavFileName: string;
+  rootDir: string;
   frq: Frq;
   workerPool: GenerateFrqWorkerPool | null;
   mode: "light" | "dark";
   onSave: (updatedFrq: Frq) => void;
   onRegenerate: () => void;
-  onBack: () => void;
+  onClose: () => void;
   open: boolean;
 }
 
 export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   wavFileName,
+  rootDir,
   frq,
   workerPool,
   mode,
   onSave,
   onRegenerate,
-  onBack,
+  onClose,
   open,
 }) => {
   const { t } = useTranslation();
@@ -48,6 +50,15 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   );
   const [editedFrq, setEditedFrq] = React.useState<Frq>(frq);
   const [isDialogReady, setIsDialogReady] = React.useState(false);
+  
+  // wavファイル名から音源ルートパスを除外
+  const displayFileName = React.useMemo(() => {
+    if (wavFileName.startsWith(rootDir)) {
+      const relative = wavFileName.substring(rootDir.length);
+      return relative.startsWith('/') || relative.startsWith('\\') ? relative.substring(1) : relative;
+    }
+    return wavFileName;
+  }, [wavFileName, rootDir]);
   
   // スクロール同期用のref
   const freqYScrollRef = React.useRef<HTMLDivElement>(null); // 周波数グラフのY軸スクロール
@@ -329,10 +340,12 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
     <Dialog
       fullScreen
       open={open}
-      onClose={onBack}
-      TransitionProps={{
-        onEntered: () => setIsDialogReady(true),
-        onExit: () => setIsDialogReady(false),
+      onClose={onClose}
+      slotProps={{
+        transition: {
+          onEntered: () => setIsDialogReady(true),
+          onExit: () => setIsDialogReady(false),
+        }
       }}
       sx={{
         '& .MuiDialog-paper': {
@@ -341,18 +354,19 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
       }}
     >
       {/* ヘッダーバー */}
-      <AppBar sx={{ position: 'relative' }}>
-        <Toolbar>
-          <Typography sx={{ ml: 0, flex: 1 }} variant="h6" component="div">
-            {wavFileName}
+      <AppBar sx={{ position: 'relative', minHeight: 'auto' }}>
+        <Toolbar sx={{ minHeight: '40px', py: 0.5 }}>
+          <Typography sx={{ ml: 0, flex: 1 }} variant="caption" component="div">
+            {displayFileName}
           </Typography>
           <IconButton
             edge="end"
             color="inherit"
-            onClick={onBack}
+            onClick={onClose}
             aria-label="close"
+            size="small"
           >
-            <CloseIcon />
+            <CloseIcon fontSize="small" />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -362,19 +376,19 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "calc(100vh - 64px)", // AppBarの高さを引く
+          height: "calc(100vh - 40px)", // AppBarの高さを引く
           overflowY: "hidden",
         }}
       >
       {/* Canvas群（周波数・音量） - 十字レイアウト */}
       <Box
         sx={{
-          height: "50vh", // 周波数40vh + 音量10vh
+          height: "35vh", // 周波数30vh + 音量5vh
           borderBottom: 1,
           borderColor: "divider",
           display: "grid",
           gridTemplateColumns: `${labelWidth}px 1fr`,
-          gridTemplateRows: "40vh 10vh",
+          gridTemplateRows: "30vh 5vh",
         }}
       >
         {/* 左上: 周波数ラベル - overflow: hidden */}
@@ -477,7 +491,6 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
           onClearSelection={handleClearSelection}
           onRegenerate={handleRegenerate}
           onSave={handleSave}
-          onBack={onBack}
         />
       </Box>
     </Box>

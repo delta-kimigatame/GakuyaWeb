@@ -15,6 +15,8 @@ import { Log } from "../../lib/Logging";
 export interface FrqThumbnailProps {
   /** wavファイル名 */
   wavFileName: string;
+  /** 音源ルートディレクトリ */
+  rootDir: string;
   /** Frqオブジェクト(nullの場合は生成中) */
   frqData: Frq | null;
   /** サムネイルの幅 */
@@ -34,6 +36,7 @@ export interface FrqThumbnailProps {
  */
 export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
   wavFileName,
+  rootDir,
   frqData,
   width,
   height,
@@ -46,6 +49,16 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [actualWidth, setActualWidth] = React.useState(width);
   const colors = getFrqColors(mode);
+
+  // wavファイル名から音源ルートパスを除外
+  const displayFileName = React.useMemo(() => {
+    if (wavFileName.startsWith(rootDir)) {
+      const relative = wavFileName.substring(rootDir.length);
+      // 先頭のスラッシュを除去
+      return relative.startsWith('/') || relative.startsWith('\\') ? relative.substring(1) : relative;
+    }
+    return wavFileName;
+  }, [wavFileName, rootDir]);
 
   // コンテナの実際の幅を取得
   React.useEffect(() => {
@@ -80,7 +93,7 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
     if (frqData && !isGenerating) {
       // frqデータがある場合は描画
       drawFrqThumbnail(ctx, frqData, actualWidth, height, colors);
-      drawFileName(ctx, wavFileName, actualWidth, height, colors);
+      drawFileName(ctx, displayFileName, actualWidth, height, colors);
       Log.debug(`サムネイルを描画しました: ${wavFileName}`, 'FrqThumbnail');
     } else {
       // 生成中または未生成の場合は背景のみ
@@ -154,7 +167,7 @@ export const FrqThumbnail: React.FC<FrqThumbnailProps> = ({
             backgroundColor: colors.generatingBackground,
           }}
         >
-          <Typography variant="body2" sx={{ color: colors.text }}>
+          <Typography variant="caption" sx={{ color: colors.text }}>
             {wavFileName}
           </Typography>
           <Typography
