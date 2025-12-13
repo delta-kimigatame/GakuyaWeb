@@ -23,7 +23,7 @@ import type { GenerateFrqWorkerPool } from "../../services/workerPool";
 interface FrqEditorViewProps {
   wavFileName: string;
   frq: Frq;
-  workerPool: GenerateFrqWorkerPool;
+  workerPool: GenerateFrqWorkerPool | null;
   mode: "light" | "dark";
   onSave: (updatedFrq: Frq) => void;
   onBack: () => void;
@@ -56,8 +56,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
   // 音量グラフコンテナの高さを取得
   const [ampContainerHeight, setAmpContainerHeight] = useState<number>(100);
   
-  // Y軸スクロール量（初期値のみ、後は直接DOM操作）
-  const [freqScrollTop] = useState<number>(0);
+
   
   // Canvas高さ計算
   const minTone = hzToTone(FRQ_CONSTANTS.MIN_HZ);
@@ -153,8 +152,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
     return sum / selectedIndices.length;
   }, [selectedIndices, editedFrq]);
 
-  // スクロール同期（不要になったので削除）
-  // X軸スクロールは音量グラフから周波数グラフへ同期
+
 
   // 編集操作: 2倍
   const handleMultiplyBy2 = useCallback(() => {
@@ -364,7 +362,7 @@ export const FrqEditorView: React.FC<FrqEditorViewProps> = ({
             ref={labelRef}
             height={canvasHeight}
             mode={mode}
-            scrollTop={freqScrollTop}
+            scrollTop={0}
           />
         </Box>
 

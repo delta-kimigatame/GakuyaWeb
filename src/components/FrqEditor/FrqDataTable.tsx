@@ -31,8 +31,6 @@ export interface FrqDataTableProps {
   onSelectAll: (selectAll: boolean) => void;
   /** テーマモード */
   mode: 'light' | 'dark';
-  /** テーブルの高さ */
-  height?: number;
 }
 
 /**
@@ -44,7 +42,6 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
   onSelectionChange,
   onSelectAll,
   mode,
-  height = 400,
 }) => {
   const { t } = useTranslation();
   const frqArray = Array.from(frq.frq);
@@ -90,7 +87,7 @@ export const FrqDataTable: React.FC<FrqDataTableProps> = ({
     <TableContainer
       component={Paper}
       sx={{
-        height,
+        height: '100%',
         overflow: 'auto',
         backgroundColor: mode === 'dark' ? 'grey.900' : 'background.paper',
       }}

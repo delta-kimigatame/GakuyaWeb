@@ -77,26 +77,21 @@ function drawFreqGraph(
     
     const freq = freqData[i];
     
-    // 周波数が0の場合はスキップ（描画を途切れさせる）
     if (freq <= 0) continue;
     
     const x = i * xStep;
     const y = hzToCanvasY(freq, height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
     
-    // 前のポイントが0または選択範囲の場合、新しいパスを開始
     const prevFreq = i > 0 ? freqData[i - 1] : 0;
     const isPrevSelected = i > 0 && selectedSet.has(i - 1);
     
     if (prevFreq <= 0 || isPrevSelected) {
-      // 新しいパスを開始
       ctx.beginPath();
       ctx.moveTo(x, y);
     } else {
-      // 前のポイントから線を引く
       ctx.lineTo(x, y);
     }
     
-    // 次のポイントが0または選択範囲または最後の場合、ここで描画
     const isLast = i === dataLength - 1;
     const nextFreq = !isLast ? freqData[i + 1] : 0;
     const isNextSelected = !isLast && selectedSet.has(i + 1);
@@ -106,7 +101,6 @@ function drawFreqGraph(
     }
   }
   
-  // 選択範囲の周波数線
   if (selectedIndices.length > 0) {
     ctx.strokeStyle = colors.freqSelected;
     ctx.lineWidth = 3;
@@ -117,27 +111,22 @@ function drawFreqGraph(
       
       const freq = freqData[i];
       
-      // 周波数が0の場合はスキップ（描画を途切れさせる）
       if (freq <= 0) continue;
       
       const x = i * xStep;
       const y = hzToCanvasY(freq, height, FRQ_CONSTANTS.MIN_HZ, FRQ_CONSTANTS.MAX_HZ);
       
-      // 前のポイントが0または選択範囲外の場合、新しいパスを開始
       const prevIdx = idx > 0 ? selectedIndices[idx - 1] : -1;
       const isPrevAdjacent = prevIdx === i - 1;
       const prevFreq = isPrevAdjacent && prevIdx >= 0 ? freqData[prevIdx] : 0;
       
       if (!isPrevAdjacent || prevFreq <= 0) {
-        // 新しいパスを開始
         ctx.beginPath();
         ctx.moveTo(x, y);
       } else {
-        // 前のポイントから線を引く
         ctx.lineTo(x, y);
       }
       
-      // 次のポイントが0または選択範囲外または最後の場合、ここで描画
       const isLast = idx === selectedIndices.length - 1;
       const nextIdx = !isLast ? selectedIndices[idx + 1] : -1;
       const isNextAdjacent = nextIdx === i + 1;
@@ -191,17 +180,13 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
   const totalSamples = dataLength * frq.perSamples;
   // グラフ幅 = 総サンプル数 / SAMPLES_PER_PIXEL
   const graphWidth = Math.ceil(totalSamples / FRQ_CONSTANTS.SAMPLES_PER_PIXEL);
-  // 横軸スケール = グラフ幅 / データ長（各データポイントのx座標計算用）
   const xStep = graphWidth / dataLength;
   
-  // 周波数グラフは縦方向に十分な高さを確保（A0～A5の範囲を表示）
-  // 1半音あたり20pxとして、A0(0)～A5(60半音) = 1200px
   const minTone = hzToTone(FRQ_CONSTANTS.MIN_HZ);
   const maxTone = hzToTone(FRQ_CONSTANTS.MAX_HZ);
   const toneRange = maxTone - minTone;
-  const pixelsPerSemitone = 20; // 1半音あたりのピクセル数
+  const pixelsPerSemitone = 20;
   const height = Math.ceil(toneRange * pixelsPerSemitone);
-  const labelWidth = FRQ_CONSTANTS.FREQ_LABEL_WIDTH;
 
   // Y軸スクロールの処理
   const handleYScroll = useCallback(() => {
@@ -253,12 +238,11 @@ export const FrqFreqCanvas: React.FC<FrqFreqCanvasProps> = ({
         height: '100%', 
         overflowX: 'auto',
         overflowY: 'hidden',
-        // スクロールバーを非表示にするが、スクロール機能は維持
         '&::-webkit-scrollbar': {
           display: 'none',
         },
-        scrollbarWidth: 'none', // Firefox用
-        msOverflowStyle: 'none', // IE/Edge用
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
       }}
     >
       <Box

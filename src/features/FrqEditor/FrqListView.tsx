@@ -68,7 +68,6 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     const map = new Map<string, string>();
     Object.keys(zipFiles).forEach((name) => {
       if (name.toLowerCase().endsWith('.frq')) {
-        // a_wav.frq → a.wav の形式で対応するwavファイル名を取得
         const wavName = name.slice(0, -4).replace(/_wav$/, '') + '.wav';
         map.set(wavName, name);
       }
@@ -76,7 +75,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     return map;
   }, [zipFiles]);
 
-  // 初期化：全wavファイルの状態を初期化（読み込みのみ、生成はしない）
+  // 初期化：全wavファイルの状態を初期化
   useEffect(() => {
     const initializeFrqs = async () => {
       const newStates = new Map<string, FrqState>();
@@ -94,7 +93,6 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
             newStates.set(wavName, { frq: null, isGenerating: false, progress: 0 });
           }
         } else {
-          // frqファイルが存在しない場合は生成待ち状態で初期化（まだ生成はしない）
           newStates.set(wavName, { frq: null, isGenerating: false, progress: 0 });
         }
       }
@@ -123,22 +121,18 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
         perSamples: 256,
       };
 
-      // workerPoolに生成依頼（indexは0固定、優先度管理は不要）
       const frq = await workerPool.runGenerateFrq(request, 0);
 
       if (frq) {
-        // 生成成功
         setFrqStates((prev) => {
           const newStates = new Map(prev);
           newStates.set(wavName, { frq, isGenerating: false, progress: 1 });
           return newStates;
         });
 
-        // zipに格納
         onFrqUpdate?.(wavName, frq);
         Log.info(`${wavName}の周波数表を生成しました`, 'FrqListView.generateFrqWithWorkerPool');
       } else {
-        // 生成失敗
         setFrqStates((prev) => {
           const newStates = new Map(prev);
           newStates.set(wavName, { frq: null, isGenerating: false, progress: 0 });
@@ -181,20 +175,16 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   useEffect(() => {
     if (!workerPool) return;
 
-    // ページが変わったら、未実行のタスクをクリア
     workerPool.clearTasks();
 
     for (const wavName of currentPageFiles) {
       const state = frqStates.get(wavName);
-      // frqが存在せず、生成中でもない場合のみ生成開始
       if (state && !state.frq && !state.isGenerating) {
-        // 生成中状態に更新
         setFrqStates((prev) => {
           const newStates = new Map(prev);
           newStates.set(wavName, { frq: null, isGenerating: true, progress: 0 });
           return newStates;
         });
-        // 生成開始
         generateFrqWithWorkerPool(wavName);
       }
     }
@@ -208,16 +198,13 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
       )
     : FRQ_CONSTANTS.MIN_THUMBNAIL_HEIGHT;
 
-  // サムネイルクリック処理（編集画面への遷移）
   const handleThumbnailClick = (wavName: string) => {
     const state = frqStates.get(wavName);
     if (!state) return;
 
     if (state.frq && !state.isGenerating) {
-      // frqが生成済みの場合のみ編集画面へ遷移
       setEditingWavFile(wavName);
     }
-    // frqがない場合や生成中の場合は何もしない（自動生成待ち）
   };
 
   // 編集画面から戻る
@@ -229,17 +216,14 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
   const handleSave = (updatedFrq: Frq) => {
     if (!editingWavFile) return;
 
-    // frqStatesを更新
     setFrqStates((prev) => {
       const newStates = new Map(prev);
       newStates.set(editingWavFile, { frq: updatedFrq, isGenerating: false, progress: 1 });
       return newStates;
     });
 
-    // zipに保存
     onFrqUpdate?.(editingWavFile, updatedFrq);
     
-    // リストビューに戻る
     setEditingWavFile(null);
     
     Log.info(`${editingWavFile}の周波数表を保存しました`, 'FrqListView.handleSave');
@@ -324,19 +308,6 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
         </Box>
       )}
     </Box>
-    
-    {/* 編集画面（閉じている場合は非表示） */}
-    {editingWavFile && editingFrq && (
-      <FrqEditorView
-        wavFileName={editingWavFile}
-        frq={editingFrq}
-        workerPool={workerPool}
-        mode={mode}
-        onSave={handleSave}
-        onBack={handleBack}
-        open={false}
-      />
-    )}
     </>
   );
 };
