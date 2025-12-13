@@ -28,6 +28,7 @@ export const translation_ja = {
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
     changelog: [
+      "2025/12/13 周波数表編集機能の追加",
       "2025/11/16 不正なcharacter.txtが含まれている場合うまく動作しない不具合の修正",
       "2025/11/09 中国語UIの追加\r\n対応文字コードの追加\r\n周波数表生成処理の高速化",
       "2025/08/31 一部のwavがうまく変換できない不具合の修正",
@@ -81,6 +82,40 @@ export const translation_ja = {
         sampleRate: "サンプリング周波数を44,100にする",
         depth: "bit深度を16bitにする",
         dcoffset: "DCオフセットを除去する。",
+      },
+    },
+    frq_editor: {
+      title: "周波数表編集",
+      list: {
+        title: "周波数表一覧",
+        files_count: "{{count}}ファイル中 {{start}}～{{end}}を表示",
+        no_wav_files: "wavファイルが見つかりません",
+      },
+      thumbnail: {
+        no_frq: "周波数表なし",
+        generating: "生成中...",
+      },
+      table: {
+        index: "インデックス",
+        frequency: "周波数 (Hz)",
+        no_data: "データがありません",
+      },
+      toolbar: {
+        select_all: "全選択",
+        clear_selection: "選択解除",
+        multiply_by_2: "選択範囲を2倍にする",
+        multiply_by_3: "選択範囲を3倍にする",
+        divide_by_2: "選択範囲を1/2にする",
+        divide_by_3: "選択範囲を1/3にする",
+        selection_to_file_average: "選択範囲の平均値をファイル全体の平均周波数にする",
+        file_average_to_selection: "ファイル全体の平均周波数を選択範囲の平均値にする",
+        linear_interpolate: "選択範囲の始点と終点の値を使って間を線形補完する",
+        regenerate: "周波数表を再生成する",
+        save: "保存",
+        back: "一覧画面に戻る",
+      },
+      average: {
+        file_average: "Avg",
       },
     },
     character: {

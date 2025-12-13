@@ -30,6 +30,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2025/12/13 Added frequency table editing feature",
       "2025/11/16 Fixed a bug: The application does not work properly if an invalid character.txt is included.",
       "2025/11/09 Added Chinese UI\r\nAdded support for additional character encodings\r\nImproved frequency table generation performance",
       "2025/08/31 Fixed a bug: Some wav files could not be converted properly",
@@ -83,6 +84,40 @@ export const translation_en = {
         sampleRate: "Set sampling rate to 44,100 Hz",
         depth: "Set bit depth to 16-bit",
         dcoffset: "Remove DC offset",
+      },
+    },
+    frq_editor: {
+      title: "Frequency Table Editor",
+      list: {
+        title: "Frequency Table List",
+        files_count: "Showing {{start}}～{{end}} of {{count}} files",
+        no_wav_files: "No wav files found",
+      },
+      thumbnail: {
+        no_frq: "No frequency table",
+        generating: "Generating...",
+      },
+      table: {
+        index: "Index",
+        frequency: "Frequency (Hz)",
+        no_data: "No data",
+      },
+      toolbar: {
+        select_all: "Select All",
+        clear_selection: "Clear Selection",
+        multiply_by_2: "Multiply selection by 2",
+        multiply_by_3: "Multiply selection by 3",
+        divide_by_2: "Divide selection by 2",
+        divide_by_3: "Divide selection by 3",
+        selection_to_file_average: "Set selection average to file average frequency",
+        file_average_to_selection: "Set file average frequency to selection average",
+        linear_interpolate: "Linear interpolation between start and end of selection",
+        regenerate: "Regenerate frequency table",
+        save: "Save",
+        back: "Back to list",
+      },
+      average: {
+        file_average: "Avg",
       },
     },
     character: {

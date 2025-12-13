@@ -26,6 +26,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2025/12/13 添加频率表编辑功能",
       "2025/11/16 修复一个错误：如果包含无效的character.txt，应用程序无法正常工作。",
       "2025/11/09 添加中文界面\r\n增加字符编码支持\r\n提高频率表生成性能",
       "2025/08/31 修复部分wav文件无法正常转换的问题",
@@ -73,11 +74,45 @@ export const translation_zh = {
       },
       wav: {
         title: "音频数据",
-        description: "基本上全部勾选",
-        stereo: "将立体声音源转换为单声道",
-        sampleRate: "将采样频率设为44,100Hz",
-        depth: "将bit深度设为16bit",
-        dcoffset: "去除DC偏移",
+        description: "基本上全部选中",
+        stereo: "立体声转换为单声道",
+        sampleRate: "采样率设置为44,100",
+        depth: "位深度设置为16bit",
+        dcoffset: "移除DC偏移",
+      },
+    },
+    frq_editor: {
+      title: "频率表编辑器",
+      list: {
+        title: "频率表列表",
+        files_count: "显示 {{count}} 个文件中的 {{start}}～{{end}}",
+        no_wav_files: "没有找到wav文件",
+      },
+      thumbnail: {
+        no_frq: "无频率表",
+        generating: "生成中...",
+      },
+      table: {
+        index: "索引",
+        frequency: "频率 (Hz)",
+        no_data: "没有数据",
+      },
+      toolbar: {
+        select_all: "全选",
+        clear_selection: "清除选择",
+        multiply_by_2: "将选择范围乘以2",
+        multiply_by_3: "将选择范围乘以3",
+        divide_by_2: "将选择范围除以2",
+        divide_by_3: "将选择范围除以3",
+        selection_to_file_average: "将选择范围的平均值设置为文件整体的平均频率",
+        file_average_to_selection: "将文件整体的平均频率设置为选择范围的平均值",
+        linear_interpolate: "使用选择范围的起点和终点值进行线性插值",
+        regenerate: "重新生成频率表",
+        save: "保存",
+        back: "返回列表",
+      },
+      average: {
+        file_average: "Avg",
       },
     },
     character: {

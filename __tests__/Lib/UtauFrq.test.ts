@@ -1,5 +1,5 @@
-import { describe, test, expect } from 'vitest';
-import { Frq } from "../../src/Lib/UtauFrq";
+import { describe, test, expect, beforeEach } from 'vitest';
+import { Frq } from "../../src/lib/UtauFrq";
 
 describe("エラーが帰る", () => {
   test("no_buf_and_no_frq", () => {
@@ -296,5 +296,75 @@ describe("バイナリを書いて読む", () => {
     expect(newFrq.frqAverage).toBe(0);
     expect(newFrq.frq).toEqual(Float64Array.from(frqs));
     expect(newFrq.amp).toEqual(Float64Array.from(amp));
+  });
+});
+
+describe("拡張メソッド - 編集機能", () => {
+  let frq: Frq;
+
+  beforeEach(() => {
+    const testFreqData = new Float64Array([100, 200, 0, 300, 400, 500]);
+    const testAmpData = new Float64Array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6]);
+    
+    frq = new Frq({
+      frq: testFreqData,
+      amp: testAmpData,
+      perSamples: 256,
+    });
+  });
+
+  test("getAverageFreq: 全体の平均周波数(0Hzを除外)", () => {
+    const avg = frq.getAverageFreq();
+    expect(avg).toBeCloseTo(300, 5);
+  });
+
+  test("getAverageFreqInRange: 指定範囲の平均周波数", () => {
+    const avg = frq.getAverageFreqInRange(1, 4);
+    expect(avg).toBeCloseTo(300, 5);
+  });
+
+  test("multiplyFreqInRange: 周波数を倍率変更", () => {
+    frq.multiplyFreqInRange([0, 1, 3], 2);
+    
+    expect(frq.getFreqAt(0)).toBeCloseTo(200, 5);
+    expect(frq.getFreqAt(1)).toBeCloseTo(400, 5);
+    expect(frq.getFreqAt(2)).toBeCloseTo(0, 5);
+    expect(frq.getFreqAt(3)).toBeCloseTo(600, 5);
+  });
+
+  test("setFreqInRange: 周波数を設定", () => {
+    frq.setFreqInRange([0, 2, 4], 150);
+    
+    expect(frq.getFreqAt(0)).toBeCloseTo(150, 5);
+    expect(frq.getFreqAt(2)).toBeCloseTo(150, 5);
+    expect(frq.getFreqAt(4)).toBeCloseTo(150, 5);
+  });
+
+  test("linearInterpolate: 線形補完", () => {
+    frq.linearInterpolate([0, 1, 2, 3, 4]);
+    
+    expect(frq.getFreqAt(0)).toBeCloseTo(100, 5);
+    expect(frq.getFreqAt(1)).toBeCloseTo(175, 5);
+    expect(frq.getFreqAt(2)).toBeCloseTo(250, 5);
+    expect(frq.getFreqAt(3)).toBeCloseTo(325, 5);
+    expect(frq.getFreqAt(4)).toBeCloseTo(400, 5);
+  });
+
+  test("getLength: データポイント数", () => {
+    expect(frq.getLength()).toBe(6);
+  });
+
+  test("getFreqAt: 指定インデックスの周波数", () => {
+    expect(frq.getFreqAt(0)).toBeCloseTo(100, 5);
+    expect(frq.getFreqAt(3)).toBeCloseTo(300, 5);
+    expect(frq.getFreqAt(-1)).toBe(0);
+    expect(frq.getFreqAt(100)).toBe(0);
+  });
+
+  test("getAmpAt: 指定インデックスの音量", () => {
+    expect(frq.getAmpAt(0)).toBeCloseTo(0.1, 5);
+    expect(frq.getAmpAt(3)).toBeCloseTo(0.4, 5);
+    expect(frq.getAmpAt(-1)).toBe(0);
+    expect(frq.getAmpAt(100)).toBe(0);
   });
 });

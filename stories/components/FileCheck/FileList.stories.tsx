@@ -60,11 +60,11 @@ export const NoDeletedFiles: Story = {
     rootDir: "",
     files: [
       "あ.wav",
-      "あ.frq",
+      "あ_wav.frq",
       "い.wav",
-      "い.frq",
+      "い_wav.frq",
       "う.wav",
-      "う.frq",
+      "う_wav.frq",
       "oto.ini",
     ],
     flags: {
