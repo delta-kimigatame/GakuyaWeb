@@ -126,6 +126,7 @@ export class GenerateFrqWorker {
       data: response.data,
       perSamples: workerRequest.perSamples 
     });
+    frq.autoCorrectFrequency();
     // 返された結果は Float64Array として受け取る
     return frq;
   }
