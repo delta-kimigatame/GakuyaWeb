@@ -131,6 +131,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
         });
 
         onFrqUpdate?.(wavName, frq);
+        Log.gtag("GenerateFrqEditor");
         Log.info(`${wavName}の周波数表を生成しました`, 'FrqListView.generateFrqWithWorkerPool');
       } else {
         setFrqStates((prev) => {
@@ -205,6 +206,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
 
     if (state.frq && !state.isGenerating) {
       setEditingWavFile(wavName);
+      Log.gtag("EditFrq");
     }
   };
 
@@ -227,6 +229,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     
     setEditingWavFile(null);
     
+    Log.gtag("SaveFrq");
     Log.info(`${editingWavFile}の周波数表を保存しました`, 'FrqListView.handleSave');
   };
 
@@ -247,6 +250,7 @@ export const FrqListView: React.FC<FrqListViewProps> = ({
     // frqを再生成
     await generateFrqWithWorkerPool(editingWavFile);
     
+    Log.gtag("RegenerateFrq");
     Log.info(`${editingWavFile}の周波数表を再生成しました`, 'FrqListView.handleRegenerate');
   };
 
