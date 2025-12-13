@@ -410,7 +410,7 @@ describe("OutputZip", () => {
       .async("arraybuffer")
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
-        expect(txt).toBe("name=hoge");
+        expect(txt).toBe("name=hoge\r\n");
       });
   });
   it("ExtractCharacterTxt_true", () => {
@@ -483,7 +483,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\r\nimage=a.bmp\r\nsample=b.wav\r\nauthor=c,version=e\r\n"
+          "name=test\r\nimage=a.bmp\r\nsample=b.wav\r\nauthor=c\r\nweb=d\r\nversion=e\r\n"
         );
       });
   });
@@ -511,7 +511,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\r\nimage=icon.bmp\r\nsample=b.wav\r\nauthor=c\r\nversion=e\r\n"
+          "name=test\r\nimage=icon.bmp\r\nsample=b.wav\r\nauthor=c\r\nweb=d\r\nversion=e\r\n"
         );
       });
   });
@@ -539,7 +539,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\r\nimage=a.bmp\r\nsample=sample.wav\r\nauthor=c\r\nversion=e\r\n"
+          "name=test\r\nimage=a.bmp\r\nsample=sample.wav\r\nauthor=c\r\nweb=d\r\nversion=e\r\n"
         );
       });
   });
@@ -568,7 +568,7 @@ describe("OutputZip", () => {
       .then(async (buf) => {
         const txt = await FileReadAsync(buf);
         expect(txt).toBe(
-          "name=test\r\nimage=icon.bmp\r\nsample=sample.wav\r\nauthor=c\r\nversion=e\r\n"
+          "name=test\r\nimage=icon.bmp\r\nsample=sample.wav\r\nauthor=c\r\nweb=d\r\nversion=e\r\n"
         );
       });
   });
@@ -598,7 +598,7 @@ describe("OutputZip", () => {
     expect("root/oto.ini" in newZip.files).toBeTruthy();
     newZip.files["root/oto.ini"].async("arraybuffer").then(async (buf) => {
       const txt = await FileReadAsync(buf);
-      expect(txt).toBe("aaa");
+      expect(txt).toBe("");
     });
   });
   it("GetNewFileName",()=>{

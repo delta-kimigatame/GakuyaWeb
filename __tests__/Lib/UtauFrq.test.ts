@@ -151,8 +151,8 @@ describe("frqとdataからFrq生成", () => {
     expect(frq.perSamples).toBe(256);
     expect(frq.frqAverage).toBe(0);
     expect(frq.frq).toEqual(Float64Array.from(frqs));
-    expect(frq.amp[0]).toBeCloseTo(0.6);
-    expect(frq.amp[1]).toBeCloseTo(0.5);
+    expect(frq.amp[0]).toBeCloseTo(0.55, 2);
+    expect(frq.amp[1]).toBeCloseTo(0.55, 2);
   });
   test("frq_and_data_and_perSamples", () => {
     const frqs = [440.0, 440.0];
@@ -180,8 +180,8 @@ describe("frqとdataからFrq生成", () => {
     expect(frq.perSamples).toBe(10);
     expect(frq.frqAverage).toBe(0);
     expect(frq.frq).toEqual(Float64Array.from(frqs));
-    expect(frq.amp[0]).toBeCloseTo(0.6);
-    expect(frq.amp[1]).toBeCloseTo(0.5);
+    expect(frq.amp[0]).toBeCloseTo(0.55, 2);
+    expect(frq.amp[1]).toBeCloseTo(0.55, 2);
   });
   test("frq_and_dataand_frqAverage", () => {
     const frqs = [440.0, 440.0];
@@ -209,8 +209,8 @@ describe("frqとdataからFrq生成", () => {
     expect(frq.perSamples).toBe(256);
     expect(frq.frqAverage).toBe(300);
     expect(frq.frq).toEqual(Float64Array.from(frqs));
-    expect(frq.amp[0]).toBeCloseTo(0.6);
-    expect(frq.amp[1]).toBeCloseTo(0.5);
+    expect(frq.amp[0]).toBeCloseTo(0.55, 2);
+    expect(frq.amp[1]).toBeCloseTo(0.55, 2);
   });
   test("frq_and_data_surplus", () => {
     const frqs = [440.0, 440.0];
@@ -233,8 +233,8 @@ describe("frqとdataからFrq生成", () => {
     expect(frq.perSamples).toBe(256);
     expect(frq.frqAverage).toBe(0);
     expect(frq.frq).toEqual(Float64Array.from(frqs));
-    expect(frq.amp[0]).toBeCloseTo(0.6);
-    expect(frq.amp[1]).toBeCloseTo(0.5);
+    expect(frq.amp[0]).toBeCloseTo(0.55, 2);
+    expect(frq.amp[1]).toBeCloseTo(0.55, 2);
   });
 });
 

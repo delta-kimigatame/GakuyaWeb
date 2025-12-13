@@ -11,17 +11,17 @@ import {
 
 describe('FreqToTone', () => {
   describe('hzToTone', () => {
-    it('A0(55Hz)は0トーンを返す', () => {
-      expect(hzToTone(55)).toBeCloseTo(0, 5);
+    it('A1(55Hz)は12トーンを返す', () => {
+      expect(hzToTone(55)).toBeCloseTo(12, 5);
     });
 
-    it('A1(110Hz)は12トーンを返す', () => {
-      expect(hzToTone(110)).toBeCloseTo(12, 5);
+    it('A2(110Hz)は24トーンを返す', () => {
+      expect(hzToTone(110)).toBeCloseTo(24, 5);
     });
 
-    it('A5(880Hz)は48トーンを返す', () => {
-      // A0(55Hz)からA5(880Hz)は4オクターブ = 48半音
-      expect(hzToTone(880)).toBeCloseTo(48, 5);
+    it('A5(880Hz)は60トーンを返す', () => {
+      // A0(27.5Hz)からA5(880Hz)は5オクターブ = 60半音
+      expect(hzToTone(880)).toBeCloseTo(60, 5);
     });
 
     it('0Hz以下は0を返す', () => {
@@ -31,17 +31,17 @@ describe('FreqToTone', () => {
   });
 
   describe('toneToHz', () => {
-    it('0トーンはA0(55Hz)を返す', () => {
-      expect(toneToHz(0)).toBeCloseTo(55, 2);
+    it('0トーンはA0(27.5Hz)を返す', () => {
+      expect(toneToHz(0)).toBeCloseTo(27.5, 2);
     });
 
-    it('12トーンはA1(110Hz)を返す', () => {
-      expect(toneToHz(12)).toBeCloseTo(110, 2);
+    it('12トーンはA1(55Hz)を返す', () => {
+      expect(toneToHz(12)).toBeCloseTo(55, 2);
     });
 
     it('48トーンはA4(440Hz)を返す', () => {
       // A0から4オクターブ上はA4
-      expect(toneToHz(48)).toBeCloseTo(880, 2);
+      expect(toneToHz(48)).toBeCloseTo(440, 2);
     });
   });
 
@@ -100,9 +100,9 @@ describe('FreqToTone', () => {
       expect(toneToNoteName(12)).toBe('A1');
     });
 
-    it('3トーンはC0を返す', () => {
-      // A0から3半音上はC0(オクターブはまだ変わらない)
-      expect(toneToNoteName(3)).toBe('C0');
+    it('3トーンはC1を返す', () => {
+      // A0から3半音上はC1(A0→A#0→B0→C1)
+      expect(toneToNoteName(3)).toBe('C1');
     });
 
     it('1トーンはA#0を返す', () => {
