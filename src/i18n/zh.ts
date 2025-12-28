@@ -26,6 +26,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2025/12/29 修复一个错误：如果zip内包含macOS系统文件，无法生成zip文件",
       "2025/12/13 添加频率表编辑功能",
       "2025/11/16 修复一个错误：如果包含无效的character.txt，应用程序无法正常工作。",
       "2025/11/09 添加中文界面\r\n增加字符编码支持\r\n提高频率表生成性能",
@@ -56,6 +57,7 @@ export const translation_zh = {
         uspec: "删除UTAU原音设置缓存文件(*.uspec)",
         setparam: "删除setParam缓存文件(oto.setParam-Scache)",
         vlabeler: "删除vLabeler缓存文件夹(*.lbp.caches/)",
+        macos: "删除macOS系统文件(__MACOSX/和.DS_Store)",
       },
       frq: {
         title: "频率表文件",

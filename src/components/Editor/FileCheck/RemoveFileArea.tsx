@@ -76,6 +76,14 @@ export const RemoveFileArea: React.FC<RemoveFileAreaProps> = (props) => {
       />
       <br />
       <br />
+      <CommonCheckBox
+        checked={true}
+        setChecked={() => {}}
+        disabled={true}
+        label={t("editor.file_check.remove.macos")}
+      />
+      <br />
+      <br />
     </>
   );
 };

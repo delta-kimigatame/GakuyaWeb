@@ -116,7 +116,14 @@ export const LoadZipCore = async(
       .then((z) => {
         setProcessing(false);
         Log.info(`zip読込完了`, "LoadZipDialog");
-        resolve(z.files);
+        //** __MACOSX/から始まると.DS_Storeファイルを除外する */
+        const filteredFiles: { [key: string]: JSZip.JSZipObject } = {};
+        Object.keys(z.files).forEach((key) => {
+          if (!key.startsWith("__MACOSX/") && !key.endsWith(".DS_Store")) {
+            filteredFiles[key] = z.files[key];
+          }
+        });
+        resolve(filteredFiles);
       });
   })
 };

@@ -28,6 +28,7 @@ export const translation_ja = {
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
     changelog: [
+      "2025/12/29 zip内にmacOSのシステムファイルが含まれている場合、zipを生成できなくなる不具合の修正",
       "2025/12/13 周波数表編集機能の追加",
       "2025/11/16 不正なcharacter.txtが含まれている場合うまく動作しない不具合の修正",
       "2025/11/09 中国語UIの追加\r\n対応文字コードの追加\r\n周波数表生成処理の高速化",
@@ -58,6 +59,7 @@ export const translation_ja = {
         uspec: "UTAU 原音設定キャッシュファイル(*.uspec)の削除",
         setparam: "setParamキャッシュファイル(oto.setParam-Scache)の削除",
         vlabeler: "vLabelerキャッシュフォルダ(*.lbp.caches/)の削除",
+        macos: "macOSのシステムファイル(__MACOSX/や.DS_Store)の削除",
       },
       frq: {
         title: "周波数表ファイル",

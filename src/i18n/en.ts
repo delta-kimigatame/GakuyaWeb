@@ -30,6 +30,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2025/12/29 Fixed a bug: Cannot generate zip if macOS system files are included in the zip",
       "2025/12/13 Added frequency table editing feature",
       "2025/11/16 Fixed a bug: The application does not work properly if an invalid character.txt is included.",
       "2025/11/09 Added Chinese UI\r\nAdded support for additional character encodings\r\nImproved frequency table generation performance",
@@ -60,6 +61,7 @@ export const translation_en = {
         uspec: "Delete UTAU voicebank cache files (*.uspec)",
         setparam: "Delete setParam cache files (oto.setParam-Scache)",
         vlabeler: "Delete vLabeler cache folders (*.lbp.caches/)",
+        macos: "Delete macOS system files (__MACOSX/ and .DS_Store)",
       },
       frq: {
         title: "Frequency Table Files",
