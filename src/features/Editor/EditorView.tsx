@@ -339,8 +339,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
             wav.RemoveDCOffset();
             Log.info(`${f}のDCoffsetを除去しました`, "EditorView");
           }
-          console.log(wav);
-          newZip.file(newFileName, wav.Output());
+          const wavOutput = wav.Output();
+          newZip.file(newFileName, wavOutput);
           Log.info(
             `${f}を${newFileName}としてzipに格納しました。`,
             "EditorView"
@@ -472,6 +472,13 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     // FRQカウンターをリセット
     setFrqCount(0);
     setGeneratedFrqCount(0);
+    
+    // 前回のzipUrlを解放
+    if (zipUrl !== "") {
+      URL.revokeObjectURL(zipUrl);
+      setZipUrl("");
+    }
+    
     const newZip = new JSZip();
     const newRootDir =
       rootDir === ""
@@ -479,17 +486,15 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
         : rootDir.split("/").slice(-1)[0];
     const world = new World();
     await world.Initialize();
+    
+    // filelist を一度だけ作成して共有
+    const filelist = Object.keys(props.zipFiles)
+      .filter((f) => f.startsWith(rootDir))
+      .sort();
+    
     Log.info(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
     Log.gtag("OutputZip");
-    ZipExtractBase(
-      newRootDir,
-      Object.keys(props.zipFiles)
-        .filter((f) => f.startsWith(rootDir))
-        .sort(),
-      0,
-      newZip,
-      world
-    );
+    ZipExtractBase(newRootDir, filelist, 0, newZip, world);
   };
 
   return (

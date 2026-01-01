@@ -30,6 +30,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2026/01/01 Fixed a bug: Memory consumption increases when generating voicebank packages",
       "2025/12/29 Fixed a bug: Cannot generate zip if macOS system files are included in the zip",
       "2025/12/13 Added frequency table editing feature",
       "2025/11/16 Fixed a bug: The application does not work properly if an invalid character.txt is included.",

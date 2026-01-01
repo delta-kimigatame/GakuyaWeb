@@ -26,6 +26,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2026/01/01 修复一个错误：生成音源包时内存消耗增加",
       "2025/12/29 修复一个错误：如果zip内包含macOS系统文件，无法生成zip文件",
       "2025/12/13 添加频率表编辑功能",
       "2025/11/16 修复一个错误：如果包含无效的character.txt，应用程序无法正常工作。",
