@@ -5,7 +5,9 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { Log } from "../../../lib/Logging";
-export const HeaderMenuClearCache: React.FC<HeaderMenuClearCacheProps> = (props) => {
+export const HeaderMenuClearCache: React.FC<HeaderMenuClearCacheProps> = (
+  props
+) => {
   const { t } = useTranslation();
   const handleClick = () => {
     Log.info("click", "HeaderMenuClearCache");
@@ -27,21 +29,22 @@ export const HeaderMenuClearCache: React.FC<HeaderMenuClearCacheProps> = (props)
       Log.info("キャッシュクリア${key}", "HeaderMenuClearCache");
     }
     Log.info("アプリのキャッシュクリア完了", "HeaderMenuClearCache");
+    window.location.reload();
     props.setMenuAnchor(null);
   };
   return (
     <>
-    <MenuItem onClick={handleClick}>
-      <ListItemIcon>
-      <CachedIcon />
-      </ListItemIcon>
-      <ListItemText>{t("menu.clearAppCache")}</ListItemText>
-    </MenuItem>
+      <MenuItem onClick={handleClick}>
+        <ListItemIcon>
+          <CachedIcon />
+        </ListItemIcon>
+        <ListItemText>{t("menu.clearAppCache")}</ListItemText>
+      </MenuItem>
     </>
   );
 };
 
-interface HeaderMenuClearCacheProps{
+interface HeaderMenuClearCacheProps {
   /**親メニューを閉じるために使用 */
   setMenuAnchor: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
 }

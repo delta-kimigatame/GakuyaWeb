@@ -30,6 +30,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2026/01/03 Measures against crashes when using browser's automatic translation feature",
       "2026/01/01 Fixed a bug: Memory consumption increases when generating voicebank packages",
       "2025/12/29 Fixed a bug: Cannot generate zip if macOS system files are included in the zip",
       "2025/12/13 Added frequency table editing feature",
