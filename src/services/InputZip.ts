@@ -328,3 +328,47 @@ export const GetCharacterYamlFilePaths = (
     .filter((path) => path.toLowerCase().endsWith("character.yaml"))
     .sort();
 };
+
+/**
+ * zip内のすべてのoto.iniファイルのパスを取得
+ * @param zipFiles zipデータ
+ * @returns oto.iniファイルのパス配列
+ */
+export const GetOtoIniFilePaths = (
+  zipFiles: {
+    [key: string]: JSZip.JSZipObject;
+  }
+): string[] => {
+  return Object.keys(zipFiles)
+    .filter((path) => path.toLowerCase().endsWith("oto.ini"))
+    .sort();
+};
+
+/**
+ * 指定されたパスのoto.iniを読み込む
+ * @param zipFiles zipデータ
+ * @param encoding 文字コード（デフォルト: "SJIS"）
+ * @param targetPath 読み込むoto.iniのパス
+ * @returns oto.iniの内容
+ */
+export const GetOtoIni = async (
+  zipFiles: {
+    [key: string]: JSZip.JSZipObject;
+  },
+  encoding: string = "SJIS",
+  targetPath: string
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    if (Object.keys(zipFiles).includes(targetPath)) {
+      Log.info(`oto.iniがみつかりました。${targetPath}`, "InputZip");
+      zipFiles[targetPath].async("arraybuffer").then(async (buf) => {
+        const txt = await FileReadAsync(buf, encoding);
+        Log.info(`oto.iniの読込完了 path=${targetPath}`, "InputZip");
+        resolve(txt);
+      });
+    } else {
+      Log.info(`oto.iniが見つかりません。${targetPath}`, "InputZip");
+      resolve("");
+    }
+  });
+};

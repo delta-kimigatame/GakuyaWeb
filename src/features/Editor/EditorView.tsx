@@ -28,6 +28,7 @@ import { Divider } from "@mui/material";
 import { CharacterYamlPanel } from "./CharacterYamlPanel";
 import { PrefixMapPanel } from "./PrefixMapPanel";
 import { FileCheckPanel } from "./FileCheckPanel";
+import { OtoIniPanel } from "./OtoIniPanel";
 import { FullWidthButton } from "../../components/Common/FullWidthButton";
 import { Wave } from "utauwav";
 import { GenerateFrq } from "../../lib/GenerateFrq";
@@ -42,6 +43,7 @@ import {
   ExtractPrefixMap,
   ExtractReadme,
   ExtractRootOto,
+  ExtractAllOtoIni,
   GetNewFileName,
 } from "../../services/OutputZip";
 import {
@@ -50,6 +52,8 @@ import {
   GetInstallTxt,
   GetPrefixMap,
   GetReadme,
+  GetOtoIni,
+  GetOtoIniFilePaths,
 } from "../../services/InputZip";
 import { FileList } from "../../components/Editor/FileCheck/FileList";
 
@@ -97,6 +101,11 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     React.useState<boolean>(false);
   const [prefixMapEncoding, setPrefixMapEncoding] = React.useState<string>("SJIS");
   const [prefixMapPath, setPrefixMapPath] = React.useState<string>("");
+  /** oto.ini */
+  const [otoEncodings, setOtoEncodings] = React.useState<Map<string, string>>(new Map());
+  const [selectedOtoPath, setSelectedOtoPath] = React.useState<string>("");
+  const [otoContent, setOtoContent] = React.useState<string>("");
+  const [otoUpdate, setOtoUpdate] = React.useState<boolean>(false);
   /** 音源ルート */
   const [rootDir, setRootDir] = React.useState<string | null>(null);
   /** ファイル一覧 */
@@ -270,6 +279,33 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
         setPrefixMaps(gcyr.maps);
       }
     }
+    
+    // oto.iniファイルの検出と初期化
+    const otoFiles = GetOtoIniFilePaths(props.zipFiles);
+    const newOtoEncodings = new Map<string, string>();
+    
+    for (const otoPath of otoFiles) {
+      // デフォルトエンコーディングはSJIS
+      newOtoEncodings.set(otoPath, "SJIS");
+    }
+    
+    setOtoEncodings(newOtoEncodings);
+    
+    // rootDir直下のoto.iniを自動選択
+    const defaultOtoPath = rootDir === "" ? "oto.ini" : rootDir + "/oto.ini";
+    if (otoFiles.includes(defaultOtoPath)) {
+      setSelectedOtoPath(defaultOtoPath);
+      const otoText = await GetOtoIni(props.zipFiles, "SJIS", defaultOtoPath);
+      setOtoContent(otoText);
+    } else if (otoFiles.length > 0) {
+      // rootDirにoto.iniがない場合、最初のファイルを選択
+      setSelectedOtoPath(otoFiles[0]);
+      const otoText = await GetOtoIni(props.zipFiles, "SJIS", otoFiles[0]);
+      setOtoContent(otoText);
+    } else {
+      setSelectedOtoPath("");
+      setOtoContent("");
+    }
   };
 
   React.useEffect(() => {
@@ -284,6 +320,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setReadmePath("");
       setPrefixMaps({});
       setPrefixMapPath("");
+      setOtoEncodings(new Map());
+      setSelectedOtoPath("");
+      setOtoContent("");
     } else {
       InputZip();
     }
@@ -512,8 +551,12 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       });
     }
   };
-  const ZipExtractMake = (newRootDir: string, newZip: JSZip) => {
-    const newZip7 = ExtractRootOto(newRootDir, newZip, flags.oto.root);
+  const ZipExtractMake = async (newRootDir: string, newZip: JSZip) => {
+    // oto.iniの文字コード変換（ExtractRootOtoより前に実行）
+    const newZip8 = otoUpdate 
+      ? await ExtractAllOtoIni(rootDir, newRootDir, otoEncodings, props.zipFiles, newZip)
+      : newZip;
+    const newZip7 = ExtractRootOto(newRootDir, newZip8, flags.oto.root);
     const newZip6 = ExtractCharacterTxt(
       newRootDir,
       characterUpdate,
@@ -667,9 +710,14 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 value={5}
               />
               <Tab
-                label={t("editor.frq_editor.title")}
+                label={t("editor.otoini.title")}
                 style={{ textTransform: "none" }}
                 value={6}
+              />
+              <Tab
+                label={t("editor.frq_editor.title")}
+                style={{ textTransform: "none" }}
+                value={7}
               />
             </Tabs>
             <TabPanel value={0} sx={{ p: 1 }}>
@@ -788,7 +836,25 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 }}
               />
             </TabPanel>
-            <TabPanel value={6} sx={{ p: 0 }}>
+            <TabPanel value={6} sx={{ p: 1 }}>
+              <OtoIniPanel
+                files={files}
+                otoEncodings={otoEncodings}
+                setOtoEncodings={setOtoEncodings}
+                selectedOtoPath={selectedOtoPath}
+                setSelectedOtoPath={setSelectedOtoPath}
+                otoContent={otoContent}
+                setOtoContent={setOtoContent}
+                update={otoUpdate}
+                setUpdate={setOtoUpdate}
+                onReload={async (path: string, encoding: string) => {
+                  Log.info(`oto.ini再読み込み: path=${path}, encoding=${encoding}`, "EditorView");
+                  const otoText = await GetOtoIni(props.zipFiles, encoding, path);
+                  setOtoContent(otoText);
+                }}
+              />
+            </TabPanel>
+            <TabPanel value={7} sx={{ p: 0 }}>
               {props.zipFiles && workerPool && rootDir && (
                 <FrqListView
                   zipFiles={props.zipFiles}

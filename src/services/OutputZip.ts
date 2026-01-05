@@ -5,6 +5,7 @@ import { Log } from "../lib/Logging";
 import { InstallTxt } from "../lib/InstallTxt";
 import { PrefixMap } from "../lib/PrefixMap";
 import { CharacterTxt } from "../lib/CharacterTxt";
+import { FileReadAsync } from "./FileReadAsync";
 
 /**
  * Install.txtをzip内に生成する処理
@@ -370,6 +371,49 @@ export const ExtractRootOto = (
       `空のoto.iniを作成し、${newRootDir + "/oto.ini"}に格納しました。`,
       "OutputZip"
     );
+  }
+  return newZip;
+};
+
+/**
+ * 複数のoto.iniをzip内に生成する処理（文字コード変換）
+ * @param oldRootDir 元のzip内における音源ルートへの相対パス
+ * @param newRootDir 新しいzip内における音源ルートへの相対パス
+ * @param otoEncodings 各oto.iniのパスとエンコーディングのマップ
+ * @param zipFiles 元のzipファイル
+ * @param newZip 生成先のzip
+ * @returns 生成先のzip
+ */
+export const ExtractAllOtoIni = async (
+  oldRootDir: string,
+  newRootDir: string,
+  otoEncodings: Map<string, string>,
+  zipFiles: { [key: string]: JSZip.JSZipObject },
+  newZip: JSZip
+): Promise<JSZip> => {
+  for (const [oldPath, encoding] of otoEncodings.entries()) {
+    if (Object.keys(zipFiles).includes(oldPath)) {
+      // 元のパスから新しいパスを計算
+      const newPath = oldPath.replace(oldRootDir, newRootDir);
+      
+      // oto.iniを指定エンコーディングで読み込み
+      const buf = await zipFiles[oldPath].async("arraybuffer");
+      const txt = await FileReadAsync(buf, encoding);
+      
+      // Shift-JIS（Windows-31j）で書き出し
+      const encodingName = encoding === "SJIS" ? "Windows-31j" : encoding;
+      const o_output = new File(
+        [iconv.encode(txt.replace(/\n/g, "\r\n"), "Windows-31j")],
+        "oto.ini",
+        { type: "text/plane;charset=shift-jis" }
+      );
+      
+      newZip.file(newPath, o_output);
+      Log.info(
+        `${newPath}をzipに格納しました（encoding: ${encoding} -> SJIS）`,
+        "OutputZip"
+      );
+    }
   }
   return newZip;
 };
