@@ -14,9 +14,17 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
   const { t } = useTranslation();
   /** zip内の立ち絵をdataurlに変換したもの */
   const [portraitUrl, setPortaitUrl] = React.useState<string>("");
+  
+  // character.yamlが置かれているディレクトリを取得
+  const characterYamlDir = React.useMemo(() => {
+    return props.characterYamlPath 
+      ? props.characterYamlPath.substring(0, props.characterYamlPath.lastIndexOf("/"))
+      : props.rootDir;
+  }, [props.characterYamlPath, props.rootDir]);
+  
   const loadPotrait = (value: string) => {
     const samplePath =
-      props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
+      characterYamlDir + (characterYamlDir !== "" ? "/" : "") + value;
     Log.info(
       `character.yamlに基づき立ち絵load ${samplePath}`,
       "CharacterYamlPanel"
@@ -41,7 +49,7 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
         setPortaitUrl("");
       }
     }
-  }, [props.files, props.hasCharacterYaml]);
+  }, [props.files, props.hasCharacterYaml, props.characterYamlPath, props.characterYaml.portrait]);
 
   /** サンプル音声が変更された際の処理 */
   const OnChangePortait = (e: SelectChangeEvent) => {
@@ -76,16 +84,15 @@ export const PortraitSelect: React.FC<PortraitSelectProps> = (props) => {
           {t("editor.characterYaml.PortraitUpload")}
         </MenuItem>
         {props.files
-          .filter((f) => f.startsWith(props.rootDir) && f.endsWith(".png"))
-          .map((f) => (
-            <MenuItem
-              value={
-                props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")
-              }
-            >
-              {props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")}
-            </MenuItem>
-          ))}
+          .filter((f) => f.startsWith(characterYamlDir) && f.endsWith(".png"))
+          .map((f) => {
+            const relativePath = characterYamlDir === "" ? f : f.replace(characterYamlDir + "/", "");
+            return (
+              <MenuItem key={f} value={relativePath}>
+                {relativePath}
+              </MenuItem>
+            );
+          })}
       </FullWidthSelect>
       {props.characterYaml.portrait !== "upload" &&
         props.characterYaml.portrait !== "" &&
@@ -140,6 +147,8 @@ export interface PortraitSelectProps {
   update: boolean;
   /** 立ち絵のアップロード */
   setPortraitBuf: React.Dispatch<React.SetStateAction<ArrayBuffer>>;
+  /** 選択されているcharacter.yamlのパス */
+  characterYamlPath: string;
 }
 
 interface CharacterYaml {

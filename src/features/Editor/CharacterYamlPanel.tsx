@@ -204,6 +204,7 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
             setCharacterYaml={props.setCharacterYaml}
             update={props.update}
             setPortraitBuf={props.setPortraitBuf}
+            characterYamlPath={props.characterYamlPath}
           />
           {props.characterYaml.portrait && (
             <>

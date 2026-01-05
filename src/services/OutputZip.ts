@@ -213,6 +213,8 @@ export const ExtractCharacterYaml = (
  * @param newZip 生成先のzip
  * @param iconBuf アイコンをアップロードした際のデータ
  * @param sampleBuf サンプル音声をアップロードした際のデータ
+ * @param selectedPath 選択されているcharacter.txtのパス
+ * @param zipFiles 元のzipファイル（icon/sample参照用）
  * @returns 生成先のzip
  */
 export const ExtractCharacterTxt = (
@@ -221,7 +223,9 @@ export const ExtractCharacterTxt = (
   character: CharacterTxt,
   newZip: JSZip,
   iconBuf: ArrayBuffer,
-  sampleBuf: ArrayBuffer
+  sampleBuf: ArrayBuffer,
+  selectedPath?: string,
+  zipFiles?: { [key: string]: JSZip.JSZipObject }
 ): JSZip => {
   if (characterUpdate || !(newRootDir + "/character.txt" in newZip.files)) {
     const c = {
@@ -240,6 +244,40 @@ export const ExtractCharacterTxt = (
         `${newRootDir + "/" + iconPath}をzipに格納しました。`,
         "OutputZip"
       );
+    } else if (
+      character.image &&
+      character.image !== "upload" &&
+      selectedPath &&
+      zipFiles
+    ) {
+      // 既存のiconがある場合、パスを新しいrootDirからの相対パスに変換
+      const selectedDir = selectedPath.substring(0, selectedPath.lastIndexOf("/"));
+      const iconRelativePath = character.image;
+      
+      // selectedDir相対のiconの絶対パスを構築
+      let iconAbsolutePath: string;
+      if (iconRelativePath.startsWith("/") || iconRelativePath.includes(":")) {
+        // 絶対パスの場合はそのまま
+        iconAbsolutePath = iconRelativePath;
+      } else {
+        // 相対パスの場合はselectedDirからの相対パス
+        iconAbsolutePath = selectedDir ? selectedDir + "/" + iconRelativePath : iconRelativePath;
+      }
+      
+      // iconの絶対パスからnewRootDirへの相対パスを計算
+      if (Object.keys(zipFiles).includes(iconAbsolutePath)) {
+        const newIconPath = GetRelativePath(newRootDir, iconAbsolutePath);
+        c.image = newIconPath;
+        Log.info(
+          `icon参照を${iconRelativePath}から${newIconPath}に変更しました。`,
+          "OutputZip"
+        );
+      } else {
+        Log.warn(
+          `icon画像が見つかりません: ${iconAbsolutePath}`,
+          "OutputZip"
+        );
+      }
     }
     if (character.sample === "upload") {
       const samplePath = GetAddFilePath(newRootDir, newZip, "sample", "wav");
@@ -249,6 +287,40 @@ export const ExtractCharacterTxt = (
         `${newRootDir + "/" + samplePath}をzipに格納しました。`,
         "OutputZip"
       );
+    } else if (
+      character.sample &&
+      character.sample !== "upload" &&
+      selectedPath &&
+      zipFiles
+    ) {
+      // 既存のsampleがある場合、パスを新しいrootDirからの相対パスに変換
+      const selectedDir = selectedPath.substring(0, selectedPath.lastIndexOf("/"));
+      const sampleRelativePath = character.sample;
+      
+      // selectedDir相対のsampleの絶対パスを構築
+      let sampleAbsolutePath: string;
+      if (sampleRelativePath.startsWith("/") || sampleRelativePath.includes(":")) {
+        // 絶対パスの場合はそのまま
+        sampleAbsolutePath = sampleRelativePath;
+      } else {
+        // 相対パスの場合はselectedDirからの相対パス
+        sampleAbsolutePath = selectedDir ? selectedDir + "/" + sampleRelativePath : sampleRelativePath;
+      }
+      
+      // sampleの絶対パスからnewRootDirへの相対パスを計算
+      if (Object.keys(zipFiles).includes(sampleAbsolutePath)) {
+        const newSamplePath = GetRelativePath(newRootDir, sampleAbsolutePath);
+        c.sample = newSamplePath;
+        Log.info(
+          `sample参照を${sampleRelativePath}から${newSamplePath}に変更しました。`,
+          "OutputZip"
+        );
+      } else {
+        Log.warn(
+          `sample音声が見つかりません: ${sampleAbsolutePath}`,
+          "OutputZip"
+        );
+      }
     }
     const c_output = new File(
       [iconv.encode(new CharacterTxt(c).OutputTxt(), "Windows-31j")],
@@ -261,6 +333,19 @@ export const ExtractCharacterTxt = (
       "OutputZip"
     );
   }
+  
+  // rootDir以外のcharacter.txtを削除
+  const rootCharacterTxtPath = newRootDir + "/character.txt";
+  Object.keys(newZip.files).forEach((filePath) => {
+    if (filePath.toLowerCase().endsWith("character.txt") && filePath !== rootCharacterTxtPath) {
+      newZip.remove(filePath);
+      Log.info(
+        `rootDir以外のcharacter.txtを削除しました: ${filePath}`,
+        "OutputZip"
+      );
+    }
+  });
+  
   return newZip;
 };
 

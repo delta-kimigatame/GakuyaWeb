@@ -148,6 +148,10 @@ export const translation_zh = {
       Voice: "声音提供者",
       DefaultPhonemizer: "为日语音源设置音素化器",
     },
+    characterTxt: {
+      encoding: "字符编码",
+      selectFile: "选择character.txt文件",
+    },
     readme: {
       title: "说明书·使用条款",
       check: "创建或更新readme.txt",

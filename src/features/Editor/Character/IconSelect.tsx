@@ -15,8 +15,16 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
   const { t } = useTranslation();
   /** zip内のアイコン画像をdataurlに変換したもの */
   const [iconUrl, setIconUrl] = React.useState<string>("");
+  
+  // character.txtが置かれているディレクトリを取得
+  const characterTxtDir = React.useMemo(() => {
+    return props.characterTxtPath 
+      ? props.characterTxtPath.substring(0, props.characterTxtPath.lastIndexOf("/"))
+      : props.rootDir;
+  }, [props.characterTxtPath, props.rootDir]);
+  
   const loadIcon = (value: string) => {
-    const imagePath = props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
+    const imagePath = characterTxtDir + (characterTxtDir !== "" ? "/" : "") + value;
     Log.info(
       `character.txtに基づきアイコン画像load ${imagePath}`,
       "CharacterPanel"
@@ -38,7 +46,7 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
         setIconUrl("");
       }
     }
-  }, [props.files, props.hasCharacterTxt]);
+  }, [props.files, props.hasCharacterTxt, props.characterTxtPath, props.characterTxt.image]);
 
   /** アイコン画像が変更された際の処理 */
   const OnChangeImage = (e: SelectChangeEvent) => {
@@ -82,21 +90,20 @@ export const IconSelect: React.FC<IconSelectProps> = (props) => {
         {props.files
           .filter(
             (f) =>
-              f.startsWith(props.rootDir) &&
+              f.startsWith(characterTxtDir) &&
               (f.endsWith(".bmp") ||
                 f.endsWith(".gif") ||
                 f.endsWith(".jpg") ||
                 f.endsWith(".jpeg"))
           )
-          .map((f) => (
-            <MenuItem
-              value={
-                props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")
-              }
-            >
-              {props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")}
-            </MenuItem>
-          ))}
+          .map((f) => {
+            const relativePath = characterTxtDir === "" ? f : f.replace(characterTxtDir + "/", "");
+            return (
+              <MenuItem key={f} value={relativePath}>
+                {relativePath}
+              </MenuItem>
+            );
+          })}
       </FullWidthSelect>
       {props.characterTxt.image !== "upload" &&
         props.characterTxt.image !== "" &&
@@ -134,4 +141,6 @@ export interface IconSelectProps {
   characterTxtUpdate: boolean;
   /** アイコンアップロード */
   setIconBuf: React.Dispatch<React.SetStateAction<ArrayBuffer>>;
+  /** 選択されているcharacter.txtのパス */
+  characterTxtPath: string;
 }

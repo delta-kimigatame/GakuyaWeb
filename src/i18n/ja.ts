@@ -154,6 +154,10 @@ export const translation_ja = {
       Voice: "音声提供者",
       DefaultPhonemizer: "日本語音源向けPhonemizerを設定する",
     },
+    characterTxt: {
+      encoding: "文字コード",
+      selectFile: "character.txtファイルを選択",
+    },
     readme: {
       title: "説明書・利用規約",
       check: "readme.txtを作成・更新する",

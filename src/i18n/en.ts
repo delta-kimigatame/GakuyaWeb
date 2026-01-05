@@ -156,6 +156,10 @@ export const translation_en = {
       Voice: "Voice Provider",
       DefaultPhonemizer: "Setting Phonemizer for jp VoiceBanks.",
     },
+    characterTxt: {
+      encoding: "Encoding",
+      selectFile: "Select character.txt file",
+    },
     readme: {
       title: "Readme & Terms of Use",
       check: "Create or update readme.txt",

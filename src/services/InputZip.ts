@@ -60,6 +60,8 @@ export const GetInstallTxt = async (
  * @param rootDir zip内における音源ルートへの相対パス
  * @param zipFileName zipのファイル名
  * @param zipFiles zipデータ
+ * @param encoding 文字コード（デフォルト: "SJIS"）
+ * @param targetPath 読み込むcharacter.txtのパス（省略時はrootDir/character.txt）
  * @returns Character.txtの値と更新要否のタプル
  */
 export const GetCharacterTxt = async (
@@ -67,17 +69,22 @@ export const GetCharacterTxt = async (
   zipFileName: string,
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
-  }
+  },
+  encoding: string = "SJIS",
+  targetPath?: string
 ): Promise<{ value: CharacterTxt; update: boolean }> => {
-  const targetPath =
-    rootDir === "" ? "character.txt" : rootDir + "/character.txt";
+  const characterTxtPath = targetPath
+    ? targetPath
+    : rootDir === ""
+    ? "character.txt"
+    : rootDir + "/character.txt";
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.info(`character.txtがみつかりました。${targetPath}`, "EditorView");
-      zipFiles[targetPath]
+    if (Object.keys(zipFiles).includes(characterTxtPath)) {
+      Log.info(`character.txtがみつかりました。${characterTxtPath}`, "EditorView");
+      zipFiles[characterTxtPath]
         .async("arraybuffer")
         .then(async (buf) => {
-          const txt = await FileReadAsync(buf);
+          const txt = await FileReadAsync(buf, encoding);
           const value = new CharacterTxt({ txt: txt });
           Log.info(`character.txtの読込完了 name=${value.name}`, "EditorView");
           resolve({ value: value, update: false });
@@ -121,6 +128,19 @@ export const GetCharacterTxt = async (
       });
     }
   });
+};
+
+/**
+ * zipファイル内のcharacter.txtファイルのパスリストを取得
+ * @param zipFiles zipデータ
+ * @returns character.txtファイルのパスの配列
+ */
+export const GetCharacterTxtFilePaths = (
+  zipFiles: { [key: string]: JSZip.JSZipObject }
+): string[] => {
+  return Object.keys(zipFiles).filter((f) =>
+    f.toLowerCase().endsWith("character.txt")
+  );
 };
 
 /**

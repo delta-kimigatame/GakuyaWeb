@@ -15,9 +15,17 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
   const { t } = useTranslation();
   /** zip内のサンプル音声をdataurlに変換したもの */
   const [sampleUrl, setSampleUrl] = React.useState<string>("");
+  
+  // character.txtが置かれているディレクトリを取得
+  const characterTxtDir = React.useMemo(() => {
+    return props.characterTxtPath 
+      ? props.characterTxtPath.substring(0, props.characterTxtPath.lastIndexOf("/"))
+      : props.rootDir;
+  }, [props.characterTxtPath, props.rootDir]);
+  
   const loadWav = (value: string) => {
     const samplePath =
-      props.rootDir + (props.rootDir !== "" ? "/" : "") + value;
+      characterTxtDir + (characterTxtDir !== "" ? "/" : "") + value;
     Log.info(
       `character.txtに基づきサンプル音声load ${samplePath}`,
       "CharacterPanel"
@@ -42,7 +50,7 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
         setSampleUrl("");
       }
     }
-  }, [props.files, props.hasCharacterTxt]);
+  }, [props.files, props.hasCharacterTxt, props.characterTxtPath, props.characterTxt.sample]);
 
   /** サンプル音声が変更された際の処理 */
   const OnChangeSample = (e: SelectChangeEvent) => {
@@ -84,16 +92,15 @@ export const SampleWavSelect: React.FC<SampleWavSelectProps> = (props) => {
           {t("editor.character.field.uploadSample")}
         </MenuItem>
         {props.files
-          .filter((f) => f.startsWith(props.rootDir) && f.endsWith(".wav"))
-          .map((f) => (
-            <MenuItem
-              value={
-                props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")
-              }
-            >
-              {props.rootDir === "" ? f : f.replace(props.rootDir + "/", "")}
-            </MenuItem>
-          ))}
+          .filter((f) => f.startsWith(characterTxtDir) && f.endsWith(".wav"))
+          .map((f) => {
+            const relativePath = characterTxtDir === "" ? f : f.replace(characterTxtDir + "/", "");
+            return (
+              <MenuItem key={f} value={relativePath}>
+                {relativePath}
+              </MenuItem>
+            );
+          })}
       </FullWidthSelect>
       {props.characterTxt.sample !== "upload" &&
         props.characterTxt.sample !== "" &&
@@ -131,4 +138,6 @@ export interface SampleWavSelectProps {
   characterTxtUpdate: boolean;
   /** サンプル音声のアップロード */
   setSampleBuf: React.Dispatch<React.SetStateAction<ArrayBuffer>>;
+  /** 選択されているcharacter.txtのパス */
+  characterTxtPath: string;
 }

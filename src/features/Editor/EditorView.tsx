@@ -71,6 +71,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [character, setCharacter] = React.useState<CharacterTxt | null>(null);
   const [characterUpdate, setCharacterUpdate] = React.useState<boolean>(false);
   const [characterForceUpdate, setCharacterForceUpdate] = React.useState<boolean>(false);
+  const [characterTxtEncoding, setCharacterTxtEncoding] = React.useState<string>("SJIS");
+  const [characterTxtPath, setCharacterTxtPath] = React.useState<string>("");
   /** icon画像 */
   const [iconBuf, setIconBuf] = React.useState<ArrayBuffer>();
   /** sample音声 */
@@ -178,14 +180,33 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       props.zipFiles
     );
     setInstall(install);
-    const gcr = await GetCharacterTxt(
-      rootDir,
-      props.zipFileName,
-      props.zipFiles
-    );
-    setCharacter(gcr.value);
-    setCharacterUpdate(gcr.update);
-    setCharacterForceUpdate(gcr.update);
+    
+    // character.txtの自動選択
+    const defaultCharacterTxtPath = rootDir === "" ? "character.txt" : rootDir + "/character.txt";
+    if (Object.keys(props.zipFiles).includes(defaultCharacterTxtPath)) {
+      setCharacterTxtPath(defaultCharacterTxtPath);
+      const gcr = await GetCharacterTxt(
+        rootDir,
+        props.zipFileName,
+        props.zipFiles,
+        characterTxtEncoding,
+        defaultCharacterTxtPath
+      );
+      setCharacter(gcr.value);
+      setCharacterUpdate(gcr.update);
+      setCharacterForceUpdate(gcr.update);
+    } else {
+      setCharacterTxtPath("");
+      const gcr = await GetCharacterTxt(
+        rootDir,
+        props.zipFileName,
+        props.zipFiles,
+        characterTxtEncoding
+      );
+      setCharacter(gcr.value);
+      setCharacterUpdate(gcr.update);
+      setCharacterForceUpdate(gcr.update);
+    }
     
     // rootDirが変更されるたびにreadme.txtの選択を再評価
     const defaultReadmePath = rootDir === "" ? "readme.txt" : rootDir + "/readme.txt";
@@ -258,6 +279,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setCharacter(null);
       setCharacterYaml(null);
       setCharacterYamlPath("");
+      setCharacterTxtPath("");
       setReadme("");
       setReadmePath("");
       setPrefixMaps({});
@@ -498,7 +520,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       character,
       newZip7,
       iconBuf,
-      sampleBuf
+      sampleBuf,
+      characterTxtPath,
+      props.zipFiles
     );
     const newZip5 = ExtractCharacterYaml(
       newRootDir,
@@ -674,6 +698,26 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setCharacterTxtUpdate={setCharacterUpdate}
                 setIconBuf={setIconBuf}
                 setSampleBuf={setSampleBuf}
+                characterTxtPath={characterTxtPath}
+                setCharacterTxtPath={setCharacterTxtPath}
+                characterTxtEncoding={characterTxtEncoding}
+                setCharacterTxtEncoding={setCharacterTxtEncoding}
+                onReload={async (path?: string, encoding?: string) => {
+                  const actualPath = path || characterTxtPath;
+                  const actualEncoding = encoding || characterTxtEncoding;
+                  setCharacterTxtPath(actualPath);
+                  setCharacterTxtEncoding(actualEncoding);
+                  const gcr = await GetCharacterTxt(
+                    rootDir,
+                    props.zipFileName,
+                    props.zipFiles,
+                    actualEncoding,
+                    actualPath
+                  );
+                  setCharacter(gcr.value);
+                  setCharacterUpdate(gcr.update);
+                  setCharacterForceUpdate(gcr.update);
+                }}
               />
               <Divider />
               <CharacterYamlPanel
@@ -689,6 +733,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setCharacterYamlPath={setCharacterYamlPath}
                 onReload={async (path: string) => {
                   Log.info(`character.yaml再読み込み: path=${path}`, "EditorView");
+                  setCharacterYamlPath(path);
                   const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, prefixMapPath);
                   const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, path);
                   setCharacterYaml(gcyr.yaml);
