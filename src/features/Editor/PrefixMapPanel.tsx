@@ -10,6 +10,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { CommonCheckBox } from "../../components/Common/CommonCheckBox";
 import { FullWidthSelect } from "../../components/Common/FullWidthSelect";
+import { EncodeSelect } from "../Common/EncodeSelect";
 
 import { PrefixMap, NoteNumToTone } from "../../lib/PrefixMap";
 import { Log } from "../../lib/Logging";
@@ -43,10 +44,10 @@ export const PrefixMapPanel: React.FC<PrefixMapPanelProps> = (props) => {
   /**
    * エンコーディング変更時の処理
    */
-  const onEncodingChange = (e: SelectChangeEvent) => {
-    props.setPrefixMapEncoding(e.target.value);
+  const onEncodingChange = (encoding: string) => {
+    props.setPrefixMapEncoding(encoding);
     if (props.onReload) {
-      props.onReload(props.prefixMapPath, e.target.value);
+      props.onReload(props.prefixMapPath, encoding);
     }
   };
 
@@ -103,19 +104,12 @@ export const PrefixMapPanel: React.FC<PrefixMapPanelProps> = (props) => {
       )}
 
       {/* エンコーディング選択セレクトボックス */}
-      <FullWidthSelect
+      <EncodeSelect
         label={t("editor.prefixmap.encoding")}
         value={props.prefixMapEncoding}
         onChange={onEncodingChange}
         disabled={!props.update}
-      >
-        <MenuItem value="SJIS">Shift-JIS</MenuItem>
-        <MenuItem value="utf-8">UTF-8</MenuItem>
-        <MenuItem value="gb18030">GB18030</MenuItem>
-        <MenuItem value="gbk">GBK</MenuItem>
-        <MenuItem value="big5">BIG5</MenuItem>
-        <MenuItem value="windows-1252">WINDOWS-1252</MenuItem>
-      </FullWidthSelect>
+      />
       <br />
 
       {Object.keys(props.prefixMaps).length !== 0 && (

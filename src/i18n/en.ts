@@ -4,6 +4,9 @@ export const translation_en = {
     en: "EN",
     zh: "ZH",
   },
+  common: {
+    encoding: "Encoding",
+  },
   menu: {
     toDarkMode: "to Dark Mode",
     toLightMode: "to Light Mode",

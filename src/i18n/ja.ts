@@ -4,6 +4,9 @@ export const translation_ja = {
     en: "英語",
     zh: "中文",
   },
+  common: {
+    encoding: "文字コード",
+  },
   menu: {
     toDarkMode: "ダークモードにする",
     toLightMode: "ライトモードにする",

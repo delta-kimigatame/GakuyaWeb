@@ -9,6 +9,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { CommonCheckBox } from "../../components/Common/CommonCheckBox";
 import { FullWidthSelect } from "../../components/Common/FullWidthSelect";
+import { EncodeSelect } from "../Common/EncodeSelect";
 
 /**
  * readmeを編集する画面
@@ -21,10 +22,10 @@ export const ReadMePanel: React.FC<ReadMePanelProps> = (props) => {
   /**
    * エンコーディング変更時の処理
    */
-  const onEncodingChange = (e: SelectChangeEvent) => {
-    props.setReadmeEncoding(e.target.value);
+  const onEncodingChange = (encoding: string) => {
+    props.setReadmeEncoding(encoding);
     if (props.onReload) {
-      props.onReload(props.readmePath, e.target.value);
+      props.onReload(props.readmePath, encoding);
     }
   };
 
@@ -79,19 +80,12 @@ export const ReadMePanel: React.FC<ReadMePanelProps> = (props) => {
       )}
 
       {/* エンコーディング選択セレクトボックス */}
-      <FullWidthSelect
+      <EncodeSelect
         label={t("editor.readme.encoding")}
         value={props.readmeEncoding}
         onChange={onEncodingChange}
         disabled={!props.update}
-      >
-        <MenuItem value="SJIS">Shift-JIS</MenuItem>
-        <MenuItem value="utf-8">UTF-8</MenuItem>
-        <MenuItem value="gb18030">GB18030</MenuItem>
-        <MenuItem value="gbk">GBK</MenuItem>
-        <MenuItem value="big5">BIG5</MenuItem>
-        <MenuItem value="windows-1252">WINDOWS-1252</MenuItem>
-      </FullWidthSelect>
+      />
       <br />
 
       <TextField

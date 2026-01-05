@@ -4,6 +4,9 @@ export const translation_zh = {
     en: "英语",
     zh: "中文",
   },
+  common: {
+    encoding: "字符编码",
+  },
   menu: {
     toDarkMode: "切换到深色模式",
     toLightMode: "切换到浅色模式",
