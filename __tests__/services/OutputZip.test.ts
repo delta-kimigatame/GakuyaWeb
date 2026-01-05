@@ -11,7 +11,8 @@ import {
   GetAddFilePath,
   ExtractCharacterTxt,
   ExtractRootOto,
-  GetNewFileName
+  GetNewFileName,
+  ExtractAllOtoIni,
 } from "../../src/services/OutputZip";
 import { InstallTxt, InstallTxtValue } from "../../src/lib/InstallTxt";
 import { PrefixMap } from "../../src/lib/PrefixMap";
@@ -607,4 +608,162 @@ describe("OutputZip", () => {
     expect(GetNewFileName("","test","root/a.wav")).toBe("test/root/a.wav")
     expect(GetNewFileName("","test","a.wav")).toBe("test/a.wav")
   })
+
+  describe("ExtractAllOtoIni", () => {
+    it("複数oto.iniの一括変換_SJIS to UTF-8", async () => {
+      const z = new JSZip();
+      const content1 = "あ.wav=あ,0,100,50,0,0";
+      const content2 = "い.wav=い,0,100,50,0,0";
+      
+      z.file("root/oto.ini", iconv.encode(content1, "Windows-31j"));
+      z.file("root/sub/oto.ini", iconv.encode(content2, "Windows-31j"));
+
+      const otoEncodings = new Map<string, string>();
+      otoEncodings.set("root/oto.ini", "SJIS");
+      otoEncodings.set("root/sub/oto.ini", "SJIS");
+
+      const newZip = await ExtractAllOtoIni(
+        "root",
+        "newroot",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      expect("newroot/oto.ini" in newZip.files).toBeTruthy();
+      expect("newroot/sub/oto.ini" in newZip.files).toBeTruthy();
+
+      const buf1 = await newZip.files["newroot/oto.ini"].async("arraybuffer");
+      const txt1 = await FileReadAsync(buf1, "Windows-31j");
+      expect(txt1).toBe(content1);
+
+      const buf2 = await newZip.files["newroot/sub/oto.ini"].async("arraybuffer");
+      const txt2 = await FileReadAsync(buf2, "Windows-31j");
+      expect(txt2).toBe(content2);
+    });
+
+    it("エンコーディングマップに基づく変換", async () => {
+      const z = new JSZip();
+      const contentSjis = "あ.wav=あ,0,100,50,0,0";
+      const contentGbk = "测试.wav=测试,0,100,50,0,0";
+
+      z.file("root/oto.ini", iconv.encode(contentSjis, "Windows-31j"));
+      z.file("root/sub/oto.ini", iconv.encode(contentGbk, "gbk"));
+
+      const otoEncodings = new Map<string, string>();
+      otoEncodings.set("root/oto.ini", "SJIS");
+      otoEncodings.set("root/sub/oto.ini", "gbk");
+
+      const newZip = await ExtractAllOtoIni(
+        "root",
+        "newroot",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      const buf1 = await newZip.files["newroot/oto.ini"].async("arraybuffer");
+      const txt1 = await FileReadAsync(buf1, "Windows-31j");
+      expect(txt1).toBe(contentSjis);
+
+      // GBKの中国語文字はShift-JISで表現できないため、
+      // 正しく変換できるかはiconv-liteの実装依存。
+      // ここでは少なくともファイルが作成されていることを確認
+      const buf2 = await newZip.files["newroot/sub/oto.ini"].async("arraybuffer");
+      expect(buf2).toBeDefined();
+      const txt2 = await FileReadAsync(buf2, "Windows-31j");
+      // 文字化けするが、何らかのテキストが返ってくることを確認
+      expect(txt2.length).toBeGreaterThan(0);
+    });
+
+    it("oldRootDirとnewRootDirのパス変換", async () => {
+      const z = new JSZip();
+      const content = "a.wav=a,0,100,50,0,0";
+
+      z.file("olddir/oto.ini", iconv.encode(content, "Windows-31j"));
+      z.file("olddir/sub/oto.ini", iconv.encode(content, "Windows-31j"));
+
+      const otoEncodings = new Map<string, string>();
+      otoEncodings.set("olddir/oto.ini", "SJIS");
+      otoEncodings.set("olddir/sub/oto.ini", "SJIS");
+
+      const newZip = await ExtractAllOtoIni(
+        "olddir",
+        "newdir",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      expect("newdir/oto.ini" in newZip.files).toBeTruthy();
+      expect("newdir/sub/oto.ini" in newZip.files).toBeTruthy();
+      expect("olddir/oto.ini" in newZip.files).toBeFalsy();
+    });
+
+    it("存在しないパスはスキップ", async () => {
+      const z = new JSZip();
+      const content = "a.wav=a,0,100,50,0,0";
+
+      z.file("root/oto.ini", iconv.encode(content, "Windows-31j"));
+
+      const otoEncodings = new Map<string, string>();
+      otoEncodings.set("root/oto.ini", "SJIS");
+      otoEncodings.set("root/notfound/oto.ini", "SJIS");
+
+      const newZip = await ExtractAllOtoIni(
+        "root",
+        "newroot",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      expect("newroot/oto.ini" in newZip.files).toBeTruthy();
+      expect("newroot/notfound/oto.ini" in newZip.files).toBeFalsy();
+    });
+
+    it("ルートディレクトリが空文字の場合", async () => {
+      const z = new JSZip();
+      const content = "a.wav=a,0,100,50,0,0";
+
+      z.file("oto.ini", iconv.encode(content, "Windows-31j"));
+
+      const otoEncodings = new Map<string, string>();
+      otoEncodings.set("oto.ini", "SJIS");
+
+      const newZip = await ExtractAllOtoIni(
+        "",
+        "newroot",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      expect("newroot/oto.ini" in newZip.files).toBeTruthy();
+
+      const buf = await newZip.files["newroot/oto.ini"].async("arraybuffer");
+      const txt = await FileReadAsync(buf, "Windows-31j");
+      expect(txt).toBe(content);
+    });
+
+    it("エンコーディングマップが空の場合", async () => {
+      const z = new JSZip();
+      const content = "a.wav=a,0,100,50,0,0";
+
+      z.file("root/oto.ini", iconv.encode(content, "Windows-31j"));
+
+      const otoEncodings = new Map<string, string>();
+
+      const newZip = await ExtractAllOtoIni(
+        "root",
+        "newroot",
+        otoEncodings,
+        z.files,
+        new JSZip()
+      );
+
+      // エンコーディングマップに含まれないファイルは処理されない
+      expect("newroot/oto.ini" in newZip.files).toBeFalsy();
+    });
+  });
 });

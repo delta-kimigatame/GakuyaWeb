@@ -138,9 +138,9 @@ export const GetCharacterTxt = async (
 export const GetCharacterTxtFilePaths = (
   zipFiles: { [key: string]: JSZip.JSZipObject }
 ): string[] => {
-  return Object.keys(zipFiles).filter((f) =>
-    f.toLowerCase().endsWith("character.txt")
-  );
+  return Object.keys(zipFiles)
+    .filter((f) => f.toLowerCase().endsWith("character.txt"))
+    .sort();
 };
 
 /**
@@ -204,10 +204,10 @@ export const GetPrefixMap = async (
   },
   encoding: string = "SJIS",
   targetPath?: string
-): Promise<{ string?: PrefixMap }> => {
+): Promise<{ [key: string]: PrefixMap }> => {
   const path = targetPath || (rootDir === "" ? "prefix.map" : rootDir + "/prefix.map");
   return new Promise((resolve, reject) => {
-    let maps = {};
+    let maps: { [key: string]: PrefixMap } = {};
     if (Object.keys(zipFiles).includes(path)) {
       Log.info(`prefix.mapがみつかりました。${path}`, "EditorView");
       zipFiles[path].async("arraybuffer").then(async (buf) => {

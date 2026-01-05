@@ -394,7 +394,7 @@ export const ExtractAllOtoIni = async (
   for (const [oldPath, encoding] of otoEncodings.entries()) {
     if (Object.keys(zipFiles).includes(oldPath)) {
       // 元のパスから新しいパスを計算
-      const newPath = oldPath.replace(oldRootDir, newRootDir);
+      const newPath = GetNewFileName(oldRootDir, newRootDir, oldPath);
       
       // oto.iniを指定エンコーディングで読み込み
       const buf = await zipFiles[oldPath].async("arraybuffer");
