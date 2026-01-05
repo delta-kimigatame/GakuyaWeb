@@ -145,6 +145,7 @@ export const translation_ja = {
       description:
         "OpenUtau向けの追加設定です。(自動でsinger_type=utauとなります)",
       check: "character.yamlを作成・更新する",
+      selectFile: "character.yamlファイルを選択",
       TextFileEncoding: "文字コードを表示する(shift-jis)",
       Portrait: "立ち絵イラスト",
       PortraitUpload: "zip外の画像を選択(png)",

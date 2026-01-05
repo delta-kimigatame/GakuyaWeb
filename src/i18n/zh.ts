@@ -140,8 +140,7 @@ export const translation_zh = {
     },
     characterYaml: {
       description: "OpenUtau的附加设置（自动设为singer_type=utau）",
-      check: "创建或更新character.yaml",
-      TextFileEncoding: "显示字符编码(shift-jis)",
+      check: "创建或更新character.yaml",      selectFile: "选择character.yaml文件",      TextFileEncoding: "显示字符编码(shift-jis)",
       Portrait: "立绘插图",
       PortraitUpload: "选择zip外的图像(png)",
       PortraitOpacity: "立绘透明度",

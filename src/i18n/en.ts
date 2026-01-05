@@ -147,6 +147,7 @@ export const translation_en = {
     characterYaml: {
       description: "Additional settings for OpenUtau.(auto singer_type=utau)",
       check: "Create or update character.yaml",
+      selectFile: "Select character.yaml file",
       TextFileEncoding: "Specify text file encoding (shift-jis)",
       Portrait: "Standing Illustration",
       PortraitUpload: "Select an external image (png)",

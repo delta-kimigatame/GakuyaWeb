@@ -79,6 +79,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   const [characterYaml, setCharacterYaml] = React.useState<{} | null>(null);
   const [characterYamlUpdate, setCharacterYamlUpdate] =
     React.useState<boolean>(false);
+  const [characterYamlPath, setCharacterYamlPath] = React.useState<string>("");
   /** portrait */
   const [portraitBuf, setPortraitBuf] = React.useState<ArrayBuffer>();
   /** readme.txt */
@@ -209,16 +210,44 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       // 存在する場合は自動選択
       setPrefixMapPath(defaultPrefixMapPath);
       const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, defaultPrefixMapPath);
-      const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
-      setCharacterYaml(gcyr.yaml);
-      setPrefixMaps(gcyr.maps);
+      
+      // rootDirが変更されるたびにcharacter.yamlの選択を再評価
+      const defaultCharacterYamlPath = rootDir === "" ? "character.yaml" : rootDir + "/character.yaml";
+      
+      if (Object.keys(props.zipFiles).includes(defaultCharacterYamlPath)) {
+        // 存在する場合は自動選択
+        setCharacterYamlPath(defaultCharacterYamlPath);
+        const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, defaultCharacterYamlPath);
+        setCharacterYaml(gcyr.yaml);
+        setPrefixMaps(gcyr.maps);
+      } else {
+        // 存在しない場合は何も選択しない
+        setCharacterYamlPath("");
+        const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, "");
+        setCharacterYaml(gcyr.yaml);
+        setPrefixMaps(gcyr.maps);
+      }
     } else {
       // 存在しない場合は何も選択しない
       setPrefixMapPath("");
       const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, "");
-      const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
-      setCharacterYaml(gcyr.yaml);
-      setPrefixMaps(gcyr.maps);
+      
+      // rootDirが変更されるたびにcharacter.yamlの選択を再評価
+      const defaultCharacterYamlPath = rootDir === "" ? "character.yaml" : rootDir + "/character.yaml";
+      
+      if (Object.keys(props.zipFiles).includes(defaultCharacterYamlPath)) {
+        // 存在する場合は自動選択
+        setCharacterYamlPath(defaultCharacterYamlPath);
+        const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, defaultCharacterYamlPath);
+        setCharacterYaml(gcyr.yaml);
+        setPrefixMaps(gcyr.maps);
+      } else {
+        // 存在しない場合は何も選択しない
+        setCharacterYamlPath("");
+        const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, "");
+        setCharacterYaml(gcyr.yaml);
+        setPrefixMaps(gcyr.maps);
+      }
     }
   };
 
@@ -228,6 +257,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setInstall(null);
       setCharacter(null);
       setCharacterYaml(null);
+      setCharacterYamlPath("");
       setReadme("");
       setReadmePath("");
       setPrefixMaps({});
@@ -477,7 +507,9 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       prefixMapsUpdate,
       prefixMaps,
       newZip6,
-      portraitBuf
+      portraitBuf,
+      characterYamlPath,
+      props.zipFiles
     );
     const newZip4 = ExtractReadme(newRootDir, readmeUpdate, readme, newZip5, readmePath);
     const newZip3 = ExtractPrefixMap(
@@ -653,6 +685,15 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 update={characterYamlUpdate}
                 setUpdate={setCharacterYamlUpdate}
                 setPortraitBuf={setPortraitBuf}
+                characterYamlPath={characterYamlPath}
+                setCharacterYamlPath={setCharacterYamlPath}
+                onReload={async (path: string) => {
+                  Log.info(`character.yaml再読み込み: path=${path}`, "EditorView");
+                  const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, prefixMapPath);
+                  const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps, path);
+                  setCharacterYaml(gcyr.yaml);
+                  setPrefixMaps(gcyr.maps);
+                }}
               />
             </TabPanel>
             <TabPanel value={3} sx={{ p: 1 }}>

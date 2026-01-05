@@ -114,6 +114,8 @@ export const GetSubbanks = (prefixMaps: {
  * @param prefixMaps prefix.mapの値
  * @param newZip 生成先のzip
  * @param portraitBuf 立ち絵をアップロードした際のデータ
+ * @param selectedPath 選択されているcharacter.yamlのパス（参考情報）
+ * @param zipFiles 元のzipファイル（portraitコピー用）
  * @returns 生成先のzip
  */
 export const ExtractCharacterYaml = (
@@ -123,14 +125,19 @@ export const ExtractCharacterYaml = (
   prefixMapsUpdate: boolean,
   prefixMaps: { string?: PrefixMap },
   newZip: JSZip,
-  portraitBuf: ArrayBuffer
+  portraitBuf: ArrayBuffer,
+  selectedPath?: string,
+  zipFiles?: { [key: string]: JSZip.JSZipObject }
 ): JSZip => {
   if (
     characterYamlUpdate ||
     (prefixMapsUpdate && Object.keys(prefixMaps).length >= 2)
   ) {
-    const characterYaml_ = characterYaml === null ? {} : characterYaml;
-    if (characterYaml_["portrait"] === "upload" && portraitBuf!==undefined) {
+    const characterYaml_ = characterYaml === null ? {} : { ...characterYaml };
+    
+    // portraitの処理
+    if (characterYaml_["portrait"] === "upload" && portraitBuf !== undefined) {
+      // アップロードされた画像を使用
       const portraitPath = GetAddFilePath(
         newRootDir,
         newZip,
@@ -143,7 +150,43 @@ export const ExtractCharacterYaml = (
         `${newRootDir + "/" + portraitPath}をzipに格納しました。`,
         "OutputZip"
       );
+    } else if (
+      characterYaml_["portrait"] &&
+      characterYaml_["portrait"] !== "upload" &&
+      selectedPath &&
+      zipFiles
+    ) {
+      // 既存のportraitがある場合、パスを新しいrootDirからの相対パスに変換
+      const selectedDir = selectedPath.substring(0, selectedPath.lastIndexOf("/"));
+      const portraitRelativePath = characterYaml_["portrait"];
+      
+      // selectedDir相対のportraitの絶対パスを構築
+      let portraitAbsolutePath: string;
+      if (portraitRelativePath.startsWith("/") || portraitRelativePath.includes(":")) {
+        // 絶対パスの場合はそのまま
+        portraitAbsolutePath = portraitRelativePath;
+      } else {
+        // 相対パスの場合はselectedDirからの相対パス
+        portraitAbsolutePath = selectedDir ? selectedDir + "/" + portraitRelativePath : portraitRelativePath;
+      }
+      
+      // portraitの絶対パスからnewRootDirへの相対パスを計算
+      if (Object.keys(zipFiles).includes(portraitAbsolutePath)) {
+        // newRootDirからportraitへの相対パスを計算
+        const newPortraitPath = GetRelativePath(newRootDir, portraitAbsolutePath);
+        characterYaml_["portrait"] = newPortraitPath;
+        Log.info(
+          `portrait参照を${portraitRelativePath}から${newPortraitPath}に変更しました。`,
+          "OutputZip"
+        );
+      } else {
+        Log.warn(
+          `portrait画像が見つかりません: ${portraitAbsolutePath}`,
+          "OutputZip"
+        );
+      }
     }
+    
     const subbanks = GetSubbanks(prefixMaps);
     if (subbanks.length !== 0) {
       characterYaml_["subbanks"] = subbanks;
@@ -273,6 +316,42 @@ export const GetAddFilePath = (
     i++;
   }
   return filename + (i === 0 ? "" : i.toString()) + "." + extension;
+};
+
+/**
+ * fromパスからtoパスへの相対パスを計算
+ * @param from 基準パス（ディレクトリ）
+ * @param to 対象パス（ファイル）
+ * @returns fromからtoへの相対パス
+ */
+const GetRelativePath = (from: string, to: string): string => {
+  const fromParts = from.split("/").filter(p => p);
+  const toParts = to.split("/").filter(p => p);
+  
+  // 共通部分を見つける
+  let commonLength = 0;
+  while (
+    commonLength < fromParts.length &&
+    commonLength < toParts.length &&
+    fromParts[commonLength] === toParts[commonLength]
+  ) {
+    commonLength++;
+  }
+  
+  // fromから上に戻る回数
+  const upCount = fromParts.length - commonLength;
+  
+  // 相対パスを構築
+  const upPath = Array(upCount).fill("..").join("/");
+  const downPath = toParts.slice(commonLength).join("/");
+  
+  if (upPath && downPath) {
+    return upPath + "/" + downPath;
+  } else if (upPath) {
+    return upPath;
+  } else {
+    return downPath;
+  }
 };
 
 export const GetNewFileName = (

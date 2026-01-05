@@ -224,6 +224,7 @@ export const GetPrefixMapFilePaths = (
  * @param rootDir zip内における音源ルートへの相対パス
  * @param zipFiles zipデータ
  * @param maps prefix.mapの値
+ * @param targetPath 読み込むcharacter.yamlのパス（省略時はrootDir配下のcharacter.yaml）
  * @returns character.yamlとprefix.mapのtuple
  */
 export const GetCharacterYaml = async (
@@ -231,14 +232,14 @@ export const GetCharacterYaml = async (
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
   },
-  maps: { string?: PrefixMap }
+  maps: { string?: PrefixMap },
+  targetPath?: string
 ): Promise<{ yaml: {} | null; maps: { string?: PrefixMap } }> => {
-  const targetPath =
-    rootDir === "" ? "character.yaml" : rootDir + "/character.yaml";
+  const path = targetPath || (rootDir === "" ? "character.yaml" : rootDir + "/character.yaml");
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.info(`character.yamlがみつかりました。${targetPath}`, "EditorView");
-      zipFiles[targetPath].async("arraybuffer").then(async (buf) => {
+    if (Object.keys(zipFiles).includes(path)) {
+      Log.info(`character.yamlがみつかりました。${path}`, "EditorView");
+      zipFiles[path].async("arraybuffer").then(async (buf) => {
         const txt = await FileReadAsync(buf, "UTF8");
         const value = yaml.load(txt);
         Log.info(`character.yamlの読込完了 name=${txt}`, "EditorView");
@@ -291,4 +292,19 @@ export const GetCharacterYaml = async (
       resolve({ yaml: null, maps: maps });
     }
   });
+};
+
+/**
+ * zip内のすべてのcharacter.yamlファイルのパスを取得
+ * @param zipFiles zipデータ
+ * @returns character.yamlファイルのパス配列
+ */
+export const GetCharacterYamlFilePaths = (
+  zipFiles: {
+    [key: string]: JSZip.JSZipObject;
+  }
+): string[] => {
+  return Object.keys(zipFiles)
+    .filter((path) => path.toLowerCase().endsWith("character.yaml"))
+    .sort();
 };

@@ -3,10 +3,13 @@ import JSZip from "jszip";
 import { useTranslation } from "react-i18next";
 
 import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 import { CommonCheckBox } from "../../components/Common/CommonCheckBox";
 import { FullWidthTextField } from "../../components/Common/FullWidthTextField";
+import { FullWidthSelect } from "../../components/Common/FullWidthSelect";
 
 import { Log } from "../../lib/Logging";
 import { Slider } from "@mui/material";
@@ -17,6 +20,25 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
   const { t } = useTranslation();
   /** rootフォルダにおけるcharacter.txtの有無 */
   const [hasCharacterYaml, setHasCharacterYaml] = React.useState<boolean>(true);
+
+  /**
+   * ファイルパス変更時の処理
+   */
+  const onFilePathChange = (e: SelectChangeEvent) => {
+    props.setCharacterYamlPath(e.target.value);
+    if (props.onReload) {
+      props.onReload(e.target.value);
+    }
+  };
+
+  // zip内の全character.yamlファイルを取得
+  const characterYamlFiles = React.useMemo(() => {
+    if (!props.files) return [];
+    return props.files
+      .filter((f) => f.toLowerCase().endsWith("character.yaml"))
+      .sort();
+  }, [props.files]);
+
   /**
    * rootDir変更時の処理
    */
@@ -128,6 +150,26 @@ export const CharacterYamlPanel: React.FC<CharacterYamlPanelProps> = (
         {t("editor.characterYaml.description")}
       </Typography>
       <br />
+
+      {/* ファイル選択セレクトボックス */}
+      {characterYamlFiles.length > 0 && (
+        <>
+          <FullWidthSelect
+            label={t("editor.characterYaml.selectFile")}
+            value={props.characterYamlPath}
+            onChange={onFilePathChange}
+            disabled={!props.update}
+          >
+            {characterYamlFiles.map((path) => (
+              <MenuItem key={path} value={path}>
+                {path}
+              </MenuItem>
+            ))}
+          </FullWidthSelect>
+          <br />
+        </>
+      )}
+
       {props.characterYaml !== null && (
         <>
           <Box sx={{ m: 1 }}>
@@ -219,6 +261,12 @@ export interface CharacterYamlPanelProps {
   setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
   /** 立ち絵アップロード */
   setPortraitBuf: React.Dispatch<React.SetStateAction<ArrayBuffer>>;
+  /** 読み込むcharacter.yamlのパス */
+  characterYamlPath: string;
+  /** 読み込むcharacter.yamlのパス変更処理 */
+  setCharacterYamlPath: React.Dispatch<React.SetStateAction<string>>;
+  /** character.yaml再読み込み時のコールバック */
+  onReload?: (path: string) => void;
 }
 
 interface CharacterYaml {
