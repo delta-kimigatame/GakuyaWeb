@@ -157,6 +157,8 @@ export const translation_en = {
       check: "Create or update readme.txt",
       description:
         "Displayed when using the voicebank for the first time. It is recommended to include terms of use and voicebank details.",
+      encoding: "Encoding",
+      selectFile: "Select readme.txt file",
     },
     install: {
       title: "Installation Settings",

@@ -62,13 +62,15 @@ export const ExtractPrefixMap = (
  * @param readmeUpdate 生成の要否
  * @param readme 値
  * @param newZip 生成先のzip
+ * @param selectedPath 選択されているreadme.txtのパス（参考情報、出力先は常にnewRootDir/readme.txt）
  * @returns 生成先のzip
  */
 export const ExtractReadme = (
   newRootDir: string,
   readmeUpdate: boolean,
   readme: string,
-  newZip: JSZip
+  newZip: JSZip,
+  selectedPath?: string
 ): JSZip => {
   if (readmeUpdate) {
     const r_output = new File(

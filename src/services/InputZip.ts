@@ -127,20 +127,24 @@ export const GetCharacterTxt = async (
  * rootDirにreadme.txtがあれば読込、なければ初期化して返す
  * @param rootDir zip内における音源ルートへの相対パス
  * @param zipFiles zipデータ
+ * @param encoding 文字コード（デフォルト: "SJIS"）
+ * @param targetPath 読み込むreadme.txtのパス（省略時はrootDir配下のreadme.txt）
  * @returns readmeの値
  */
 export const GetReadme = async (
   rootDir: string,
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
-  }
+  },
+  encoding: string = "SJIS",
+  targetPath?: string
 ): Promise<string> => {
-  const targetPath = rootDir === "" ? "readme.txt" : rootDir + "/readme.txt";
+  const path = targetPath || (rootDir === "" ? "readme.txt" : rootDir + "/readme.txt");
   return new Promise((resolve, reject) => {
-    if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.info(`readme.txtがみつかりました。${targetPath}`, "EditorView");
-      zipFiles[targetPath].async("arraybuffer").then(async (buf) => {
-        const txt = await FileReadAsync(buf);
+    if (Object.keys(zipFiles).includes(path)) {
+      Log.info(`readme.txtがみつかりました。${path}`, "EditorView");
+      zipFiles[path].async("arraybuffer").then(async (buf) => {
+        const txt = await FileReadAsync(buf, encoding);
         Log.info(`readme.txtの読込完了 ${txt}`, "EditorView");
         resolve(txt);
       });
@@ -148,6 +152,21 @@ export const GetReadme = async (
       resolve("");
     }
   });
+};
+
+/**
+ * zip内のすべてのreadme.txtファイルのパスを取得
+ * @param zipFiles zipデータ
+ * @returns readme.txtファイルのパス配列
+ */
+export const GetReadmeFilePaths = (
+  zipFiles: {
+    [key: string]: JSZip.JSZipObject;
+  }
+): string[] => {
+  return Object.keys(zipFiles)
+    .filter((path) => path.toLowerCase().endsWith("readme.txt"))
+    .sort();
 };
 
 /**

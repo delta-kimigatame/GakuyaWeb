@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 
 import { BasePaper } from "../../components/Common/BasePaper";
 import { setting } from "../../settings/setting";
-import { ReadMePanel } from "../../components/Editor/ReadMePanel";
+import { ReadMePanel } from "./ReadMePanel";
 import { InstallTextPanel } from "./InstallTxtPanel";
 
 import { InstallTxt } from "../../lib/InstallTxt";
@@ -84,6 +84,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   /** readme.txt */
   const [readme, setReadme] = React.useState<string>("");
   const [readmeUpdate, setReadmeUpdate] = React.useState<boolean>(false);
+  const [readmeEncoding, setReadmeEncoding] = React.useState<string>("SJIS");
+  const [readmePath, setReadmePath] = React.useState<string>("");
   /** prefix.map */
   const [prefixMaps, setPrefixMaps] = React.useState<{ string?: PrefixMap }>(
     {}
@@ -181,8 +183,22 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     setCharacter(gcr.value);
     setCharacterUpdate(gcr.update);
     setCharacterForceUpdate(gcr.update);
-    const readme = await GetReadme(rootDir, props.zipFiles);
-    setReadme(readme);
+    
+    // rootDirが変更されるたびにreadme.txtの選択を再評価
+    const defaultReadmePath = rootDir === "" ? "readme.txt" : rootDir + "/readme.txt";
+    
+    // デフォルトパスにreadme.txtが存在するかチェック
+    if (Object.keys(props.zipFiles).includes(defaultReadmePath)) {
+      // 存在する場合は自動選択
+      setReadmePath(defaultReadmePath);
+      const readme = await GetReadme(rootDir, props.zipFiles, readmeEncoding, defaultReadmePath);
+      setReadme(readme);
+    } else {
+      // 存在しない場合は何も選択しない
+      setReadmePath("");
+      setReadme("");
+    }
+    
     const maps = await GetPrefixMap(rootDir, props.zipFiles);
     const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
     setCharacterYaml(gcyr.yaml);
@@ -196,6 +212,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setCharacter(null);
       setCharacterYaml(null);
       setReadme("");
+      setReadmePath("");
       setPrefixMaps({});
     } else {
       InputZip();
@@ -444,7 +461,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       newZip6,
       portraitBuf
     );
-    const newZip4 = ExtractReadme(newRootDir, readmeUpdate, readme, newZip5);
+    const newZip4 = ExtractReadme(newRootDir, readmeUpdate, readme, newZip5, readmePath);
     const newZip3 = ExtractPrefixMap(
       newRootDir,
       prefixMapsUpdate,
@@ -625,6 +642,16 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 setReadme={setReadme}
                 update={readmeUpdate}
                 setUpdate={setReadmeUpdate}
+                readmeEncoding={readmeEncoding}
+                setReadmeEncoding={setReadmeEncoding}
+                readmePath={readmePath}
+                setReadmePath={setReadmePath}
+                files={files}
+                onReload={async (path: string, encoding: string) => {
+                  Log.info(`readme.txt再読み込み: path=${path}, encoding=${encoding}`, "EditorView");
+                  const newReadme = await GetReadme(rootDir, props.zipFiles, encoding, path);
+                  setReadme(newReadme);
+                }}
               />
             </TabPanel>
             <TabPanel value={4} sx={{ p: 1 }}>

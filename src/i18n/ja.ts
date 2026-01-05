@@ -155,6 +155,8 @@ export const translation_ja = {
       check: "readme.txtを作成・更新する",
       description:
         "初めてこの音源を使う際に表示されます。利用規約や音源の説明を書くといいでしょう。",
+      encoding: "文字コード",
+      selectFile: "readme.txtファイルを選択",
     },
     install: {
       title: "インストール設定",

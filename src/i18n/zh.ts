@@ -150,6 +150,8 @@ export const translation_zh = {
       title: "说明书·使用条款",
       check: "创建或更新readme.txt",
       description: "首次使用此音源时显示。建议写入使用条款和音源说明。",
+      encoding: "字符编码",
+      selectFile: "选择readme.txt文件",
     },
     install: {
       title: "安装设置",
