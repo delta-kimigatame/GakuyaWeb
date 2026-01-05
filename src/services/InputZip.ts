@@ -173,21 +173,25 @@ export const GetReadmeFilePaths = (
  * rootDirにprefix.mapがあれば読込、なければ初期化して返す
  * @param rootDir zip内における音源ルートへの相対パス
  * @param zipFiles zipデータ
+ * @param encoding 文字コード（デフォルト: "SJIS"）
+ * @param targetPath 読み込むprefix.mapのパス（省略時はrootDir配下のprefix.map）
  * @returns prefix.map
  */
 export const GetPrefixMap = async (
   rootDir: string,
   zipFiles: {
     [key: string]: JSZip.JSZipObject;
-  }
+  },
+  encoding: string = "SJIS",
+  targetPath?: string
 ): Promise<{ string?: PrefixMap }> => {
-  const targetPath = rootDir === "" ? "prefix.map" : rootDir + "/prefix.map";
+  const path = targetPath || (rootDir === "" ? "prefix.map" : rootDir + "/prefix.map");
   return new Promise((resolve, reject) => {
     let maps = {};
-    if (Object.keys(zipFiles).includes(targetPath)) {
-      Log.info(`prefix.mapがみつかりました。${targetPath}`, "EditorView");
-      zipFiles[targetPath].async("arraybuffer").then(async (buf) => {
-        const txt = await FileReadAsync(buf);
+    if (Object.keys(zipFiles).includes(path)) {
+      Log.info(`prefix.mapがみつかりました。${path}`, "EditorView");
+      zipFiles[path].async("arraybuffer").then(async (buf) => {
+        const txt = await FileReadAsync(buf, encoding);
         const value = new PrefixMap(txt);
         Log.info(`prefix.mapの読込完了 ${txt}`, "EditorView");
         maps[""] = value;
@@ -197,6 +201,21 @@ export const GetPrefixMap = async (
       resolve({});
     }
   });
+};
+
+/**
+ * zip内のすべてのprefix.mapファイルのパスを取得
+ * @param zipFiles zipデータ
+ * @returns prefix.mapファイルのパス配列
+ */
+export const GetPrefixMapFilePaths = (
+  zipFiles: {
+    [key: string]: JSZip.JSZipObject;
+  }
+): string[] => {
+  return Object.keys(zipFiles)
+    .filter((path) => path.toLowerCase().endsWith("prefix.map"))
+    .sort();
 };
 
 /**

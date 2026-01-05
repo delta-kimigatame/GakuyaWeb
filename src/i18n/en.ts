@@ -176,6 +176,8 @@ export const translation_en = {
         "Settings to automatically switch voicebanks based on pitch.",
       description2: "Voice Color is not available in standard UTAU.",
       check: "Create or update prefix.map",
+      encoding: "Encoding",
+      selectFile: "Select prefix.map file",
       header: {
         tone: "Pitch",
         prefix: "Prefix",

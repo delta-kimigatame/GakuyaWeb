@@ -36,13 +36,15 @@ export const ExtractInstallTxt = (
  * @param prefixMapsUpdate 生成の要否
  * @param prefixMaps 値
  * @param newZip 生成先のzip
+ * @param selectedPath 選択されているprefix.mapのパス（参考情報、出力先は常にnewRootDir/prefix.map）
  * @returns 生成先のzip
  */
 export const ExtractPrefixMap = (
   newRootDir: string,
   prefixMapsUpdate: boolean,
   prefixMaps: { string?: PrefixMap },
-  newZip: JSZip
+  newZip: JSZip,
+  selectedPath?: string
 ): JSZip => {
   if (prefixMapsUpdate) {
     const p_output = new File(

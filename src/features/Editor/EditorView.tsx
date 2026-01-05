@@ -92,6 +92,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
   );
   const [prefixMapsUpdate, setPrefixMapsUpdate] =
     React.useState<boolean>(false);
+  const [prefixMapEncoding, setPrefixMapEncoding] = React.useState<string>("SJIS");
+  const [prefixMapPath, setPrefixMapPath] = React.useState<string>("");
   /** 音源ルート */
   const [rootDir, setRootDir] = React.useState<string | null>(null);
   /** ファイル一覧 */
@@ -199,10 +201,25 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setReadme("");
     }
     
-    const maps = await GetPrefixMap(rootDir, props.zipFiles);
-    const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
-    setCharacterYaml(gcyr.yaml);
-    setPrefixMaps(gcyr.maps);
+    // rootDirが変更されるたびにprefix.mapの選択を再評価
+    const defaultPrefixMapPath = rootDir === "" ? "prefix.map" : rootDir + "/prefix.map";
+    
+    // デフォルトパスにprefix.mapが存在するかチェック
+    if (Object.keys(props.zipFiles).includes(defaultPrefixMapPath)) {
+      // 存在する場合は自動選択
+      setPrefixMapPath(defaultPrefixMapPath);
+      const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, defaultPrefixMapPath);
+      const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
+      setCharacterYaml(gcyr.yaml);
+      setPrefixMaps(gcyr.maps);
+    } else {
+      // 存在しない場合は何も選択しない
+      setPrefixMapPath("");
+      const maps = await GetPrefixMap(rootDir, props.zipFiles, prefixMapEncoding, "");
+      const gcyr = await GetCharacterYaml(rootDir, props.zipFiles, maps);
+      setCharacterYaml(gcyr.yaml);
+      setPrefixMaps(gcyr.maps);
+    }
   };
 
   React.useEffect(() => {
@@ -214,6 +231,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       setReadme("");
       setReadmePath("");
       setPrefixMaps({});
+      setPrefixMapPath("");
     } else {
       InputZip();
     }
@@ -466,7 +484,8 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       newRootDir,
       prefixMapsUpdate,
       prefixMaps,
-      newZip4
+      newZip4,
+      prefixMapPath
     );
     const newZip2 = ExtractInstallTxt(installUpdate, install, newZip3);
     newZip2
@@ -671,6 +690,16 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
                 update={prefixMapsUpdate}
                 setUpdate={setPrefixMapsUpdate}
                 mode={props.mode}
+                prefixMapEncoding={prefixMapEncoding}
+                setPrefixMapEncoding={setPrefixMapEncoding}
+                prefixMapPath={prefixMapPath}
+                setPrefixMapPath={setPrefixMapPath}
+                files={files}
+                onReload={async (path: string, encoding: string) => {
+                  Log.info(`prefix.map再読み込み: path=${path}, encoding=${encoding}`, "EditorView");
+                  const newMaps = await GetPrefixMap(rootDir, props.zipFiles, encoding, path);
+                  setPrefixMaps(newMaps);
+                }}
               />
             </TabPanel>
             <TabPanel value={6} sx={{ p: 0 }}>

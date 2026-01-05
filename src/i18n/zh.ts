@@ -168,6 +168,8 @@ export const translation_zh = {
       description: "根据音高自动切换音源的设置。",
       description2: "Voice Color在原版UTAU中无法使用。",
       check: "创建或更新prefix.map",
+      encoding: "字符编码",
+      selectFile: "选择prefix.map文件",
       header: {
         tone: "音阶",
         prefix: "前缀",

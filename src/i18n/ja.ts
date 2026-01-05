@@ -174,6 +174,8 @@ export const translation_ja = {
       description: "音高毎に自動で音源を切り替えるための設定です。",
       description2: "Voice Colorは本家UTAUでは使えません。",
       check: "prefix.mapを作成・更新する",
+      encoding: "文字コード",
+      selectFile: "prefix.mapファイルを選択",
       header: {
         tone: "音階",
         prefix: "prefix",
