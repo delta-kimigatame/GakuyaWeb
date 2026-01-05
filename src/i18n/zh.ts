@@ -87,6 +87,11 @@ export const translation_zh = {
         depth: "位深度设置为16bit",
         dcoffset: "移除DC偏移",
       },
+      encoding: {
+        title: "字符编码",
+        utf8: "以UTF-8编码输出配置文件",
+        warning: "警告：将与原UTAU失去兼容性。仅在仅针对OpenUtau或UTAlet时使用。UTF-8在日本以外的环境中具有优势。",
+      },
     },
     frq_editor: {
       title: "频率表编辑器",

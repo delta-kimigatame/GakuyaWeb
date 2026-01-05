@@ -12,16 +12,18 @@ import { FileReadAsync } from "./FileReadAsync";
  * @param installUpdate 生成の要否
  * @param install 値
  * @param newZip 生成先のzip
+ * @param encoding 文字コード（デフォルト: Windows-31j）
  * @returns 生成先のzip
  */
 export const ExtractInstallTxt = (
   installUpdate: boolean,
   install: InstallTxt,
-  newZip: JSZip
+  newZip: JSZip,
+  encoding: string = "Windows-31j"
 ): JSZip => {
   if (installUpdate) {
     const i_output = new File(
-      [iconv.encode(install.OutputTxt(), "Windows-31j")],
+      [iconv.encode(install.OutputTxt(), encoding)],
       "install.txt",
       { type: "text/plane;charset=shift-jis" }
     );
@@ -38,6 +40,7 @@ export const ExtractInstallTxt = (
  * @param prefixMaps 値
  * @param newZip 生成先のzip
  * @param selectedPath 選択されているprefix.mapのパス（参考情報、出力先は常にnewRootDir/prefix.map）
+ * @param encoding 文字コード（デフォルト: Windows-31j）
  * @returns 生成先のzip
  */
 export const ExtractPrefixMap = (
@@ -45,11 +48,12 @@ export const ExtractPrefixMap = (
   prefixMapsUpdate: boolean,
   prefixMaps: { string?: PrefixMap },
   newZip: JSZip,
-  selectedPath?: string
+  selectedPath?: string,
+  encoding: string = "Windows-31j"
 ): JSZip => {
   if (prefixMapsUpdate) {
     const p_output = new File(
-      [iconv.encode(prefixMaps[""].OutputMap(), "Windows-31j")],
+      [iconv.encode(prefixMaps[""].OutputMap(), encoding)],
       "prefix.map",
       { type: "text/plane;charset=shift-jis" }
     );
@@ -66,6 +70,7 @@ export const ExtractPrefixMap = (
  * @param readme 値
  * @param newZip 生成先のzip
  * @param selectedPath 選択されているreadme.txtのパス（参考情報、出力先は常にnewRootDir/readme.txt）
+ * @param encoding 文字コード（デフォルト: Windows-31j）
  * @returns 生成先のzip
  */
 export const ExtractReadme = (
@@ -73,11 +78,12 @@ export const ExtractReadme = (
   readmeUpdate: boolean,
   readme: string,
   newZip: JSZip,
-  selectedPath?: string
+  selectedPath?: string,
+  encoding: string = "Windows-31j"
 ): JSZip => {
   if (readmeUpdate) {
     const r_output = new File(
-      [iconv.encode(readme.replace(/\n/g,"\r\n"), "Windows-31j")],
+      [iconv.encode(readme.replace(/\n/g,"\r\n"), encoding)],
       "readme.txt",
       { type: "text/plane;charset=shift-jis" }
     );
@@ -216,6 +222,7 @@ export const ExtractCharacterYaml = (
  * @param sampleBuf サンプル音声をアップロードした際のデータ
  * @param selectedPath 選択されているcharacter.txtのパス
  * @param zipFiles 元のzipファイル（icon/sample参照用）
+ * @param encoding 文字コード（デフォルト: Windows-31j）
  * @returns 生成先のzip
  */
 export const ExtractCharacterTxt = (
@@ -226,7 +233,8 @@ export const ExtractCharacterTxt = (
   iconBuf: ArrayBuffer,
   sampleBuf: ArrayBuffer,
   selectedPath?: string,
-  zipFiles?: { [key: string]: JSZip.JSZipObject }
+  zipFiles?: { [key: string]: JSZip.JSZipObject },
+  encoding: string = "Windows-31j"
 ): JSZip => {
   if (characterUpdate || !(newRootDir + "/character.txt" in newZip.files)) {
     const c = {
@@ -324,7 +332,7 @@ export const ExtractCharacterTxt = (
       }
     }
     const c_output = new File(
-      [iconv.encode(new CharacterTxt(c).OutputTxt(), "Windows-31j")],
+      [iconv.encode(new CharacterTxt(c).OutputTxt(), encoding)],
       "character.txt",
       { type: "text/plane;charset=shift-jis" }
     );
@@ -382,6 +390,7 @@ export const ExtractRootOto = (
  * @param otoEncodings 各oto.iniのパスとエンコーディングのマップ
  * @param zipFiles 元のzipファイル
  * @param newZip 生成先のzip
+ * @param encoding 出力文字コード（デフォルト: Windows-31j）
  * @returns 生成先のzip
  */
 export const ExtractAllOtoIni = async (
@@ -389,28 +398,29 @@ export const ExtractAllOtoIni = async (
   newRootDir: string,
   otoEncodings: Map<string, string>,
   zipFiles: { [key: string]: JSZip.JSZipObject },
-  newZip: JSZip
+  newZip: JSZip,
+  encoding: string = "Windows-31j"
 ): Promise<JSZip> => {
-  for (const [oldPath, encoding] of otoEncodings.entries()) {
+  for (const [oldPath, inputEncoding] of otoEncodings.entries()) {
     if (Object.keys(zipFiles).includes(oldPath)) {
       // 元のパスから新しいパスを計算
       const newPath = GetNewFileName(oldRootDir, newRootDir, oldPath);
       
       // oto.iniを指定エンコーディングで読み込み
       const buf = await zipFiles[oldPath].async("arraybuffer");
-      const txt = await FileReadAsync(buf, encoding);
+      const txt = await FileReadAsync(buf, inputEncoding);
       
-      // Shift-JIS（Windows-31j）で書き出し
-      const encodingName = encoding === "SJIS" ? "Windows-31j" : encoding;
+      // 改行コードを正規化してから変換（\r\nを\nに統一してから\r\nに変換）
+      const normalizedTxt = txt.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
       const o_output = new File(
-        [iconv.encode(txt.replace(/\n/g, "\r\n"), "Windows-31j")],
+        [iconv.encode(normalizedTxt.replace(/\n/g, "\r\n"), encoding)],
         "oto.ini",
         { type: "text/plane;charset=shift-jis" }
       );
       
       newZip.file(newPath, o_output);
       Log.info(
-        `${newPath}をzipに格納しました（encoding: ${encoding} -> SJIS）`,
+        `${newPath}をzipに格納しました（encoding: ${inputEncoding} -> ${encoding}）`,
         "OutputZip"
       );
     }

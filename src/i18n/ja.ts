@@ -90,6 +90,11 @@ export const translation_ja = {
         depth: "bit深度を16bitにする",
         dcoffset: "DCオフセットを除去する。",
       },
+      encoding: {
+        title: "文字コード",
+        utf8: "設定ファイルをUTF-8で出力する",
+        warning: "警告: 本家UTAUでの互換性が失われます。OpenUtauやUTAletでのみ使用する場合に限定してください。UTF-8は日本以外の環境で有利です。",
+      },
     },
     frq_editor: {
       title: "周波数表編集",

@@ -92,6 +92,11 @@ export const translation_en = {
         depth: "Set bit depth to 16-bit",
         dcoffset: "Remove DC offset",
       },
+      encoding: {
+        title: "Text Encoding",
+        utf8: "Output configuration files in UTF-8",
+        warning: "Warning: This will break compatibility with original UTAU. Only use this if you are targeting OpenUtau or UTAlet exclusively. UTF-8 is advantageous for non-Japanese environments.",
+      },
     },
     frq_editor: {
       title: "Frequency Table Editor",

@@ -9,6 +9,7 @@ import { OtoArea } from "../../components/Editor/FileCheck/OtoArea";
 import { FrqArea } from "../../components/Editor/FileCheck/FrqArea";
 import { RemoveFileArea } from "../../components/Editor/FileCheck/RemoveFileArea";
 import { SelectRootDir } from "./FileCheck/SelectRootDir";
+import { EncodingArea } from "../../components/Editor/FileCheck/EncodingArea";
 
 export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
   const OnCheckBoxChange = (key1: string, key2: string) => {
@@ -74,6 +75,12 @@ export const FileCheckPanel: React.FC<FileCheckPanelProps> = (props) => {
         flags={props.flags}
         OnCheckBoxChange={OnCheckBoxChange}
         OnAllClick={OnAllClick}
+      />
+      <Divider />
+      <br />
+      <EncodingArea
+        flags={props.flags}
+        OnCheckBoxChange={OnCheckBoxChange}
       />
     </>
   );

@@ -67,6 +67,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     frq: {},
     oto: {},
     wav: {},
+    encoding: {},
   });
   /** install.txt */
   const [install, setInstall] = React.useState<InstallTxt | null>(null);
@@ -552,20 +553,26 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
     }
   };
   const ZipExtractMake = async (newRootDir: string, newZip: JSZip) => {
+    // 出力エンコーディングを決定
+    const encoding = flags.encoding.utf8 ? "utf-8" : "Windows-31j";
+    // UTF-8エンコードが有効な場合は、エンコード変更のため強制的に再出力
+    const forceUpdate = flags.encoding.utf8 === true;
+    
     // oto.iniの文字コード変換（ExtractRootOtoより前に実行）
-    const newZip8 = otoUpdate 
-      ? await ExtractAllOtoIni(rootDir, newRootDir, otoEncodings, props.zipFiles, newZip)
+    const newZip8 = (otoUpdate || forceUpdate)
+      ? await ExtractAllOtoIni(rootDir, newRootDir, otoEncodings, props.zipFiles, newZip, encoding)
       : newZip;
     const newZip7 = ExtractRootOto(newRootDir, newZip8, flags.oto.root);
     const newZip6 = ExtractCharacterTxt(
       newRootDir,
-      characterUpdate,
+      characterUpdate || forceUpdate,
       character,
       newZip7,
       iconBuf,
       sampleBuf,
       characterTxtPath,
-      props.zipFiles
+      props.zipFiles,
+      encoding
     );
     const newZip5 = ExtractCharacterYaml(
       newRootDir,
@@ -578,15 +585,16 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       characterYamlPath,
       props.zipFiles
     );
-    const newZip4 = ExtractReadme(newRootDir, readmeUpdate, readme, newZip5, readmePath);
+    const newZip4 = ExtractReadme(newRootDir, readmeUpdate || forceUpdate, readme, newZip5, readmePath, encoding);
     const newZip3 = ExtractPrefixMap(
       newRootDir,
-      prefixMapsUpdate,
+      prefixMapsUpdate || forceUpdate,
       prefixMaps,
       newZip4,
-      prefixMapPath
+      prefixMapPath,
+      encoding
     );
-    const newZip2 = ExtractInstallTxt(installUpdate, install, newZip3);
+    const newZip2 = ExtractInstallTxt(installUpdate || forceUpdate, install, newZip3, encoding);
     newZip2
       .generateAsync({
         type: "uint8array",
@@ -924,6 +932,39 @@ export interface FileCheckFlags {
   frq: FrqFlags;
   oto: OtoFlags;
   wav: WavFlags;
+  encoding: EncodingFlags;
+}
+
+interface EncodingFlags {
+  utf8?: boolean;
+}
+
+interface RemoveFlags {
+  read?: boolean;
+  uspec?: boolean;
+  setparam?: boolean;
+  vlabeler?: boolean;
+}
+
+interface FrqFlags {
+  frq?: boolean;
+  pmk?: boolean;
+  frc?: boolean;
+  vs4ufrq?: boolean;
+  world?: boolean;
+  llsm?: boolean;
+  mrq?: boolean;
+}
+
+interface OtoFlags {
+  root?: boolean;
+}
+
+interface WavFlags {
+  stereo?: boolean;
+  sampleRate?: boolean;
+  depth?: boolean;
+  dcoffset?: boolean;
 }
 
 export const IsDelete = (f: string, flags: FileCheckFlags): boolean => {
