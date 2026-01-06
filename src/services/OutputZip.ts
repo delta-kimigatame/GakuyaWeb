@@ -410,10 +410,9 @@ export const ExtractAllOtoIni = async (
       const buf = await zipFiles[oldPath].async("arraybuffer");
       const txt = await FileReadAsync(buf, inputEncoding);
       
-      // 改行コードを正規化してから変換（\r\nを\nに統一してから\r\nに変換）
-      const normalizedTxt = txt.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      // エンコーディングのみ変換（改行コードは元のまま維持）
       const o_output = new File(
-        [iconv.encode(normalizedTxt.replace(/\n/g, "\r\n"), encoding)],
+        [iconv.encode(txt, encoding)],
         "oto.ini",
         { type: "text/plane;charset=shift-jis" }
       );
