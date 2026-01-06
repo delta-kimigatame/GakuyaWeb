@@ -636,7 +636,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
       .sort();
     
     Log.info(`zipの生成。${rootDir}以下を${newRootDir}に配置`, "EditorView");
-    Log.gtag("OutputZip");
+    Log.gtag("OutputZip",{characterName: character ? character.name : "unknown"});
     ZipExtractBase(newRootDir, filelist, 0, newZip, world);
   };
 
