@@ -34,11 +34,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
       >
         <Box sx={{ flex: 1, order: 1 }}>
           <Typography>
-            <Link
-              variant="body2"
-              color="inherit"
-              href={setting.developerXUrl}
-            >
+            <Link variant="body2" color="inherit" href={setting.developerXUrl}>
               {t("footer.developerx")}
             </Link>{" "}
             <br />
@@ -77,6 +73,13 @@ export const Footer: React.FC<FooterProps> = (props) => {
           }}
         >
           <Typography variant="body2">
+            icon/logo/imgae:浅岬透(
+            <Link href="https://ripask.stars.ne.jp/link/">
+              https://ripask.stars.ne.jp/link/
+            </Link>
+            )
+            <br />
+            <br />
             きみがため
             <br />
             <br />
@@ -103,5 +106,5 @@ export const Footer: React.FC<FooterProps> = (props) => {
 
 export interface FooterProps {
   /** テーマ設定 */
-  theme:ThemeOptions;
-};
+  theme: ThemeOptions;
+}

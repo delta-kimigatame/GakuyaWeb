@@ -33,6 +33,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2026/02/26 Changed the app icon",
       "2026/01/06 Implemented functionality to change character encoding of configuration files, ability to read configuration files located outside the root directory, and removal of duplicate character.txt files",
       "2026/01/03 Measures against crashes when using browser's automatic translation feature",
       "2026/01/01 Fixed a bug: Memory consumption increases when generating voicebank packages",
