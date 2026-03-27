@@ -51,7 +51,7 @@ export const ExtractPrefixMap = (
   selectedPath?: string,
   encoding: string = "Windows-31j"
 ): JSZip => {
-  if (prefixMapsUpdate) {
+  if (prefixMapsUpdate && prefixMaps[""] != null) {
     const p_output = new File(
       [iconv.encode(prefixMaps[""].OutputMap(), encoding)],
       "prefix.map",
