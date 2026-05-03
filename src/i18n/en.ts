@@ -33,6 +33,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2026/05/04 Supported 32bit float wav. Fixed a bug where the length of the wav would change when the bit depth was changed.",
       "2026/03/27 Fixed a bug: Output fails when trying to output in UTF-8 mode without prefix.map",
       "2026/02/26 Changed the app icon",
       "2026/01/06 Implemented functionality to change character encoding of configuration files, ability to read configuration files located outside the root directory, and removal of duplicate character.txt files",
@@ -52,6 +53,16 @@ export const translation_en = {
       "2025/02/17 Add File List Tab",
       "2025/02/13 Release",
     ],
+    linkTitle: "Links",
+    linkSynthesis: "Core synthesis software",
+    linkPureUtau: "Official UTAU (飴屋／菖蒲)",
+    linkOpenUtau: "OpenUtau (stakira)",
+    linkSeries: "Related projects",
+    linkUtalet: "Let's UTA! Let's go!: Utalet",
+    linkLaberu: "Voicebank configuration tool: Laberu",
+    linkThirdParty: "Third-party tools",
+    linkRecstar: "Recording tool: RecStar (sdercolin)",
+    linkUtaformatix: "Project file converter: UtaFormatix (sdercolin)",
   },
   editor: {
     file_check: {
@@ -98,7 +109,8 @@ export const translation_en = {
       encoding: {
         title: "Text Encoding",
         utf8: "Output configuration files in UTF-8",
-        warning: "Warning: This will break compatibility with original UTAU. Only use this if you are targeting OpenUtau or UTAlet exclusively. UTF-8 is advantageous for non-Japanese environments.",
+        warning:
+          "Warning: This will break compatibility with original UTAU. Only use this if you are targeting OpenUtau or UTAlet exclusively. UTF-8 is advantageous for non-Japanese environments.",
       },
     },
     frq_editor: {
@@ -124,9 +136,12 @@ export const translation_en = {
         multiply_by_3: "Multiply selection by 3",
         divide_by_2: "Divide selection by 2",
         divide_by_3: "Divide selection by 3",
-        selection_to_file_average: "Set selection average to file average frequency",
-        file_average_to_selection: "Set file average frequency to selection average",
-        linear_interpolate: "Linear interpolation between start and end of selection",
+        selection_to_file_average:
+          "Set selection average to file average frequency",
+        file_average_to_selection:
+          "Set file average frequency to selection average",
+        linear_interpolate:
+          "Linear interpolation between start and end of selection",
         regenerate: "Regenerate frequency table",
         save: "Save",
         back: "Back to list",
@@ -210,7 +225,8 @@ export const translation_en = {
     },
     otoini: {
       title: "oto.ini",
-      description: "Fix character encoding of oto.ini files. Content editing is not available.",
+      description:
+        "Fix character encoding of oto.ini files. Content editing is not available.",
       check: "Fix oto.ini encoding",
       encoding: "Encoding",
       selectFile: "Preview oto.ini",

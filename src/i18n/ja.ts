@@ -31,6 +31,7 @@ export const translation_ja = {
       "当サイトでは、表示方法をカスタマイズするためにcookieを使用します。",
     history: "更新履歴",
     changelog: [
+      "2026/05/04 32bitfloatのwavに対応。bit深度が変更されたときにwavの長さが変わってしまう不具合の修正",
       "2026/03/27 prefix.mapが存在しない状態で、utf-8モードで出力しようとすると出力失敗する不具合の修正",
       "2026/02/26 アプリのアイコン変更",
       "2026/01/06 各設定ファイルの文字コードを修正する機能の実装、ルート以外の場所に配置された設定ファイルを読み込む機能を実装、重複したcharacter.txtを削除するように変更",
@@ -50,6 +51,16 @@ export const translation_ja = {
       "2025/02/17 ファイル一覧タブの追加",
       "2025/02/13 初版公開",
     ],
+    linkTitle: "リンク",
+    linkSynthesis: "本体ソフトウェア",
+    linkPureUtau: "本家 UTAU(飴屋／菖蒲)",
+    linkOpenUtau: "OpenUtau(stakira)",
+    linkSeries: "兄弟プロジェクト",
+    linkUtalet: "さあ!UTAおう Utalet",
+    linkLaberu: "原音設定アプリ Laberu",
+    linkThirdParty: "第三者アプリ",
+    linkRecstar: "録音アプリ RecStar(sdercolin)",
+    linkUtaformatix: "プロジェクトファイル変換 UtaFormatix(sdercolin)",
   },
   editor: {
     file_check: {
@@ -96,7 +107,8 @@ export const translation_ja = {
       encoding: {
         title: "文字コード",
         utf8: "設定ファイルをUTF-8で出力する",
-        warning: "警告: 本家UTAUでの互換性が失われます。OpenUtauやUTAletでのみ使用する場合に限定してください。UTF-8は日本以外の環境で有利です。",
+        warning:
+          "警告: 本家UTAUでの互換性が失われます。OpenUtauやUTAletでのみ使用する場合に限定してください。UTF-8は日本以外の環境で有利です。",
       },
     },
     frq_editor: {
@@ -122,8 +134,10 @@ export const translation_ja = {
         multiply_by_3: "選択範囲を3倍にする",
         divide_by_2: "選択範囲を1/2にする",
         divide_by_3: "選択範囲を1/3にする",
-        selection_to_file_average: "選択範囲の平均値をファイル全体の平均周波数にする",
-        file_average_to_selection: "ファイル全体の平均周波数を選択範囲の平均値にする",
+        selection_to_file_average:
+          "選択範囲の平均値をファイル全体の平均周波数にする",
+        file_average_to_selection:
+          "ファイル全体の平均周波数を選択範囲の平均値にする",
         linear_interpolate: "選択範囲の始点と終点の値を使って間を線形補完する",
         regenerate: "周波数表を再生成する",
         save: "保存",

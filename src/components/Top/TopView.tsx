@@ -5,6 +5,7 @@ import { PrivacyPaper } from "./PrivacyPaper";
 import { RulePaper } from "./RulePaper";
 import { TopPaper } from "../../features/Top/TopPaper";
 import { HistoryPaper } from "./HistoryPaper";
+import { LinkPaper } from "./LinkPaper";
 
 /**
  * zipデータを読み込む前の画面
@@ -21,6 +22,7 @@ export const TopView: React.FC<TopViewProps> = (props) => {
       />
       <RulePaper />
       <PrivacyPaper />
+      <LinkPaper />
       <HistoryPaper />
     </>
   );

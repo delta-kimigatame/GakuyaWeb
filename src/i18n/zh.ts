@@ -29,6 +29,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2026/05/04 支持32bit浮点wav。修复在更改位深度时wav长度发生变化的错误",
       "2026/03/27 修复在没有prefix.map的情况下尝试以UTF-8模式输出时输出失败的问题",
       "2026/02/26 更改应用图标",
       "2026/01/06 实现配置文件字符编码修改功能、实现读取根目录以外位置配置文件的功能、更改为删除重复的character.txt",
@@ -48,6 +49,16 @@ export const translation_zh = {
       "2025/02/17 添加文件列表标签页",
       "2025/02/13 首次发布",
     ],
+    linkTitle: "链接",
+    linkSynthesis: "主程序",
+    linkPureUtau: "UTAU 本家（飴屋／菖蒲）",
+    linkOpenUtau: "OpenUtau（stakira）",
+    linkSeries: "兄弟项目",
+    linkUtalet: "来吧！一起UTA吧！ Utalet",
+    linkLaberu: "原音设定工具 Laberu",
+    linkThirdParty: "第三方应用",
+    linkRecstar: "录音应用 RecStar（sdercolin）",
+    linkUtaformatix: "工程文件转换工具 UtaFormatix（sdercolin）",
   },
   editor: {
     file_check: {
@@ -93,7 +104,8 @@ export const translation_zh = {
       encoding: {
         title: "字符编码",
         utf8: "以UTF-8编码输出配置文件",
-        warning: "警告：将与原UTAU失去兼容性。仅在仅针对OpenUtau或UTAlet时使用。UTF-8在日本以外的环境中具有优势。",
+        warning:
+          "警告：将与原UTAU失去兼容性。仅在仅针对OpenUtau或UTAlet时使用。UTF-8在日本以外的环境中具有优势。",
       },
     },
     frq_editor: {
@@ -148,7 +160,9 @@ export const translation_zh = {
     },
     characterYaml: {
       description: "OpenUtau的附加设置（自动设为singer_type=utau）",
-      check: "创建或更新character.yaml",      selectFile: "选择character.yaml文件",      TextFileEncoding: "显示字符编码(shift-jis)",
+      check: "创建或更新character.yaml",
+      selectFile: "选择character.yaml文件",
+      TextFileEncoding: "显示字符编码(shift-jis)",
       Portrait: "立绘插图",
       PortraitUpload: "选择zip外的图像(png)",
       PortraitOpacity: "立绘透明度",
