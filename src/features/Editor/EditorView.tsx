@@ -475,7 +475,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
           
           // frq処理: 優先順位は updatedFrqs > 元のzip > 新規生成
           const frqPath = f.replace(".wav", "_wav.frq");
-          const newFrqPath = frqPath.replace(rootDir, newRootDir);
+          const newFrqPath = GetNewFileName(rootDir, newRootDir, frqPath);
           // updatedFrqsのキーはフルパス（f）を使用
           const updatedFrq = updatedFrqs.get(f);
           
@@ -863,7 +863,7 @@ export const EditorView: React.FC<EditorViewProps> = (props) => {
               />
             </TabPanel>
             <TabPanel value={7} sx={{ p: 0 }}>
-              {props.zipFiles && workerPool && rootDir && (
+              {props.zipFiles && workerPool && rootDir !== null && (
                 <FrqListView
                   zipFiles={props.zipFiles}
                   rootDir={rootDir}

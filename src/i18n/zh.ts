@@ -29,6 +29,7 @@ export const translation_zh = {
     privacyCookie: "本网站使用cookie来自定义显示方式。",
     history: "更新历史",
     changelog: [
+      "2026/06/27 修复当zip的根文件夹为空字符串时，周波数表相关处理无法正常工作的错误",
       "2026/05/04 支持32bit浮点wav。修复在更改位深度时wav长度发生变化的错误",
       "2026/03/27 修复在没有prefix.map的情况下尝试以UTF-8模式输出时输出失败的问题",
       "2026/02/26 更改应用图标",

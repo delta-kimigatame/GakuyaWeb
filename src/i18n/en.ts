@@ -33,6 +33,7 @@ export const translation_en = {
       "We use cookies on our site to customize how you experience our site.",
     history: "Release Note",
     changelog: [
+      "2026/06/27 Fixed a bug where frequency table-related processing did not work correctly when the root folder of the zip was an empty string.",
       "2026/05/04 Supported 32bit float wav. Fixed a bug where the length of the wav would change when the bit depth was changed.",
       "2026/03/27 Fixed a bug: Output fails when trying to output in UTF-8 mode without prefix.map",
       "2026/02/26 Changed the app icon",
